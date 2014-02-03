@@ -7,18 +7,18 @@ require "base64"
 
 require "json" unless Hash.respond_to?(:to_json)
 
-require "errplane/version"
-require "errplane/logger"
-require "errplane/exception_presenter"
-require "errplane/max_queue"
-require "errplane/configuration"
-require "errplane/api"
-require "errplane/backtrace"
-require "errplane/worker"
-require "errplane/rack"
+require "influxdb/version"
+require "influxdb/logger"
+require "influxdb/exception_presenter"
+require "influxdb/max_queue"
+require "influxdb/configuration"
+require "influxdb/api"
+require "influxdb/backtrace"
+require "influxdb/worker"
+require "influxdb/rack"
 
-require "errplane/railtie" if defined?(Rails::Railtie)
-require "errplane/sidekiq" if defined?(Sidekiq)
+require "influxdb/railtie" if defined?(Rails::Railtie)
+require "influxdb/sidekiq" if defined?(Sidekiq)
 
 module InfluxDB
   class << self
@@ -119,7 +119,7 @@ module InfluxDB
 
     def report_exception(e, env = {})
       begin
-        env = errplane_request_data if env.empty? && defined? errplane_request_data
+        env = influxdb_request_data if env.empty? && defined? influxdb_request_data
         exception_presenter = ExceptionPresenter.new(e, env)
         log :info, "Exception: #{exception_presenter.to_json[0..512]}..."
 
@@ -166,7 +166,7 @@ module InfluxDB
   end
 end
 
-require "errplane/sinatra" if defined?(Sinatra::Request)
+require "influxdb/sinatra" if defined?(Sinatra::Request)
 
 unless defined?(Base64.strict_encode64)
   module Base64

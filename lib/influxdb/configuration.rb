@@ -36,11 +36,11 @@ module InfluxDB
     attr_accessor :queue_maximum_post
 
     DEFAULTS = {
-      :app_host => "app.errplane.com",
-      :api_udp_host => "udp.apiv3.errplane.com",
+      :app_host => "app.influxdb.com",
+      :api_udp_host => "udp.apiv3.influxdb.com",
       :api_udp_port => 8126,
-      :api_http_read_host => "r.apiv3.errplane.com",
-      :api_http_write_host => "w.apiv3.errplane.com",
+      :api_http_read_host => "r.apiv3.influxdb.com",
+      :api_http_write_host => "w.apiv3.influxdb.com",
       :ignored_exceptions => %w{ActiveRecord::RecordNotFound
                                 ActionController::RoutingError},
       :ignored_exception_messages => [],

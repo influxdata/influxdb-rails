@@ -77,7 +77,7 @@ module InfluxDB
       {
         :name => "InfluxDB",
         :version => InfluxDB::VERSION,
-        :url => "https://github.com/errplane/errplane-ruby"
+        :url => "https://github.com/influxdb/influxdb-ruby"
       }
     end
 

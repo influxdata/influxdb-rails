@@ -9,7 +9,7 @@ class InfluxDBGenerator < Rails::Generators::Base
       application_name = Rails.application.class.parent_name || "NewApplication"
       api_key = ARGV.first
 
-      connection = Net::HTTP.new("errplane.com", 443)
+      connection = Net::HTTP.new("influxdb.com", 443)
       connection.use_ssl = true
       connection.verify_mode = OpenSSL::SSL::VERIFY_NONE
       url = "/api/v1/applications?api_key=#{api_key}&name=#{application_name}"
@@ -28,7 +28,7 @@ class InfluxDBGenerator < Rails::Generators::Base
 
   rescue => e
     puts "We ran into a problem creating your application via the API!"
-    puts "If this issue persists, contact us at support@errplane.com with the following details:"
+    puts "If this issue persists, contact us at support@influxdb.com with the following details:"
     puts "#{e.class}: #{e.message}"
   end
 
@@ -44,7 +44,7 @@ class InfluxDBGenerator < Rails::Generators::Base
     :description => "Identifier for this application (Leave blank and a new one will be generated for you)"
 
   def copy_initializer_file
-    template "initializer.rb", "config/initializers/errplane.rb"
+    template "initializer.rb", "config/initializers/influxdb.rb"
   end
 
   def install

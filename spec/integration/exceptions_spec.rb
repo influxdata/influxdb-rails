@@ -10,7 +10,7 @@ describe "exception handling" do
     # FakeWeb.last_request = nil
     # FakeWeb.clean_registry
     # @request_path = "/api/v1/applications/#{InfluxDB.configuration.application_id}/exceptions/test?api_key=f123-e456-d789c012"
-    # @request_url = "http://api.errplane.com#{@request_path}"
+    # @request_url = "http://api.influxdb.com#{@request_path}"
     # FakeWeb.register_uri(:post, @request_url, :body => "", :status => ["200", "OK"])
 
     InfluxDB.queue.clear

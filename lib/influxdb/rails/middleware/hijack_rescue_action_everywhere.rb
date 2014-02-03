@@ -3,23 +3,23 @@ module InfluxDB
     module Middleware
       module HijackRescueActionEverywhere
         def self.included(base)
-          base.send(:alias_method_chain, :rescue_action_in_public, :errplane)
-          base.send(:alias_method_chain, :rescue_action_locally, :errplane)
+          base.send(:alias_method_chain, :rescue_action_in_public, :influxdb)
+          base.send(:alias_method_chain, :rescue_action_locally, :influxdb)
         end
 
         private
-        def rescue_action_in_public_with_errplane(e)
+        def rescue_action_in_public_with_influxdb(e)
           handle_exception(e)
-          rescue_action_in_public_without_errplane(e)
+          rescue_action_in_public_without_influxdb(e)
         end
 
-        def rescue_action_locally_with_errplane(e)
+        def rescue_action_locally_with_influxdb(e)
           handle_exception(e)
-          rescue_action_locally_without_errplane(e)
+          rescue_action_locally_without_influxdb(e)
         end
 
         def handle_exception(e)
-          request_data = errplane_request_data || {}
+          request_data = influxdb_request_data || {}
 
           unless InfluxDB.configuration.ignore_user_agent?(request_data[:user_agent])
             InfluxDB.report_exception_unless_ignorable(e, request_data)

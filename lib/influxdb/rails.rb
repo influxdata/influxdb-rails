@@ -1,9 +1,9 @@
 require 'action_controller'
-require 'errplane'
-require 'errplane/rails/middleware/hijack_rescue_action_everywhere'
-require 'errplane/rails/air_traffic_controller'
-require 'errplane/rails/benchmarking'
-require 'errplane/rails/instrumentation'
+require 'influxdb'
+require 'influxdb/rails/middleware/hijack_rescue_action_everywhere'
+require 'influxdb/rails/air_traffic_controller'
+require 'influxdb/rails/benchmarking'
+require 'influxdb/rails/instrumentation'
 
 module InfluxDB
   module Rails

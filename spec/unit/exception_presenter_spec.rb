@@ -31,7 +31,7 @@ describe InfluxDB::ExceptionPresenter do
       # json["backtrace"].should_not be_nil
     # end
 
-    # it "should include a custom hash if defined in the errplane config" do
+    # it "should include a custom hash if defined in the influxdb config" do
       # InfluxDB.configure do |config|
         # config.define_custom_exception_data do |exception_presenter|
           # if exception_presenter.exception.class ==  ZeroDivisionError

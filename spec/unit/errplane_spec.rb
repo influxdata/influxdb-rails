@@ -8,7 +8,7 @@ describe InfluxDB do
     FakeWeb.clean_registry
 
     @request_path = "/api/v1/applications/#{InfluxDB.configuration.application_id}/exceptions/test?api_key=f123-e456-d789c012"
-    @request_url = "http://api.errplane.com#{@request_path}"
+    @request_url = "http://api.influxdb.com#{@request_path}"
   end
 
   describe ".ignorable_exception?" do
