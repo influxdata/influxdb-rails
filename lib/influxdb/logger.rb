@@ -1,11 +1,11 @@
-module Errplane
+module InfluxDB
   module Logger
-    PREFIX = "[Errplane] "
+    PREFIX = "[InfluxDB] "
 
     private
     def log(level, message)
-      return if level != :error && !Errplane.configuration.debug?
-      Errplane.configuration.logger.send(level, PREFIX + message) if Errplane.configuration.logger
+      return if level != :error && !InfluxDB.configuration.debug?
+      InfluxDB.configuration.logger.send(level, PREFIX + message) if InfluxDB.configuration.logger
     end
   end
 end

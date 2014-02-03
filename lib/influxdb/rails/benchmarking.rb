@@ -1,7 +1,7 @@
 require 'benchmark'
 require "socket"
 
-module Errplane
+module InfluxDB
   module Rails
     module Benchmarking
       def self.included(base)
@@ -13,23 +13,23 @@ module Errplane
       private
       def perform_action_with_instrumentation
         ms = Benchmark.ms { perform_action_without_instrumentation }
-        if Errplane.configuration.instrumentation_enabled && ! Errplane.configuration.ignore_current_environment?
-          Errplane.aggregate "controllers", :value => ms.ceil, :dimensions => dimensions
+        if InfluxDB.configuration.instrumentation_enabled && ! InfluxDB.configuration.ignore_current_environment?
+          InfluxDB.aggregate "controllers", :value => ms.ceil, :dimensions => dimensions
         end
       end
 
       def view_runtime_with_instrumentation
         runtime = view_runtime_without_instrumentation
-        if Errplane.configuration.instrumentation_enabled && ! Errplane.configuration.ignore_current_environment?
-          Errplane.aggregate "views", :value => runtime.split.last.to_f.ceil, :dimensions => dimensions
+        if InfluxDB.configuration.instrumentation_enabled && ! InfluxDB.configuration.ignore_current_environment?
+          InfluxDB.aggregate "views", :value => runtime.split.last.to_f.ceil, :dimensions => dimensions
         end
         runtime
       end
 
       def active_record_runtime_with_instrumentation
         runtime = active_record_runtime_without_instrumentation
-        if Errplane.configuration.instrumentation_enabled && ! Errplane.configuration.ignore_current_environment?
-          Errplane.aggregate "db", :value => runtime.split.last.to_f.ceil, :dimensions => dimensions
+        if InfluxDB.configuration.instrumentation_enabled && ! InfluxDB.configuration.ignore_current_environment?
+          InfluxDB.aggregate "db", :value => runtime.split.last.to_f.ceil, :dimensions => dimensions
         end
         runtime
       end

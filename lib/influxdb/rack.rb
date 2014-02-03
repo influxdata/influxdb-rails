@@ -1,4 +1,4 @@
-module Errplane
+module InfluxDB
   class Rack
     def initialize(app)
       @app = app
@@ -12,7 +12,7 @@ module Errplane
       begin
         status, headers, body = @app.call(env)
       rescue => e
-        Errplane.transmit_unless_ignorable(e, env)
+        InfluxDB.transmit_unless_ignorable(e, env)
         raise(e)
       ensure
         _body = []

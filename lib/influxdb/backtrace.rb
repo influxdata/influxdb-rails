@@ -1,4 +1,4 @@
-module Errplane
+module InfluxDB
   class Backtrace
     class Line
       FORMAT = %r{^((?:[a-zA-Z]:)?[^:]+):(\d+)(?::in `([^']+)')?$}.freeze
@@ -24,7 +24,7 @@ module Errplane
 
     def initialize(backtrace)
       @lines = Array(backtrace).each.collect do |line|
-        Errplane.configuration.backtrace_filters.each do |filter|
+        InfluxDB.configuration.backtrace_filters.each do |filter|
           line = filter.call(line)
         end
         Line.new(line)

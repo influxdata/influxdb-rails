@@ -1,11 +1,11 @@
 require 'rails/generators'
 
-class ErrplaneGenerator < Rails::Generators::Base
-  desc "Description:\n  This creates a Rails initializer for Errplane."
+class InfluxDBGenerator < Rails::Generators::Base
+  desc "Description:\n  This creates a Rails initializer for InfluxDB."
 
   begin
     if ARGV.count == 1
-      puts "No Application ID provided, contacting Errplane API."
+      puts "No Application ID provided, contacting InfluxDB API."
       application_name = Rails.application.class.parent_name || "NewApplication"
       api_key = ARGV.first
 
@@ -16,7 +16,7 @@ class ErrplaneGenerator < Rails::Generators::Base
       response = connection.post(url, nil)
 
       unless response.is_a?(Net::HTTPSuccess)
-        raise "The Errplane API returned an error: #{response.inspect}"
+        raise "The InfluxDB API returned an error: #{response.inspect}"
       end
 
       @application = JSON.parse(response.body)
@@ -36,7 +36,7 @@ class ErrplaneGenerator < Rails::Generators::Base
   argument :api_key,
     :required => true,
     :type => :string,
-    :description => "API key for your Errplane organization"
+    :description => "API key for your InfluxDB organization"
   argument :application_id,
     :required => false,
     :default => @application_id,

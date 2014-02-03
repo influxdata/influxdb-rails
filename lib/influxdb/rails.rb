@@ -5,17 +5,17 @@ require 'errplane/rails/air_traffic_controller'
 require 'errplane/rails/benchmarking'
 require 'errplane/rails/instrumentation'
 
-module Errplane
+module InfluxDB
   module Rails
     def self.initialize
-      ActionController::Base.send(:include, Errplane::Rails::AirTrafficController)
-      ActionController::Base.send(:include, Errplane::Rails::Middleware::HijackRescueActionEverywhere)
-      ActionController::Base.send(:include, Errplane::Rails::Benchmarking)
-      ActionController::Base.send(:include, Errplane::Rails::Instrumentation)
+      ActionController::Base.send(:include, InfluxDB::Rails::AirTrafficController)
+      ActionController::Base.send(:include, InfluxDB::Rails::Middleware::HijackRescueActionEverywhere)
+      ActionController::Base.send(:include, InfluxDB::Rails::Benchmarking)
+      ActionController::Base.send(:include, InfluxDB::Rails::Instrumentation)
 
-      ::Rails.configuration.middleware.insert_after 'ActionController::Failsafe', Errplane::Rack
+      ::Rails.configuration.middleware.insert_after 'ActionController::Failsafe', InfluxDB::Rack
 
-      Errplane.configure(true) do |config|
+      InfluxDB.configure(true) do |config|
         config.logger                ||= ::Rails.logger
         config.debug                   = true
         config.environment           ||= ::Rails.env
@@ -27,13 +27,13 @@ module Errplane
 
       if defined?(PhusionPassenger)
         PhusionPassenger.on_event(:starting_worker_process) do |forked|
-          Errplane::Worker.spawn_threads() if forked
+          InfluxDB::Worker.spawn_threads() if forked
         end
       else
-        Errplane::Worker.spawn_threads()
+        InfluxDB::Worker.spawn_threads()
       end
     end
   end
 end
 
-Errplane::Rails.initialize
+InfluxDB::Rails.initialize

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Errplane::Configuration do
+describe InfluxDB::Configuration do
   before do
-    @configuration = Errplane::Configuration.new
+    @configuration = InfluxDB::Configuration.new
   end
 
   describe "#ignore_user_agent?" do

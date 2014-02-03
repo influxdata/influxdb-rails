@@ -1,14 +1,14 @@
-module Errplane
+module InfluxDB
   module Rails
     module Instrumentation
       def benchmark_for_instrumentation
         start = Time.now
         yield
 
-        unless Errplane.configuration.ignore_current_environment?
+        unless InfluxDB.configuration.ignore_current_environment?
           elapsed = ((Time.now - start) * 1000).ceil
           dimensions = { :method => "#{controller_name}##{action_name}", :server => Socket.gethostname }
-          Errplane.aggregate "instrumentation", :value => elapsed, :dimensions => dimensions
+          InfluxDB.aggregate "instrumentation", :value => elapsed, :dimensions => dimensions
         end
       end
 

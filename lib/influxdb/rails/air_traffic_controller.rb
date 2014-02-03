@@ -1,4 +1,4 @@
-module Errplane
+module InfluxDB
   module Rails
     module AirTrafficController
       def errplane_request_data

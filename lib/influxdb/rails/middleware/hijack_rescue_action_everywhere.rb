@@ -1,4 +1,4 @@
-module Errplane
+module InfluxDB
   module Rails
     module Middleware
       module HijackRescueActionEverywhere
@@ -21,8 +21,8 @@ module Errplane
         def handle_exception(e)
           request_data = errplane_request_data || {}
 
-          unless Errplane.configuration.ignore_user_agent?(request_data[:user_agent])
-            Errplane.report_exception_unless_ignorable(e, request_data)
+          unless InfluxDB.configuration.ignore_user_agent?(request_data[:user_agent])
+            InfluxDB.report_exception_unless_ignorable(e, request_data)
           end
         end
       end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Errplane::Backtrace do
+describe InfluxDB::Backtrace do
   before do
     @raw_backtrace = [
       "/var/www/current/app/models/foo.rb:10:in `bar'",
@@ -8,7 +8,7 @@ describe Errplane::Backtrace do
       "/var/www/current/app/models/foo.rb:32:in `<main>'"
     ]
 
-    @backtrace = Errplane::Backtrace.new(@raw_backtrace)
+    @backtrace = InfluxDB::Backtrace.new(@raw_backtrace)
   end
 
   it "should accept an exception into the initializer" do
@@ -35,7 +35,7 @@ describe Errplane::Backtrace do
       # Exception.new.backtrace == nil
       @raw_backtrace = nil
 
-      @backtrace = Errplane::Backtrace.new(@raw_backtrace)
+      @backtrace = InfluxDB::Backtrace.new(@raw_backtrace)
     end
 
     it "should accept an exception into the initializer" do
@@ -53,13 +53,13 @@ describe Errplane::Backtrace do
 
   describe "backtrace filters" do
     before do
-      Errplane.configure do |config|
+      InfluxDB.configure do |config|
         config.application_root = "/var/www/current"
       end
     end
 
     it "should apply a single default backtrace filter correctly" do
-      filtered_backtrace = Errplane::Backtrace.new(@raw_backtrace)
+      filtered_backtrace = InfluxDB::Backtrace.new(@raw_backtrace)
 
       line = filtered_backtrace.lines.first
       line.file.should == "[APP_ROOT]/app/models/foo.rb"
@@ -69,17 +69,17 @@ describe Errplane::Backtrace do
       extended_backtrace = @raw_backtrace.dup
       extended_backtrace << "#{Gem.path.first}/lib/foo_gem.rb:1:in `blah'"
 
-      filtered_backtrace = Errplane::Backtrace.new(extended_backtrace)
+      filtered_backtrace = InfluxDB::Backtrace.new(extended_backtrace)
       filtered_backtrace.lines.first.file.should == "[APP_ROOT]/app/models/foo.rb"
       filtered_backtrace.lines.last.file.should == "[GEM_ROOT]/lib/foo_gem.rb"
     end
 
     it "should allow the addition of custom backtrace filters" do
-      Errplane.configure do |config|
+      InfluxDB.configure do |config|
         config.backtrace_filters << lambda { |line| line.gsub(/foo/, "F00") }
       end
 
-      filtered_backtrace = Errplane::Backtrace.new(@raw_backtrace)
+      filtered_backtrace = InfluxDB::Backtrace.new(@raw_backtrace)
 
       line = filtered_backtrace.lines.first
       line.file.should == "[APP_ROOT]/app/models/F00.rb"

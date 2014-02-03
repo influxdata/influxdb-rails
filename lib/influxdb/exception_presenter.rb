@@ -1,7 +1,7 @@
 require "base64"
 require "socket"
 
-module Errplane
+module InfluxDB
   class ExceptionPresenter
     attr_accessor :hash
 
@@ -23,7 +23,7 @@ module Errplane
       e = e.original_exception if e.respond_to?(:original_exception)
 
       @exception = e.is_a?(String) ? Exception.new(e) : e
-      @backtrace = Errplane::Backtrace.new(@exception.backtrace)
+      @backtrace = InfluxDB::Backtrace.new(@exception.backtrace)
       @params = params[:params]
       @session_data = params[:session_data] || {}
       @current_user = params[:current_user]
@@ -41,10 +41,10 @@ module Errplane
     def context
       c = {
         :time => Time.now.utc.to_i,
-        :application_name => Errplane.configuration.application_name,
-        :application_root => Errplane.configuration.application_root,
-        :framework => Errplane.configuration.framework,
-        :framework_version => Errplane.configuration.framework_version,
+        :application_name => InfluxDB.configuration.application_name,
+        :application_root => InfluxDB.configuration.application_root,
+        :framework => InfluxDB.configuration.framework,
+        :framework_version => InfluxDB.configuration.framework_version,
         :message => @exception.message,
         :backtrace => @backtrace.to_a,
         :language => "Ruby",
@@ -54,10 +54,10 @@ module Errplane
       }
 
       c[:environment_variables] = @environment_variables.reject do |k,v|
-        Errplane.configuration.environment_variable_filters.any? { |filter| k =~ filter }
+        InfluxDB.configuration.environment_variable_filters.any? { |filter| k =~ filter }
       end
 
-      Errplane.configuration.add_custom_exception_data(self)
+      InfluxDB.configuration.add_custom_exception_data(self)
 
       c[:request_data] = request_data if @controller || @action || !@params.blank?
       c
@@ -75,8 +75,8 @@ module Errplane
 
     def reporter
       {
-        :name => "Errplane",
-        :version => Errplane::VERSION,
+        :name => "InfluxDB",
+        :version => InfluxDB::VERSION,
         :url => "https://github.com/errplane/errplane-ruby"
       }
     end

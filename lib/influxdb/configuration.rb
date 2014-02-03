@@ -1,4 +1,4 @@
-module Errplane
+module InfluxDB
   class Configuration
     attr_accessor :api_key
     attr_accessor :api_udp_host
@@ -58,8 +58,8 @@ module Errplane
       :backtrace_filters => [
         lambda { |line| line.gsub(/^\.\//, "") },
         lambda { |line|
-          return line if Errplane.configuration.application_root.to_s.empty?
-          line.gsub(/#{Errplane.configuration.application_root}/, "[APP_ROOT]")
+          return line if InfluxDB.configuration.application_root.to_s.empty?
+          line.gsub(/#{InfluxDB.configuration.application_root}/, "[APP_ROOT]")
         },
         lambda { |line|
           if defined?(Gem) && !Gem.path.nil? && !Gem.path.empty?

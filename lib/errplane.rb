@@ -20,7 +20,7 @@ require "errplane/rack"
 require "errplane/railtie" if defined?(Rails::Railtie)
 require "errplane/sidekiq" if defined?(Sidekiq)
 
-module Errplane
+module InfluxDB
   class << self
     include Logger
 
@@ -43,16 +43,16 @@ module Errplane
     def report(name, params = {}, udp = false)
       unless configuration.ignored_reports.find{ |msg| /#{msg}/ =~ name  }
         data = generate_data(name, params)
-        udp ? Errplane.api.send(data) : Errplane.queue.push(data)
+        udp ? InfluxDB.api.send(data) : InfluxDB.queue.push(data)
       end
     end
 
     def aggregate(name, params = {})
-      Errplane.api.send generate_data(name, params), "t"
+      InfluxDB.api.send generate_data(name, params), "t"
     end
 
     def sum(name, params = {})
-      Errplane.api.send generate_data(name, params), "c"
+      InfluxDB.api.send generate_data(name, params), "c"
     end
 
     def destringify_value(value)
@@ -123,7 +123,7 @@ module Errplane
         exception_presenter = ExceptionPresenter.new(e, env)
         log :info, "Exception: #{exception_presenter.to_json[0..512]}..."
 
-        Errplane.queue.push({
+        InfluxDB.queue.push({
           :n => "exceptions",
           :p => [{
             :v => 1,
@@ -132,7 +132,7 @@ module Errplane
           }]
         })
       rescue => e
-        log :info, "[Errplane] Something went terribly wrong. Exception failed to take off! #{e.class}: #{e.message}"
+        log :info, "[InfluxDB] Something went terribly wrong. Exception failed to take off! #{e.class}: #{e.message}"
       end
     end
     alias_method :transmit, :report_exception
