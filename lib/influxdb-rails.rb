@@ -5,17 +5,14 @@ require "socket"
 require "thread"
 require "base64"
 
-require "json" unless Hash.respond_to?(:to_json)
+require "influxdb/rails/version"
+require "influxdb/rails/logger"
+require "influxdb/rails/exception_presenter"
+require "influxdb/rails/configuration"
+require "influxdb/rails/backtrace"
+require "influxdb/rails/rack"
 
-require "influxdb/version"
-require "influxdb/logger"
-require "influxdb/exception_presenter"
-require "influxdb/configuration"
-require "influxdb/api"
-require "influxdb/backtrace"
-require "influxdb/rack"
-
-require "influxdb/railtie" if defined?(Rails::Railtie)
+require "influxdb/rails/railtie" if defined?(Rails::Railtie)
 
 module InfluxDB
   class << self
