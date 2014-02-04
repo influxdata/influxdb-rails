@@ -20,13 +20,11 @@ Gem::Specification.new do |s|
 
   s.licenses = ['MIT']
 
-  s.add_runtime_dependency 'json'
   s.add_runtime_dependency 'influxdb'
+  s.add_runtime_dependency 'railties'
 
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'fakeweb', ['>= 0']
-  s.add_development_dependency 'guard', ['>= 0']
-  s.add_development_dependency 'guard-rspec', ['>= 0']
   s.add_development_dependency 'rake', ['>= 0']
   s.add_development_dependency 'rdoc', ['>= 0']
   s.add_development_dependency 'rspec', ['>= 0']
