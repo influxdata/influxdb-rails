@@ -3,7 +3,6 @@ require "net/https"
 require "rubygems"
 require "socket"
 require "thread"
-require "base64"
 
 require "influxdb/rails/version"
 require "influxdb/rails/logger"
@@ -16,18 +15,18 @@ require "influxdb/rails/railtie" if defined?(Rails::Railtie)
 
 module InfluxDB
   class << self
-    include Logger
+    include InfluxDB::Rails::Logger
 
     attr_writer :configuration
-    attr_accessor :api
+    attr_accessor :influxdb
 
     def configure(silent = false)
       yield(configuration)
-      self.api = Api.new
+      self.influxdb = InfluxDB::Client.new
     end
 
     def configuration
-      @configuration ||= Configuration.new
+      @configuration ||= InfluxDB::Rails::Configuration.new
     end
 
     def report_exception_unless_ignorable(e, env = {})

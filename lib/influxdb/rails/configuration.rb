@@ -37,11 +37,8 @@ module InfluxDB
       attr_accessor :queue_maximum_post
 
       DEFAULTS = {
-        :app_host => "app.influxdb.com",
-        :api_udp_host => "udp.apiv3.influxdb.com",
-        :api_udp_port => 8126,
-        :api_http_read_host => "r.apiv3.influxdb.com",
-        :api_http_write_host => "w.apiv3.influxdb.com",
+        :influxdb_host => "localhost",
+        :influxdb_port => 8086,
         :ignored_exceptions => %w{ActiveRecord::RecordNotFound
                                   ActionController::RoutingError},
         :ignored_exception_messages => [],
@@ -72,11 +69,8 @@ module InfluxDB
       }
 
       def initialize
-        @api_udp_host = DEFAULTS[:api_udp_host]
-        @api_udp_port = DEFAULTS[:api_udp_port]
-        @api_http_read_host = DEFAULTS[:api_http_read_host]
-        @api_http_write_host = DEFAULTS[:api_http_write_host]
-        @app_host = DEFAULTS[:app_host]
+        @influxdb_host = DEFAULTS[:influxdb_host]
+        @influxdb_port = DEFAULTS[:influxdb_port]
         @ignored_exceptions = DEFAULTS[:ignored_exceptions].dup
         @ignored_exception_messages = DEFAULTS[:ignored_exception_messages].dup
         @ignored_reports = DEFAULTS[:ignored_reports].dup
@@ -88,10 +82,6 @@ module InfluxDB
         @debug = false
         @rescue_global_exceptions = false
         @instrumentation_enabled = true
-        @queue_worker_threads = 3
-        @queue_worker_polling_interval = 5
-        @queue_maximum_depth = 10_000
-        @queue_maximum_post = 500
       end
 
       def debug?

@@ -25,7 +25,7 @@ function build_with_ruby() {
   echo
   echo "### Using Ruby v$1 ###"
 
-  rvm use ruby-$1@influxdb_gem --create
+  rvm use ruby-$1@influxdb-rails --create
   build_versions
 }
 
@@ -36,7 +36,7 @@ function build() {
 }
 
 function clean() {
-  rvm gemset empty influxdb_gem --force
+  rvm gemset empty influxdb-rails --force
 }
 
 build

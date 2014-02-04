@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe InfluxDB::Configuration do
+describe InfluxDB::Rails::Configuration do
   before do
-    @configuration = InfluxDB::Configuration.new
+    @configuration = InfluxDB::Rails::Configuration.new
   end
 
   describe "#ignore_user_agent?" do
