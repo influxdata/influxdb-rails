@@ -12,9 +12,7 @@ app.routes.draw do
   resources :widgets
 end
 
-InfluxDB.configure do |config|
-  config.api_key = "f123-e456-d789c012"
-  config.application_id = "b12r8c72"
+InfluxDB::Rails.configure do |config|
 end
 
 class ApplicationController < ActionController::Base; end

@@ -25,7 +25,7 @@ module InfluxDB
 
       def initialize(backtrace)
         @lines = Array(backtrace).each.collect do |line|
-          InfluxDB.configuration.backtrace_filters.each do |filter|
+          InfluxDB::Rails.configuration.backtrace_filters.each do |filter|
             line = filter.call(line)
           end
           Line.new(line)

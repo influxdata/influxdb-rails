@@ -1,7 +1,7 @@
 module InfluxDB
   module Rails
     module Logger
-      PREFIX = "[InfluxDB] "
+      PREFIX = "[InfluxDB::Rails] "
 
       private
       def log(level, message)

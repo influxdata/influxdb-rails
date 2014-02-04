@@ -9,7 +9,7 @@ module InfluxDB
       end
 
       config.after_initialize do
-        InfluxDB.configure(true) do |config|
+        InfluxDB::Rails.configure(true) do |config|
           config.logger                ||= ::Rails.logger
           config.environment           ||= ::Rails.env
           config.application_root      ||= ::Rails.root
@@ -35,7 +35,7 @@ module InfluxDB
 
         if defined?(ActiveSupport::Notifications)
           ActiveSupport::Notifications.subscribe "process_action.action_controller" do |name, start, finish, id, payload|
-            if InfluxDB.configuration.instrumentation_enabled  && ! InfluxDB.configuration.ignore_current_environment?
+            if InfluxDB::Rails.configuration.instrumentation_enabled  && ! InfluxDB::Rails.configuration.ignore_current_environment?
               timestamp = finish.utc.to_i
               controller_runtime = ((finish - start)*1000).ceil
               view_runtime = (payload[:view_runtime] || 0).ceil
@@ -44,9 +44,9 @@ module InfluxDB
               action_name = payload[:action]
 
               dimensions = {:method => "#{controller_name}##{action_name}", :server => Socket.gethostname}
-              InfluxDB.aggregate "controllers", :value => controller_runtime, :dimensions => dimensions
-              InfluxDB.aggregate "views", :value => view_runtime, :dimensions => dimensions
-              InfluxDB.aggregate "db", :value => db_runtime, :dimensions => dimensions
+              InfluxDB::Rails.client.aggregate "controllers", :value => controller_runtime, :dimensions => dimensions
+              InfluxDB::Rails.client.aggregate "views", :value => view_runtime, :dimensions => dimensions
+              InfluxDB::Rails.client.aggregate "db", :value => db_runtime, :dimensions => dimensions
             end
           end
         end
