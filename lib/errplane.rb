@@ -10,15 +10,12 @@ require "json" unless Hash.respond_to?(:to_json)
 require "influxdb/version"
 require "influxdb/logger"
 require "influxdb/exception_presenter"
-require "influxdb/max_queue"
 require "influxdb/configuration"
 require "influxdb/api"
 require "influxdb/backtrace"
-require "influxdb/worker"
 require "influxdb/rack"
 
 require "influxdb/railtie" if defined?(Rails::Railtie)
-require "influxdb/sidekiq" if defined?(Sidekiq)
 
 module InfluxDB
   class << self
@@ -34,82 +31,6 @@ module InfluxDB
 
     def configuration
       @configuration ||= Configuration.new
-    end
-
-    def queue
-      @queue ||= MaxQueue.new(configuration.queue_maximum_depth)
-    end
-
-    def report(name, params = {}, udp = false)
-      unless configuration.ignored_reports.find{ |msg| /#{msg}/ =~ name  }
-        data = generate_data(name, params)
-        udp ? InfluxDB.api.send(data) : InfluxDB.queue.push(data)
-      end
-    end
-
-    def aggregate(name, params = {})
-      InfluxDB.api.send generate_data(name, params), "t"
-    end
-
-    def sum(name, params = {})
-      InfluxDB.api.send generate_data(name, params), "c"
-    end
-
-    def destringify_value(value)
-      if value.is_a?(String)
-        return value.to_f if value =~ /\./
-        return value.to_i
-      else
-        return value
-      end
-    end
-
-    def generate_data(name, params)
-      value = destringify_value(params[:value])
-      point = {:v => value || 1}
-      point[:t] = params[:timestamp] unless params[:timestamp].nil?
-
-      if context = params[:context]
-        point[:c] = params[:context].is_a?(String) ? params[:context] : params[:context].to_json
-      end
-
-      if dimensions = params[:dimensions]
-        point[:d] = Hash[params[:dimensions].map {|k,v| [k.to_s, v.to_s]}]
-      end
-
-      {
-        :n => name.gsub(/\s+/, "_"),
-        :p => [point]
-      }
-    end
-
-    def report_deployment(context = nil, udp = false)
-      report("deployments", {:context => context}, udp)
-    end
-
-    def heartbeat(name, interval, params)
-      log :debug, "Starting heartbeat '#{name}' on a #{interval} second interval."
-      Thread.new do
-        while true do
-          log :debug, "Sleeping '#{name}' for #{interval} seconds."
-          sleep(interval)
-          report(name, :dimensions => params[:dimensions], :context => params[:context])
-        end
-      end
-    end
-
-    def time(name, params = {})
-      time_elapsed = if block_given?
-        start_time = Time.now
-        yield_value = yield
-        ((Time.now - start_time)*1000).ceil
-      else
-        params[:value] || 0
-      end
-
-      report(name, :value => time_elapsed)
-
-      yield_value
     end
 
     def report_exception_unless_ignorable(e, env = {})
@@ -162,16 +83,6 @@ module InfluxDB
     rescue StandardError => e
       transmit_unless_ignorable(e)
       raise(e)
-    end
-  end
-end
-
-require "influxdb/sinatra" if defined?(Sinatra::Request)
-
-unless defined?(Base64.strict_encode64)
-  module Base64
-    def strict_encode64(str)
-      return encode64(str).gsub("\n", "")
     end
   end
 end
