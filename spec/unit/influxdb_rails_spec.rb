@@ -3,12 +3,6 @@ require 'spec_helper'
 describe InfluxDB::Rails do
   before do
     InfluxDB::Rails.configure { |config| config.ignored_environments = [] }
-
-    FakeWeb.last_request = nil
-    FakeWeb.clean_registry
-
-    @request_path = "/api/v1/applications/#{InfluxDB::Rails.configuration.application_id}/exceptions/test?api_key=f123-e456-d789c012"
-    @request_url = "http://api.influxdb.com#{@request_path}"
   end
 
   describe ".ignorable_exception?" do
@@ -36,18 +30,16 @@ describe InfluxDB::Rails do
 
   describe 'rescue' do
     it "should transmit an exception when passed" do
-      # InfluxDB::Rails.queue.clear
-
       InfluxDB::Rails.configure do |config|
         config.ignored_environments = []
         config.instrumentation_enabled = false
       end
 
+      InfluxDB::Rails.client.should_receive(:write_point)
+
       InfluxDB::Rails.rescue do
         raise ArgumentError.new('wrong')
       end
-
-      # InfluxDB::Rails.queue.size.should == 1
     end
 
     it "should also raise the exception when in an ignored environment" do
@@ -64,14 +56,12 @@ describe InfluxDB::Rails do
   describe "rescue_and_reraise" do
     it "should transmit an exception when passed" do
       InfluxDB::Rails.configure { |config| config.ignored_environments = [] }
-      #
-      # InfluxDB::Rails.queue.clear
+
+      InfluxDB::Rails.client.should_receive(:write_point)
 
       expect {
         InfluxDB::Rails.rescue_and_reraise { raise ArgumentError.new('wrong') }
       }.to raise_error(ArgumentError)
-
-      # InfluxDB::Rails.queue.size.should == 1
     end
   end
 end

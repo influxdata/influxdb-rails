@@ -1,12 +1,8 @@
 module InfluxDB
   module Rails
     class Configuration
-      attr_accessor :api_key
-      attr_accessor :api_udp_host
-      attr_accessor :api_udp_port
-      attr_accessor :api_http_read_host
-      attr_accessor :api_http_write_host
-      attr_accessor :app_host
+      attr_accessor :influxdb_host
+      attr_accessor :influxdb_port
       attr_accessor :application_id
       attr_accessor :application_name
       attr_accessor :application_root
@@ -30,11 +26,6 @@ module InfluxDB
       attr_accessor :instrumentation_enabled
       attr_accessor :debug
       attr_accessor :reraise_global_exceptions
-
-      attr_accessor :queue_worker_threads
-      attr_accessor :queue_worker_polling_interval
-      attr_accessor :queue_maximum_depth
-      attr_accessor :queue_maximum_post
 
       DEFAULTS = {
         :influxdb_host => "localhost",

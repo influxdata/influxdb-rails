@@ -42,11 +42,22 @@ module InfluxDB
               db_runtime = (payload[:db_runtime] || 0).ceil
               controller_name = payload[:controller]
               action_name = payload[:action]
+              hostname = Socket.gethostname
 
-              dimensions = {:method => "#{controller_name}##{action_name}", :server => Socket.gethostname}
-              InfluxDB::Rails.client.aggregate "controllers", :value => controller_runtime, :dimensions => dimensions
-              InfluxDB::Rails.client.aggregate "views", :value => view_runtime, :dimensions => dimensions
-              InfluxDB::Rails.client.aggregate "db", :value => db_runtime, :dimensions => dimensions
+              InfluxDB::Rails.client.write_point "rails.controllers",
+                :value => controller_runtime,
+                :method => "#{controller_name}##{action_name}",
+                :server => hostname
+
+              InfluxDB::Rails.client.write_point "rails.views",
+                :value => view_runtime,
+                :method => "#{controller_name}##{action_name}",
+                :server => hostname
+
+              InfluxDB::Rails.client.write_point "rails.db",
+                :value => db_runtime,
+                :method => "#{controller_name}##{action_name}",
+                :server => hostname
             end
           end
         end

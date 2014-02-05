@@ -19,11 +19,11 @@ module InfluxDB
       include InfluxDB::Rails::Logger
 
       attr_writer :configuration
-      attr_accessor :influxdb
+      attr_accessor :client
 
       def configure(silent = false)
         yield(configuration)
-        self.influxdb = InfluxDB::Client.new
+        self.client = InfluxDB::Client.new
       end
 
       def configuration
@@ -41,14 +41,10 @@ module InfluxDB
           exception_presenter = ExceptionPresenter.new(e, env)
           log :info, "Exception: #{exception_presenter.to_json[0..512]}..."
 
-          InfluxDB.queue.push({
-            :n => "exceptions",
-            :p => [{
-              :v => 1,
-              :c => exception_presenter.context.to_json,
-              :d => exception_presenter.dimensions
-            }]
-          })
+          InfluxDB::Rails.client.write_point "rails.exceptions",
+            :context => exception_presenter.context,
+            :dimensions => exception_presenter.dimensions
+
         rescue => e
           log :info, "[InfluxDB] Something went terribly wrong. Exception failed to take off! #{e.class}: #{e.message}"
         end

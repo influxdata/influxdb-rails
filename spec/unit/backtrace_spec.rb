@@ -32,7 +32,6 @@ describe InfluxDB::Rails::Backtrace do
 
   context "nil backtrace" do
     before do
-      # Exception.new.backtrace == nil
       @raw_backtrace = nil
 
       @backtrace = InfluxDB::Rails::Backtrace.new(@raw_backtrace)

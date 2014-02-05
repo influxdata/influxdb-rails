@@ -42,10 +42,10 @@ module InfluxDB
       def context
         c = {
           :time => Time.now.utc.to_i,
-          :application_name => InfluxDB.configuration.application_name,
-          :application_root => InfluxDB.configuration.application_root,
-          :framework => InfluxDB.configuration.framework,
-          :framework_version => InfluxDB.configuration.framework_version,
+          :application_name => InfluxDB::Rails.configuration.application_name,
+          :application_root => InfluxDB::Rails.configuration.application_root,
+          :framework => InfluxDB::Rails.configuration.framework,
+          :framework_version => InfluxDB::Rails.configuration.framework_version,
           :message => @exception.message,
           :backtrace => @backtrace.to_a,
           :language => "Ruby",
@@ -54,10 +54,10 @@ module InfluxDB
         }
 
         c[:environment_variables] = @environment_variables.reject do |k,v|
-          InfluxDB.configuration.environment_variable_filters.any? { |filter| k =~ filter }
+          InfluxDB::Rails.configuration.environment_variable_filters.any? { |filter| k =~ filter }
         end
 
-        InfluxDB.configuration.add_custom_exception_data(self)
+        InfluxDB::Rails.configuration.add_custom_exception_data(self)
 
         c[:request_data] = request_data if @controller || @action || !@params.blank?
         c
