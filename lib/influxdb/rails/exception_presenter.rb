@@ -24,7 +24,7 @@ module InfluxDB
         e = e.original_exception if e.respond_to?(:original_exception)
 
         @exception = e.is_a?(String) ? Exception.new(e) : e
-        @backtrace = InfluxDB::Backtrace.new(@exception.backtrace)
+        @backtrace = InfluxDB::Rails::Backtrace.new(@exception.backtrace)
         @params = params[:params]
         @session_data = params[:session_data] || {}
         @current_user = params[:current_user]
