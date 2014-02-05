@@ -56,8 +56,8 @@ module InfluxDB
         :backtrace_filters => [
           lambda { |line| line.gsub(/^\.\//, "") },
           lambda { |line|
-            return line if InfluxDB.configuration.application_root.to_s.empty?
-            line.gsub(/#{InfluxDB.configuration.application_root}/, "[APP_ROOT]")
+            return line if InfluxDB::Rails.configuration.application_root.to_s.empty?
+            line.gsub(/#{InfluxDB::Rails.configuration.application_root}/, "[APP_ROOT]")
           },
           lambda { |line|
             if defined?(Gem) && !Gem.path.nil? && !Gem.path.empty?
