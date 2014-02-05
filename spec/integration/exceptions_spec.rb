@@ -10,16 +10,15 @@ describe "exception handling" do
 
   describe "in an action that raises an exception" do
     it "should add an exception to the queue" do
-      # InfluxDB.queue.size.should == 0
       get "/widgets/new"
-      # InfluxDB.queue.size.should == 1
+      InfluxDB::Rails.influxdb.should_receive(:write_points)
     end
   end
 
   describe "in an action that does not raise an exception" do
     it "should not add anything to the queue" do
       get "/widgets"
-      # InfluxDB.queue.size.should == 0
+      InfluxDB::Rails.influxdb.should_not_receive(:write_points)
     end
   end
 
@@ -29,7 +28,7 @@ describe "exception handling" do
         config.ignored_user_agents = %w{Googlebot}
       end
       get "/widgets/new", {}, { "HTTP_USER_AGENT" => "Googlebot/2.1" }
-      # InfluxDB.queue.size.should == 0
+      InfluxDB::Rails.influxdb.should_not_receive(:write_points)
     end
   end
 end
