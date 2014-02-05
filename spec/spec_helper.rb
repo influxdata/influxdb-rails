@@ -21,9 +21,9 @@ if defined? Rails
     raise "Sorry, Rails v#{Rails.version} isn't supported. Try upgrading to Rails 3.x or higher."
   elsif Rails.version.to_f < 4.0
     require "support/rails3/app"
-    require "rspec"
+    require "rspec/rails"
   else
     require "support/rails4/app"
-    require "rspec"
+    require "rspec/rails"
   end
 end
