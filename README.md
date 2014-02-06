@@ -1,5 +1,5 @@
-influxdb-ruby
-=============
+influxdb-rails
+==============
 
 [![Build Status](https://travis-ci.org/influxdb/influxdb-rails.png?branch=master)](https://travis-ci.org/influxdb/influxdb-rails)
 
