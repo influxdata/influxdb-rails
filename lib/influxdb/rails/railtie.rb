@@ -36,29 +36,8 @@ module InfluxDB
         if defined?(ActiveSupport::Notifications)
           ActiveSupport::Notifications.subscribe "process_action.action_controller" do |name, start, finish, id, payload|
             if InfluxDB::Rails.configuration.instrumentation_enabled  && ! InfluxDB::Rails.configuration.ignore_current_environment?
-              timestamp = finish.utc.to_i
-              controller_runtime = ((finish - start)*1000).ceil
-              view_runtime = (payload[:view_runtime] || 0).ceil
-              db_runtime = (payload[:db_runtime] || 0).ceil
-              controller_name = payload[:controller]
-              action_name = payload[:action]
-              hostname = Socket.gethostname
-
               begin
-                InfluxDB::Rails.client.write_point "rails.controllers",
-                  :value => controller_runtime,
-                  :method => "#{controller_name}##{action_name}",
-                  :server => hostname
-
-                InfluxDB::Rails.client.write_point "rails.views",
-                  :value => view_runtime,
-                  :method => "#{controller_name}##{action_name}",
-                  :server => hostname
-
-                InfluxDB::Rails.client.write_point "rails.db",
-                  :value => db_runtime,
-                  :method => "#{controller_name}##{action_name}",
-                  :server => hostname
+                InfluxDB::Rails.handle_action_controller_metrics(name, start, finish, id, payload)
               rescue => e
                 ::Rails.logger.error "[InfluxDB::Rails] Failed writing points to InfluxDB: #{e.message}"
               end

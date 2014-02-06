@@ -55,6 +55,24 @@ module InfluxDB
       end
       alias_method :transmit, :report_exception
 
+      def handle_action_controller_metrics(name, start, finish, id, payload)
+        timestamp = finish.utc.to_i
+        controller_runtime = ((finish - start)*1000).ceil
+        view_runtime = (payload[:view_runtime] || 0).ceil
+        db_runtime = (payload[:db_runtime] || 0).ceil
+        method = "#{payload[:controller]}##{payload[:action]}"
+        hostname = Socket.gethostname
+
+        client.write_point configuration.series_name_for_controller_runtimes,
+          :value => controller_runtime, :method => method, :server => hostname
+
+        client.write_point configuration.series_name_for_view_runtimes,
+          :value => view_runtime, :method => method, :server => hostname
+
+        client.write_point configuration.series_name_for_db_runtimes,
+          :value => db_runtime, :method => method, :server => hostname
+      end
+
       def current_timestamp
         Time.now.utc.to_i
       end

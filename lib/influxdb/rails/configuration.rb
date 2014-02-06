@@ -7,6 +7,10 @@ module InfluxDB
       attr_accessor :influxdb_password
       attr_accessor :influxdb_database
 
+      attr_accessor :series_name_for_controller_runtimes
+      attr_accessor :series_name_for_view_runtimes
+      attr_accessor :series_name_for_db_runtimes
+
       attr_accessor :application_id
       attr_accessor :application_name
       attr_accessor :application_root
@@ -37,6 +41,11 @@ module InfluxDB
         :influxdb_host => "root",
         :influxdb_port => 8086,
         :influxdb_database => nil,
+
+        :series_name_for_controller_runtimes => "rails.controller",
+        :series_name_for_view_runtimes => "rails.view",
+        :series_name_for_db_runtimes => "rails.db",
+
         :ignored_exceptions => %w{ActiveRecord::RecordNotFound
                                   ActionController::RoutingError},
         :ignored_exception_messages => [],
