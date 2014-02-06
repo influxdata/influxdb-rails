@@ -23,7 +23,11 @@ module InfluxDB
 
       def configure(silent = false)
         yield(configuration)
-        self.client = InfluxDB::Client.new
+        self.client = InfluxDB::Client.new configuration.influxdb_database,
+          :username => configuration.influxdb_username,
+          :password => configuration.influxdb_password,
+          :host => configuration.influxdb_host,
+          :port => configuration.influxdb_port,
       end
 
       def configuration

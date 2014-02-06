@@ -3,6 +3,10 @@ module InfluxDB
     class Configuration
       attr_accessor :influxdb_host
       attr_accessor :influxdb_port
+      attr_accessor :influxdb_username
+      attr_accessor :influxdb_password
+      attr_accessor :influxdb_database
+
       attr_accessor :application_id
       attr_accessor :application_name
       attr_accessor :application_root
@@ -29,7 +33,10 @@ module InfluxDB
 
       DEFAULTS = {
         :influxdb_host => "localhost",
+        :influxdb_host => "root",
+        :influxdb_host => "root",
         :influxdb_port => 8086,
+        :influxdb_database => nil,
         :ignored_exceptions => %w{ActiveRecord::RecordNotFound
                                   ActionController::RoutingError},
         :ignored_exception_messages => [],
@@ -62,6 +69,10 @@ module InfluxDB
       def initialize
         @influxdb_host = DEFAULTS[:influxdb_host]
         @influxdb_port = DEFAULTS[:influxdb_port]
+        @influxdb_username = DEFAULTS[:influxdb_username]
+        @influxdb_password = DEFAULTS[:influxdb_password]
+        @influxdb_database = DEFAULTS[:influxdb_database]
+
         @ignored_exceptions = DEFAULTS[:ignored_exceptions].dup
         @ignored_exception_messages = DEFAULTS[:ignored_exception_messages].dup
         @ignored_reports = DEFAULTS[:ignored_reports].dup
