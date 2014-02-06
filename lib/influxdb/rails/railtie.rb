@@ -44,20 +44,24 @@ module InfluxDB
               action_name = payload[:action]
               hostname = Socket.gethostname
 
-              InfluxDB::Rails.client.write_point "rails.controllers",
-                :value => controller_runtime,
-                :method => "#{controller_name}##{action_name}",
-                :server => hostname
+              begin
+                InfluxDB::Rails.client.write_point "rails.controllers",
+                  :value => controller_runtime,
+                  :method => "#{controller_name}##{action_name}",
+                  :server => hostname
 
-              InfluxDB::Rails.client.write_point "rails.views",
-                :value => view_runtime,
-                :method => "#{controller_name}##{action_name}",
-                :server => hostname
+                InfluxDB::Rails.client.write_point "rails.views",
+                  :value => view_runtime,
+                  :method => "#{controller_name}##{action_name}",
+                  :server => hostname
 
-              InfluxDB::Rails.client.write_point "rails.db",
-                :value => db_runtime,
-                :method => "#{controller_name}##{action_name}",
-                :server => hostname
+                InfluxDB::Rails.client.write_point "rails.db",
+                  :value => db_runtime,
+                  :method => "#{controller_name}##{action_name}",
+                  :server => hostname
+              rescue => e
+                ::Rails.logger.error "[InfluxDB::Rails] Failed writing points to InfluxDB: #{e.message}"
+              end
             end
           end
         end
