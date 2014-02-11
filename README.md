@@ -41,7 +41,7 @@ end
 
 Out of the box, you'll automatically get reporting of your controller, view, and db runtimes for each request. You can also call through to the underlying `InfluxDB::Client` object to write arbitray data like this:
 
-```
+``` ruby
 InfluxDB::Rails.client.write_point("events", {url: "/foo", user_id: current_user.id})
 ```
 
