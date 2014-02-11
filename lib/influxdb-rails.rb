@@ -50,7 +50,7 @@ module InfluxDB
             :dimensions => exception_presenter.dimensions
 
         rescue => e
-          log :info, "[InfluxDB] Something went terribly wrong. Exception failed to take off! #{e.class}: #{e.message}"
+          log :info, "[InfluxDB::Rails] Something went terribly wrong. Exception failed to take off! #{e.class}: #{e.message}"
         end
       end
       alias_method :transmit, :report_exception
@@ -63,14 +63,18 @@ module InfluxDB
         method = "#{payload[:controller]}##{payload[:action]}"
         hostname = Socket.gethostname
 
-        client.write_point configuration.series_name_for_controller_runtimes,
-          :value => controller_runtime, :method => method, :server => hostname
+        begin
+          client.write_point configuration.series_name_for_controller_runtimes,
+            :value => controller_runtime, :method => method, :server => hostname
 
-        client.write_point configuration.series_name_for_view_runtimes,
-          :value => view_runtime, :method => method, :server => hostname
+          client.write_point configuration.series_name_for_view_runtimes,
+            :value => view_runtime, :method => method, :server => hostname
 
-        client.write_point configuration.series_name_for_db_runtimes,
-          :value => db_runtime, :method => method, :server => hostname
+          client.write_point configuration.series_name_for_db_runtimes,
+            :value => db_runtime, :method => method, :server => hostname
+        rescue => e
+          log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
+        end
       end
 
       def current_timestamp
