@@ -45,4 +45,4 @@ Out of the box, you'll automatically get reporting of your controller, view, and
 InfluxDB::Rails.client.write_point("events", {url: "/foo", user_id: current_user.id})
 ```
 
-Additional documentation for `InfluxDB::Client` lives in the [influxdb-ruby](http://github.com/influxdb/influxdb-rubyhttp://github.com/influxdb/influxdb-ruby) repo.
+Additional documentation for `InfluxDB::Client` lives in the [influxdb-ruby](http://github.com/influxdb/influxdb-ruby) repo.
