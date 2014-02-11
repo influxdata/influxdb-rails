@@ -82,6 +82,10 @@ module InfluxDB
         @influxdb_password = DEFAULTS[:influxdb_password]
         @influxdb_database = DEFAULTS[:influxdb_database]
 
+        @series_name_for_controller_runtimes = DEFAULTS[:series_name_for_controller_runtimes]
+        @series_name_for_view_runtimes = DEFAULTS[:series_name_for_view_runtimes]
+        @series_name_for_db_runtimes = DEFAULTS[:series_name_for_db_runtimes]
+
         @ignored_exceptions = DEFAULTS[:ignored_exceptions].dup
         @ignored_exception_messages = DEFAULTS[:ignored_exception_messages].dup
         @ignored_reports = DEFAULTS[:ignored_reports].dup
