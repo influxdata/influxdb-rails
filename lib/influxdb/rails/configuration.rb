@@ -1,11 +1,12 @@
 module InfluxDB
   module Rails
     class Configuration
-      attr_accessor :influxdb_host
+      attr_accessor :influxdb_hosts
       attr_accessor :influxdb_port
       attr_accessor :influxdb_username
       attr_accessor :influxdb_password
       attr_accessor :influxdb_database
+      attr_accessor :async
 
       attr_accessor :series_name_for_controller_runtimes
       attr_accessor :series_name_for_view_runtimes
@@ -36,11 +37,12 @@ module InfluxDB
       attr_accessor :reraise_global_exceptions
 
       DEFAULTS = {
-        :influxdb_host => "localhost",
-        :influxdb_host => "root",
-        :influxdb_host => "root",
+        :influxdb_hosts => ["localhost"],
         :influxdb_port => 8086,
+        :influxdb_username => "root",
+        :influxdb_password => "root",
         :influxdb_database => nil,
+        :async => true,
 
         :series_name_for_controller_runtimes => "rails.controller",
         :series_name_for_view_runtimes => "rails.view",
@@ -76,11 +78,12 @@ module InfluxDB
       }
 
       def initialize
-        @influxdb_host = DEFAULTS[:influxdb_host]
+        @influxdb_hosts = DEFAULTS[:influxdb_hosts]
         @influxdb_port = DEFAULTS[:influxdb_port]
         @influxdb_username = DEFAULTS[:influxdb_username]
         @influxdb_password = DEFAULTS[:influxdb_password]
         @influxdb_database = DEFAULTS[:influxdb_database]
+        @async = DEFAULTS[:async]
 
         @series_name_for_controller_runtimes = DEFAULTS[:series_name_for_controller_runtimes]
         @series_name_for_view_runtimes = DEFAULTS[:series_name_for_view_runtimes]

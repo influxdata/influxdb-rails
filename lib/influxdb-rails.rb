@@ -26,8 +26,9 @@ module InfluxDB
         self.client = InfluxDB::Client.new configuration.influxdb_database,
           :username => configuration.influxdb_username,
           :password => configuration.influxdb_password,
-          :host => configuration.influxdb_host,
-          :port => configuration.influxdb_port
+          :hosts => configuration.influxdb_hosts,
+          :port => configuration.influxdb_port,
+          :async => configuration.async
       end
 
       def configuration
