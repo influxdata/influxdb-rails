@@ -5,10 +5,10 @@ module InfluxDB
         start = Time.now
         yield
 
-        unless InfluxDB.configuration.ignore_current_environment?
+        unless InfluxDB::Rails.configuration.ignore_current_environment?
           elapsed = ((Time.now - start) * 1000).ceil
-          dimensions = { :method => "#{controller_name}##{action_name}", :server => Socket.gethostname }
-          InfluxDB.aggregate "instrumentation", :value => elapsed, :dimensions => dimensions
+          InfluxDB::Rails.client.write_point "instrumentation",
+            :value => elapsed, :method => "#{controller_name}##{action_name}", :server => Socket.gethostname
         end
       end
 

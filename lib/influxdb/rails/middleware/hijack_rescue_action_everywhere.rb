@@ -21,8 +21,8 @@ module InfluxDB
         def handle_exception(e)
           request_data = influxdb_request_data || {}
 
-          unless InfluxDB.configuration.ignore_user_agent?(request_data[:user_agent])
-            InfluxDB.report_exception_unless_ignorable(e, request_data)
+          unless InfluxDB::Rails.configuration.ignore_user_agent?(request_data[:user_agent])
+            InfluxDB::Rails.report_exception_unless_ignorable(e, request_data)
           end
         end
       end
