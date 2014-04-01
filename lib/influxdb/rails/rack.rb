@@ -13,7 +13,7 @@ module InfluxDB
         begin
           status, headers, body = @app.call(env)
         rescue => e
-          InfluxDB.transmit_unless_ignorable(e, env)
+          InfluxDB::Rails.transmit_unless_ignorable(e, env)
           raise(e)
         ensure
           _body = []
