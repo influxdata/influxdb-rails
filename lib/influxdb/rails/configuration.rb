@@ -7,6 +7,7 @@ module InfluxDB
       attr_accessor :influxdb_password
       attr_accessor :influxdb_database
       attr_accessor :async
+      attr_accessor :use_ssl
 
       attr_accessor :series_name_for_controller_runtimes
       attr_accessor :series_name_for_view_runtimes
@@ -43,6 +44,7 @@ module InfluxDB
         :influxdb_password => "root",
         :influxdb_database => nil,
         :async => true,
+        :use_ssl => false,
 
         :series_name_for_controller_runtimes => "rails.controller",
         :series_name_for_view_runtimes => "rails.view",
@@ -84,6 +86,7 @@ module InfluxDB
         @influxdb_password = DEFAULTS[:influxdb_password]
         @influxdb_database = DEFAULTS[:influxdb_database]
         @async = DEFAULTS[:async]
+        @use_ssl = DEFAULTS[:use_ssl]
 
         @series_name_for_controller_runtimes = DEFAULTS[:series_name_for_controller_runtimes]
         @series_name_for_view_runtimes = DEFAULTS[:series_name_for_view_runtimes]
