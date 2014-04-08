@@ -11,17 +11,13 @@ module InfluxDB
 
       def _call(env)
         begin
-          status, headers, body = @app.call(env)
+          response = @app.call(env)
         rescue => e
           InfluxDB::Rails.transmit_unless_ignorable(e, env)
           raise(e)
-        ensure
-          _body = []
-          body.each { |line| _body << line } unless body.nil?
-          body.close if body.respond_to?(:close)
         end
 
-        [status, headers, _body]
+        response
       end
     end
   end
