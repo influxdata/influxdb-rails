@@ -39,7 +39,7 @@ module InfluxDB
               begin
                 InfluxDB::Rails.handle_action_controller_metrics(name, start, finish, id, payload)
               rescue => e
-                ::Rails.logger.error "[InfluxDB::Rails] Failed writing points to InfluxDB: #{e.message}"
+                InfluxDB::Rails.configuration.logger.error "[InfluxDB::Rails] Failed writing points to InfluxDB: #{e.message}"
               end
             end
           end

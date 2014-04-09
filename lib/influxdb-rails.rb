@@ -30,6 +30,7 @@ module InfluxDB
           :port => configuration.influxdb_port,
           :async => configuration.async,
           :use_ssl => configuration.use_ssl
+        InfluxDB::Logging.logger = configuration.logger unless configuration.logger.nil?
       end
 
       def configuration
