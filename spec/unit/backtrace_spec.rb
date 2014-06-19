@@ -26,7 +26,7 @@ describe InfluxDB::Rails::Backtrace do
 
   describe "#to_a" do
     it "should return an array of lines" do
-      @backtrace.to_a.is_a?(Array).should be_true
+      @backtrace.to_a.is_a?(Array).should be_truthy
     end
   end
 
@@ -44,7 +44,7 @@ describe InfluxDB::Rails::Backtrace do
 
     describe "#to_a" do
       it "should return an array of lines" do
-        @backtrace.to_a.is_a?(Array).should be_true
+        @backtrace.to_a.is_a?(Array).should be_truthy
       end
     end
 

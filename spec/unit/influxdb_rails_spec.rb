@@ -14,17 +14,17 @@ describe InfluxDB::Rails do
         config.ignored_exceptions << 'DummyException'
       end
 
-      InfluxDB::Rails.ignorable_exception?(exception).should be_true
+      InfluxDB::Rails.ignorable_exception?(exception).should be_truthy
     end
 
     it "should be true for exception types specified in the configuration" do
       exception = ActionController::RoutingError.new("foo")
-      InfluxDB::Rails.ignorable_exception?(exception).should be_true
+      InfluxDB::Rails.ignorable_exception?(exception).should be_truthy
     end
 
     it "should be false for valid exceptions" do
       exception = ZeroDivisionError.new
-      InfluxDB::Rails.ignorable_exception?(exception).should be_false
+      InfluxDB::Rails.ignorable_exception?(exception).should be_falsey
     end
   end
 
