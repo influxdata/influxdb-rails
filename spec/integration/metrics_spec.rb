@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/integration_helper")
 
-describe "collecting metrics through ActiveSupport::Notifications" do
+describe "collecting metrics through ActiveSupport::Notifications", type: :request do
   before do
     InfluxDB::Rails.configure do |config|
       config.ignored_environments = %w{development}
