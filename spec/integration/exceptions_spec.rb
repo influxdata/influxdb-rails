@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/integration_helper")
 
-describe "exception handling" do
+describe "exception handling", :type => :request do
   before do
     InfluxDB::Rails.configure do |config|
       config.ignored_environments = %w{development}
