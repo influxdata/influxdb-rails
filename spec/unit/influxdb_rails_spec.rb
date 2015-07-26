@@ -14,17 +14,17 @@ describe InfluxDB::Rails do
         config.ignored_exceptions << 'DummyException'
       end
 
-      InfluxDB::Rails.ignorable_exception?(exception).should be_truthy
+      expect(InfluxDB::Rails.ignorable_exception?(exception)).to be_truthy
     end
 
     it "should be true for exception types specified in the configuration" do
       exception = ActionController::RoutingError.new("foo")
-      InfluxDB::Rails.ignorable_exception?(exception).should be_truthy
+      expect(InfluxDB::Rails.ignorable_exception?(exception)).to be_truthy
     end
 
     it "should be false for valid exceptions" do
       exception = ZeroDivisionError.new
-      InfluxDB::Rails.ignorable_exception?(exception).should be_falsey
+      expect(InfluxDB::Rails.ignorable_exception?(exception)).to be_falsey
     end
   end
 
@@ -35,7 +35,7 @@ describe InfluxDB::Rails do
         config.instrumentation_enabled = false
       end
 
-      InfluxDB::Rails.client.should_receive(:write_point)
+      expect(InfluxDB::Rails.client).to receive(:write_point)
 
       InfluxDB::Rails.rescue do
         raise ArgumentError.new('wrong')
@@ -57,7 +57,7 @@ describe InfluxDB::Rails do
     it "should transmit an exception when passed" do
       InfluxDB::Rails.configure { |config| config.ignored_environments = [] }
 
-      InfluxDB::Rails.client.should_receive(:write_point)
+      expect(InfluxDB::Rails.client).to receive(:write_point)
 
       expect {
         InfluxDB::Rails.rescue_and_reraise { raise ArgumentError.new('wrong') }
