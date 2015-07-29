@@ -12,12 +12,12 @@ describe InfluxDB::Rails::ExceptionPresenter do
   describe ".new" do
     it "should create a new ExceptionPresenter" do
       exception_presenter = InfluxDB::Rails::ExceptionPresenter.new(@exception)
-      exception_presenter.should be_a(InfluxDB::Rails::ExceptionPresenter)
+      expect(exception_presenter).to be_a(InfluxDB::Rails::ExceptionPresenter)
     end
 
     it "should accept an exception as a parameter" do
       exception_presenter = InfluxDB::Rails::ExceptionPresenter.new(@exception)
-      exception_presenter.should_not be_nil
+      expect(exception_presenter).not_to be_nil
     end
   end
 
