@@ -73,14 +73,35 @@ module InfluxDB
         hostname = Socket.gethostname
 
         begin
-          client.write_point configuration.series_name_for_controller_runtimes,
-            :value => controller_runtime, :method => method, :server => hostname
+          client.write_point configuration.series_name_for_controller_runtimes, {
+            values: {
+              value: controller_runtime,
+            },
+            tags: {
+              method: method,
+              server: hostname,
+            },
+          }
 
-          client.write_point configuration.series_name_for_view_runtimes,
-            :value => view_runtime, :method => method, :server => hostname
+          client.write_point configuration.series_name_for_view_runtimes, {
+            values: {
+              value: view_runtime,
+            },
+            tags: {
+              method: method,
+              server: hostname,
+            },
+          }
 
-          client.write_point configuration.series_name_for_db_runtimes,
-            :value => db_runtime, :method => method, :server => hostname
+          client.write_point configuration.series_name_for_db_runtimes, {
+            values: {
+              value: db_runtime,
+            },
+            tags: {
+              method: method,
+              server: hostname,
+            },
+          }
         rescue => e
           log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
         end
