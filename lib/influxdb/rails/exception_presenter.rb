@@ -47,19 +47,19 @@ module InfluxDB
           :framework => InfluxDB::Rails.configuration.framework,
           :framework_version => InfluxDB::Rails.configuration.framework_version,
           :message => @exception.message,
-          :backtrace => @backtrace.to_a,
+          :backtrace => JSON.generate(@backtrace.to_a),
           :language => "Ruby",
           :language_version => "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
           :custom_data => @custom_data
         }
 
-        c[:environment_variables] = @environment_variables.reject do |k,v|
-          InfluxDB::Rails.configuration.environment_variable_filters.any? { |filter| k =~ filter }
-        end
+        # c[:environment_variables] = JSON.generate(@environment_variables.reject do |k,v|
+        #   InfluxDB::Rails.configuration.environment_variable_filters.any? { |filter| k =~ filter }
+        # end)
 
         InfluxDB::Rails.configuration.add_custom_exception_data(self)
 
-        c[:request_data] = request_data if @controller || @action || !@params.blank?
+        # c[:request_data] = JSON.generate(request_data) if @controller || @action || !@params.blank?
         c
       end
 
