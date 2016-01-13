@@ -1,5 +1,6 @@
 require "base64"
 require "socket"
+require "json"
 
 module InfluxDB
   module Rails

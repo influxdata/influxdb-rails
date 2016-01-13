@@ -47,10 +47,10 @@ InfluxDB::Rails.configure do |config|
 end
 ```
 
-Out of the box, you'll automatically get reporting of your controller, view, and db runtimes for each request. You can also call through to the underlying `InfluxDB::Client` object to write arbitray data like this:
+Out of the box, you'll automatically get reporting of your controller, view, and db runtimes for each request. You can also call through to the underlying `InfluxDB::Client` object to write arbitrary data like this:
 
 ``` ruby
-InfluxDB::Rails.client.write_point("events", {url: "/foo", user_id: current_user.id})
+InfluxDB::Rails.client.write_point("events", { values: { value: 0 }, tags: { url: "/foo", user_id: current_user.id }})
 ```
 
 Additional documentation for `InfluxDB::Client` lives in the [influxdb-ruby](http://github.com/influxdb/influxdb-ruby) repo.
