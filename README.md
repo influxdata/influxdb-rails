@@ -3,7 +3,7 @@ influxdb-rails
 
 > This library is now updated to require `influxdb-ruby` v0.2.0 and greater, meaning that only InfluxDB v0.9.x and higher will be supported. **If you want to use this library with InfluxDB v0.8.x, you'll need to use v0.1.10 or earlier.**
 
-We encourage you to submit a pull request if you have a contribution. If you make a PR please explicitly call @beckettsean to get eyes on your PR.
+We encourage you to submit a pull request if you have a contribution. Maintained by [@toddboom](https://github.com/toddboom).
 
 ----------
 
