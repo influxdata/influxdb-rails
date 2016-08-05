@@ -7,8 +7,15 @@ module InfluxDB
 
         unless InfluxDB::Rails.configuration.ignore_current_environment?
           elapsed = ((Time.now - start) * 1000).ceil
-          InfluxDB::Rails.client.write_point "instrumentation",
-            :value => elapsed, :method => "#{controller_name}##{action_name}", :server => Socket.gethostname
+          InfluxDB::Rails.client.write_point "instrumentation", {
+            values: {
+              value: elapsed,
+            },
+            tags: {
+              method: "#{controller_name}##{action_name}",
+              server: Socket.gethostname,
+            },
+          }
         end
       end
 

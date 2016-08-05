@@ -1,7 +1,7 @@
 influxdb-rails
 ==============
 
-> This library is now updated to require `influxdb-ruby` v0.2.0 and greater, meaning that only InfluxDB v0.9.x and higher will be supported. **If you want to use this library with InfluxDB v0.8.x, you'll need to use v0.1.10 or earlier.**
+> This library is now updated to require `influxdb-ruby` v0.2.0 and greater, meaning that only InfluxDB v0.9.x and higher will be supported. **If you want to use this library with InfluxDB v0.8.x, you'll need to use v0.1.10 or earlier. You will also need to manually specify `gem 'influxdb', '0.1.9'` in your gemfile.**
 
 We encourage you to submit a pull request if you have a contribution. Maintained by [@toddboom](https://github.com/toddboom).
 
@@ -47,10 +47,10 @@ InfluxDB::Rails.configure do |config|
 end
 ```
 
-Out of the box, you'll automatically get reporting of your controller, view, and db runtimes for each request. You can also call through to the underlying `InfluxDB::Client` object to write arbitray data like this:
+Out of the box, you'll automatically get reporting of your controller, view, and db runtimes for each request. You can also call through to the underlying `InfluxDB::Client` object to write arbitrary data like this:
 
 ``` ruby
-InfluxDB::Rails.client.write_point("events", {url: "/foo", user_id: current_user.id})
+InfluxDB::Rails.client.write_point("events", { values: { value: 0 }, tags: { url: "/foo", user_id: current_user.id }})
 ```
 
 Additional documentation for `InfluxDB::Client` lives in the [influxdb-ruby](http://github.com/influxdb/influxdb-ruby) repo.

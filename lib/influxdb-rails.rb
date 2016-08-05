@@ -55,9 +55,16 @@ module InfluxDB
           exception_presenter = ExceptionPresenter.new(e, env)
           log :info, "Exception: #{exception_presenter.to_json[0..512]}..."
 
-          client.write_point "rails.exceptions",
-            exception_presenter.context.merge(exception_presenter.dimensions)
+          ex_data = exception_presenter.context.merge(exception_presenter.dimensions)
+          timestamp = ex_data.delete(:time)
 
+          client.write_point "rails.exceptions", {
+            values: {
+              ts: timestamp,
+            },
+            tags: ex_data,
+            timestamp: timestamp,
+          }
         rescue => e
           log :info, "[InfluxDB::Rails] Something went terribly wrong. Exception failed to take off! #{e.class}: #{e.message}"
         end
