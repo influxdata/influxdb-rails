@@ -8,6 +8,7 @@ module InfluxDB
       attr_accessor :influxdb_database
       attr_accessor :async
       attr_accessor :use_ssl
+      attr_accessor :retry
 
       attr_accessor :series_name_for_controller_runtimes
       attr_accessor :series_name_for_view_runtimes
@@ -37,20 +38,20 @@ module InfluxDB
       attr_accessor :debug
       attr_accessor :reraise_global_exceptions
 
-      attr_accessor :retry
 
       DEFAULTS = {
-        :influxdb_hosts => ["localhost"],
-        :influxdb_port => 8086,
-        :influxdb_username => "root",
-        :influxdb_password => "root",
-        :influxdb_database => nil,
-        :async => true,
-        :use_ssl => false,
+        :influxdb_hosts     => ["localhost"],
+        :influxdb_port      => 8086,
+        :influxdb_username  => "root",
+        :influxdb_password  => "root",
+        :influxdb_database  => nil,
+        :async              => true,
+        :use_ssl            => false,
+        :retry              => true,
 
-        :series_name_for_controller_runtimes => "rails.controller",
-        :series_name_for_view_runtimes => "rails.view",
-        :series_name_for_db_runtimes => "rails.db",
+        :series_name_for_controller_runtimes  => "rails.controller",
+        :series_name_for_view_runtimes        => "rails.view",
+        :series_name_for_db_runtimes          => "rails.db",
 
         :ignored_exceptions => %w{ActiveRecord::RecordNotFound
                                   ActionController::RoutingError},
@@ -82,29 +83,31 @@ module InfluxDB
       }
 
       def initialize
-        @influxdb_hosts = DEFAULTS[:influxdb_hosts]
-        @influxdb_port = DEFAULTS[:influxdb_port]
-        @influxdb_username = DEFAULTS[:influxdb_username]
-        @influxdb_password = DEFAULTS[:influxdb_password]
-        @influxdb_database = DEFAULTS[:influxdb_database]
-        @async = DEFAULTS[:async]
-        @use_ssl = DEFAULTS[:use_ssl]
+        @influxdb_hosts     = DEFAULTS[:influxdb_hosts]
+        @influxdb_port      = DEFAULTS[:influxdb_port]
+        @influxdb_username  = DEFAULTS[:influxdb_username]
+        @influxdb_password  = DEFAULTS[:influxdb_password]
+        @influxdb_database  = DEFAULTS[:influxdb_database]
+        @async              = DEFAULTS[:async]
+        @use_ssl            = DEFAULTS[:use_ssl]
+        @retry              = DEFAULTS[:retry]
 
-        @series_name_for_controller_runtimes = DEFAULTS[:series_name_for_controller_runtimes]
-        @series_name_for_view_runtimes = DEFAULTS[:series_name_for_view_runtimes]
-        @series_name_for_db_runtimes = DEFAULTS[:series_name_for_db_runtimes]
+        @series_name_for_controller_runtimes  = DEFAULTS[:series_name_for_controller_runtimes]
+        @series_name_for_view_runtimes        = DEFAULTS[:series_name_for_view_runtimes]
+        @series_name_for_db_runtimes          = DEFAULTS[:series_name_for_db_runtimes]
 
-        @ignored_exceptions = DEFAULTS[:ignored_exceptions].dup
-        @ignored_exception_messages = DEFAULTS[:ignored_exception_messages].dup
-        @ignored_reports = DEFAULTS[:ignored_reports].dup
-        @ignored_environments = DEFAULTS[:ignored_environments].dup
-        @ignored_user_agents = DEFAULTS[:ignored_user_agents].dup
-        @backtrace_filters = DEFAULTS[:backtrace_filters].dup
+        @ignored_exceptions           = DEFAULTS[:ignored_exceptions].dup
+        @ignored_exception_messages   = DEFAULTS[:ignored_exception_messages].dup
+        @ignored_reports              = DEFAULTS[:ignored_reports].dup
+        @ignored_environments         = DEFAULTS[:ignored_environments].dup
+        @ignored_user_agents          = DEFAULTS[:ignored_user_agents].dup
+        @backtrace_filters            = DEFAULTS[:backtrace_filters].dup
         @environment_variable_filters = DEFAULTS[:environment_variable_filters]
         @aggregated_exception_classes = []
-        @debug = false
+
+        @debug                    = false
         @rescue_global_exceptions = false
-        @instrumentation_enabled = true
+        @instrumentation_enabled  = true
       end
 
       def debug?
