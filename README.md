@@ -1,20 +1,25 @@
-influxdb-rails
-==============
+# influxdb-rails
 
-> This library is now updated to require `influxdb-ruby` v0.2.0 and greater, meaning that only InfluxDB v0.9.x and higher will be supported. **If you want to use this library with InfluxDB v0.8.x, you'll need to use v0.1.10 or earlier. You will also need to manually specify `gem 'influxdb', '0.1.9'` in your gemfile.**
+> This library is now updated to require `influxdb-ruby` v0.2.0 and greater,
+> meaning that only InfluxDB v0.9.x and higher will be supported.  **If
+> you want to use this library with InfluxDB v0.8.x, you'll need to use
+> v0.1.10 or earlier. You will also need to manually specify
+> `gem 'influxdb', '0.1.9'` in your gemfile.**
 
-We encourage you to submit a pull request if you have a contribution. Maintained by [@toddboom](https://github.com/toddboom).
+We encourage you to submit a pull request if you have a contribution.
+Maintained by [@toddboom][] and [@dmke][].
 
-----------
+[@toddboom]: https://github.com/toddboom
+[@dmke]: https://github.com/dmke
 
-
+---
 
 [![Build Status](https://travis-ci.org/influxdb/influxdb-rails.png?branch=master)](https://travis-ci.org/influxdb/influxdb-rails)
 
-Auotmatically instrument your Ruby on Rails applications and write the metrics directly into [InfluxDB](http://influxdb.org/).
+Automatically instrument your Ruby on Rails applications and write the
+metrics directly into [InfluxDB](http://influxdb.org/).
 
-Install
--------
+## Install
 
 ```
 $ [sudo] gem install influxdb-rails
@@ -22,16 +27,17 @@ $ [sudo] gem install influxdb-rails
 
 Or add it to your `Gemfile`, etc.
 
-Usage
------
+## Usage
 
 To get things set up, just create an initializer:
 
 ```
-$ rails g influxdb
+$ cd /to/you/rails/application
+$ touch config/initializers/influxdb-rails.rb
 ```
 
-Then, you can edit the file at `config/initializers/influxdb-rails.rb`. The default config should look something like this:
+In this file, you can configure the `InfluxDB::Rails` adapter. The default
+config should look something like this:
 
 ``` ruby
 InfluxDB::Rails.configure do |config|
@@ -47,10 +53,15 @@ InfluxDB::Rails.configure do |config|
 end
 ```
 
-Out of the box, you'll automatically get reporting of your controller, view, and db runtimes for each request. You can also call through to the underlying `InfluxDB::Client` object to write arbitrary data like this:
+Out of the box, you'll automatically get reporting of your controller,
+view, and db runtimes for each request. You can also call through to the
+underlying `InfluxDB::Client` object to write arbitrary data like this:
 
 ``` ruby
-InfluxDB::Rails.client.write_point("events", { values: { value: 0 }, tags: { url: "/foo", user_id: current_user.id }})
+InfluxDB::Rails.client.write_point "events",
+  tags:   { url: "/foo", user_id: current_user.id },
+  values: { value: 0 }
 ```
 
-Additional documentation for `InfluxDB::Client` lives in the [influxdb-ruby](http://github.com/influxdb/influxdb-ruby) repo.
+Additional documentation for `InfluxDB::Client` lives in the
+[influxdb-ruby](http://github.com/influxdb/influxdb-ruby) repo.
