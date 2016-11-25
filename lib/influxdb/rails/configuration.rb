@@ -47,7 +47,7 @@ module InfluxDB
         :influxdb_database  => nil,
         :async              => true,
         :use_ssl            => false,
-        :retry              => true,
+        :retry              => nil,
 
         :series_name_for_controller_runtimes  => "rails.controller",
         :series_name_for_view_runtimes        => "rails.view",

@@ -14,7 +14,7 @@ Maintained by [@toddboom][] and [@dmke][].
 
 ---
 
-[![Build Status](https://travis-ci.org/influxdb/influxdb-rails.png?branch=master)](https://travis-ci.org/influxdb/influxdb-rails)
+[![Build Status](https://travis-ci.org/influxdata/influxdb-rails.png?branch=master)](https://travis-ci.org/influxdata/influxdb-rails)
 
 Automatically instrument your Ruby on Rails applications and write the
 metrics directly into [InfluxDB](http://influxdb.org/).
