@@ -5,8 +5,6 @@ require "json"
 module InfluxDB
   module Rails
     class ExceptionPresenter
-      attr_accessor :hash
-
       attr_reader :exception
       attr_reader :backtrace
       attr_reader :params
@@ -54,13 +52,7 @@ module InfluxDB
           :custom_data => @custom_data
         }
 
-        # c[:environment_variables] = JSON.generate(@environment_variables.reject do |k,v|
-        #   InfluxDB::Rails.configuration.environment_variable_filters.any? { |filter| k =~ filter }
-        # end)
-
         InfluxDB::Rails.configuration.add_custom_exception_data(self)
-
-        # c[:request_data] = JSON.generate(request_data) if @controller || @action || !@params.blank?
         c
       end
 

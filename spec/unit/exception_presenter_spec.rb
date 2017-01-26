@@ -21,49 +21,13 @@ RSpec.describe InfluxDB::Rails::ExceptionPresenter do
     end
   end
 
-  # describe "#to_json" do
-    # it "should return a JSON string" do
-      # exception_presenter = InfluxDB::ExceptionPresenter.new(@exception)
-      # json = JSON.parse(exception_presenter.to_json)
+  describe "#to_json" do
+    it "should return a JSON string" do
+      exception_presenter = InfluxDB::Rails::ExceptionPresenter.new(@exception)
+      json = JSON.parse(exception_presenter.to_json)
 
-      # json["message"].should == "divided by 0"
-      # json["time"].should_not be_nil
-      # json["backtrace"].should_not be_nil
-    # end
-
-    # it "should include a custom hash if defined in the influxdb config" do
-      # InfluxDB.configure do |config|
-        # config.define_custom_exception_data do |exception_presenter|
-          # if exception_presenter.exception.class ==  ZeroDivisionError
-            # exception_presenter.hash = "some_hash"
-            # exception_presenter.custom_data[:extra_info] = "blah"
-          # end
-        # end
-      # end
-
-      # exception_presenter = InfluxDB::ExceptionPresenter.new(@exception)
-      # json = JSON.parse(exception_presenter.to_json)
-      # json["hash"].should == "some_hash"
-      # json["custom_data"]["extra_info"].should == "blah"
-    # end
-
-    # describe "environment variables" do
-      # it "should be filtered based on the contents of environment_variable_filters" do
-        # InfluxDB.configure do |config|
-          # config.environment_variable_filters = [/password/i]
-        # end
-
-        # exception_presenter = InfluxDB::ExceptionPresenter.new(
-          # :exception => @exception,
-          # :environment_variables => {
-            # "IMPORTANT_PASSWORD" => "sesame",
-            # "EDITOR" => "vim"
-        # })
-
-        # json = JSON.parse(exception_presenter.to_json)
-        # json["environment_variables"].size.should == 1
-        # json["environment_variables"].should == {"EDITOR" => "vim"}
-      # end
-    # end
-  # end
+      expect(json["exception"]).to eq "divided by 0"
+      expect(json["backtrace"]).not_to be nil
+    end
+  end
 end
