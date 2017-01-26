@@ -7,8 +7,8 @@ before_install:
 rvm:
   - 2.4.0
   - 2.3.3
-  - 2.2
-  - 2.1
+  - 2.2.5
+  - 2.1.10
   - 2.0.0
   - 1.9.3
 gemfile:
@@ -22,10 +22,10 @@ gemfile:
 matrix:
   exclude:
     # Rails 5 only on MRI 2.3+
-    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
-    - { rvm: "2.1",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
-    - { rvm: "2.0.0", gemfile: "gemfiles/Gemfile.rails-5.0.x" }
-    - { rvm: "1.9.3", gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "2.2.5",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "2.1.10",  gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "2.0.0",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "1.9.3",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
 
     # Rails < 5 not on MRI 2.4
     - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-4.2.x" }
@@ -35,16 +35,16 @@ matrix:
     - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
     - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
 
-    # Rails < 4 only on MRI < 2.2
+    # Rails < 4 only on MRI < 2.2.5
     - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.2.x" }
     - { rvm: "2.3.3", gemfile: "gemfiles/Gemfile.rails-3.2.x" }
-    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-3.2.x" }
+    - { rvm: "2.2.5", gemfile: "gemfiles/Gemfile.rails-3.2.x" }
     - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
     - { rvm: "2.3.3", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
-    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-3.1.x" }
+    - { rvm: "2.2.5", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
     - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
     - { rvm: "2.3.3", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
-    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-3.0.x" }
+    - { rvm: "2.2.5", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
 notifications:
   email:
     - pilots@errplane.com
