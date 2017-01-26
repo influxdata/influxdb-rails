@@ -20,14 +20,4 @@ RSpec.describe InfluxDB::Rails::ExceptionPresenter do
       expect(exception_presenter).not_to be_nil
     end
   end
-
-  describe "#to_json" do
-    it "should return a JSON string" do
-      exception_presenter = InfluxDB::Rails::ExceptionPresenter.new(@exception)
-      json = JSON.parse(exception_presenter.to_json)
-
-      expect(json["exception"]).to eq "divided by 0"
-      expect(json["backtrace"]).not_to be nil
-    end
-  end
 end
