@@ -15,6 +15,8 @@ module InfluxDB
       attr_accessor :series_name_for_db_runtimes
 
       attr_accessor :application_id
+      deprecate :application_id => "This method serve no purpose and will be removed in the release after 0.1.12"
+
       attr_accessor :application_name
       attr_accessor :application_root
 
@@ -142,6 +144,7 @@ module InfluxDB
       def database_name
         @application_id.to_s + @environment.to_s
       end
+      deprecate :database_name => "This method will be removed in the release after 0.1.12, you ought to use #influxdb_database"
 
       private
       def initialize_http_connection
