@@ -1,13 +1,18 @@
+sudo: required
+dist: trusty
 language: ruby
 before_install:
-  - gem install bundler
+  - gem update --system --no-doc
+  - gem install bundler --no-doc
 rvm:
-  - 2.3
+  - 2.4.0
+  - 2.3.3
   - 2.2
   - 2.1
   - 2.0.0
   - 1.9.3
 gemfile:
+  - gemfiles/Gemfile.rails-5.0.x
   - gemfiles/Gemfile.rails-4.2.x
   - gemfiles/Gemfile.rails-4.1.x
   - gemfiles/Gemfile.rails-4.0.x
@@ -16,18 +21,30 @@ gemfile:
   - gemfiles/Gemfile.rails-3.0.x
 matrix:
   exclude:
-    - rvm: 2.3
-      gemfile: gemfiles/Gemfile.rails-3.2.x
-    - rvm: 2.2
-      gemfile: gemfiles/Gemfile.rails-3.2.x
-    - rvm: 2.3
-      gemfile: gemfiles/Gemfile.rails-3.1.x
-    - rvm: 2.2
-      gemfile: gemfiles/Gemfile.rails-3.1.x
-    - rvm: 2.3
-      gemfile: gemfiles/Gemfile.rails-3.0.x
-    - rvm: 2.2
-      gemfile: gemfiles/Gemfile.rails-3.0.x
+    # Rails 5 only on MRI 2.3+
+    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "2.1",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "2.0.0", gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+    - { rvm: "1.9.3", gemfile: "gemfiles/Gemfile.rails-5.0.x" }
+
+    # Rails < 5 not on MRI 2.4
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-4.2.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-4.1.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-4.0.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.2.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
+
+    # Rails < 4 only on MRI < 2.2
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.2.x" }
+    - { rvm: "2.3.3", gemfile: "gemfiles/Gemfile.rails-3.2.x" }
+    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-3.2.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
+    - { rvm: "2.3.3", gemfile: "gemfiles/Gemfile.rails-3.1.x" }
+    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-3.1.x" }
+    - { rvm: "2.4.0", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
+    - { rvm: "2.3.3", gemfile: "gemfiles/Gemfile.rails-3.0.x" }
+    - { rvm: "2.2",   gemfile: "gemfiles/Gemfile.rails-3.0.x" }
 notifications:
   email:
     - pilots@errplane.com

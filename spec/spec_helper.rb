@@ -22,8 +22,11 @@ if defined? Rails
   elsif Rails.version.to_f < 4.0
     require "support/rails3/app"
     require "rspec/rails"
-  else
+  elsif Rails.version.to_f < 5.0
     require "support/rails4/app"
+    require "rspec/rails"
+  else
+    require "support/rails5/app"
     require "rspec/rails"
   end
 end
