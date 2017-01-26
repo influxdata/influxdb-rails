@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InfluxDB::Rails::Configuration do
+RSpec.describe InfluxDB::Rails::Configuration do
   before do
     @configuration = InfluxDB::Rails::Configuration.new
   end
@@ -31,14 +31,14 @@ describe InfluxDB::Rails::Configuration do
     it "defaults to nil" do
       InfluxDB::Rails.configure do |config|
       end
-      InfluxDB::Rails.configuration.retry.should be_nil
+      expect(InfluxDB::Rails.configuration.retry).to be_nil
     end
 
     it "can be updated" do
       InfluxDB::Rails.configure do |config|
         config.retry = 5
       end
-      InfluxDB::Rails.configuration.retry.should eql( 5 )
+      expect(InfluxDB::Rails.configuration.retry).to eql(5)
     end
   end
 

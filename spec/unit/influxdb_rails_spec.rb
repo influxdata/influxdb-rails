@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InfluxDB::Rails do
+RSpec.describe InfluxDB::Rails do
   before do
     InfluxDB::Rails.configure { |config| config.ignored_environments = [] }
   end

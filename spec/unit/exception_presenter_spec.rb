@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InfluxDB::Rails::ExceptionPresenter do
+RSpec.describe InfluxDB::Rails::ExceptionPresenter do
   before do
     begin
       1/0

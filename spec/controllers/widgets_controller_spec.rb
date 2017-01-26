@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WidgetsController, :type => :controller do
+RSpec.describe WidgetsController, :type => :controller do
   describe "#new" do
     it "should raise an exception" do
       expect { get :new }.to raise_error(ZeroDivisionError)

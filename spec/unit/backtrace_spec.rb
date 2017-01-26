@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InfluxDB::Rails::Backtrace do
+RSpec.describe InfluxDB::Rails::Backtrace do
   before do
     @raw_backtrace = [
       "/var/www/current/app/models/foo.rb:10:in `bar'",

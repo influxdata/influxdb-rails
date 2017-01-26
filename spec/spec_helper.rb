@@ -27,3 +27,6 @@ if defined? Rails
     require "rspec/rails"
   end
 end
+
+# use expect syntax
+RSpec.configure { |c| c.disable_monkey_patching! }
