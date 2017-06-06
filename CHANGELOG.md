@@ -5,7 +5,10 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## Unreleased changes
 
-- Added `retry` config option (#17, @scambra).
+## v0.1.12, released 2017-06-06
+
+- Added Rails 5.1 compatibility (#31, @djgould).
+- Added `retry` config option (#17, @scambra and #18, @bcantin).
 
 ## v0.1.11, released 2016-11-24
 
