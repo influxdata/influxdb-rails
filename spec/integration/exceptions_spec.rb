@@ -30,7 +30,11 @@ RSpec.describe "exception handling", :type => :request do
         config.ignored_user_agents = %w{Googlebot}
       end
 
-      get "/widgets/new", {}, { "HTTP_USER_AGENT" => "Googlebot/2.1" }
+      if Rails::VERSION::MAJOR >= 5
+        get "/widgets/new", headers: { "HTTP_USER_AGENT" => "Googlebot/2.1" }
+      else
+        get "/widgets/new", {}, { "HTTP_USER_AGENT" => "Googlebot/2.1" }
+      end
     end
   end
 end

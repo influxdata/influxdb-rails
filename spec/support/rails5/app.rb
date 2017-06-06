@@ -18,7 +18,7 @@ end
 
 class ApplicationController < ActionController::Base; end
 class WidgetsController < ApplicationController
-  def index; render :nothing => true; end
+  def index; head 200; end
   def new; return 1/0; end
 end
 
