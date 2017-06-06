@@ -14,7 +14,8 @@ Maintained by [@toddboom][] and [@dmke][].
 
 ---
 
-[![Build Status](https://travis-ci.org/influxdata/influxdb-rails.png?branch=master)](https://travis-ci.org/influxdata/influxdb-rails)
+[![Gem Version](https://badge.fury.io/rb/influxdb-rails.svg)](https://badge.fury.io/rb/influxdb-rails)
+[![Build Status](https://travis-ci.org/influxdata/influxdb-rails.svg?branch=master)](https://travis-ci.org/influxdata/influxdb-rails)
 
 Automatically instrument your Ruby on Rails applications and write the
 metrics directly into [InfluxDB](http://influxdb.org/).
