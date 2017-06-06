@@ -12,6 +12,7 @@ rvm:
   - 2.0.0
   - 1.9.3
 gemfile:
+  - gemfiles/Gemfile.rails-5.1.x
   - gemfiles/Gemfile.rails-5.0.x
   - gemfiles/Gemfile.rails-4.2.x
   - gemfiles/Gemfile.rails-4.1.x
@@ -21,7 +22,11 @@ gemfile:
   - gemfiles/Gemfile.rails-3.0.x
 matrix:
   exclude:
-    # Rails 5 only on MRI 2.3+
+    # Rails 5+ only on MRI 2.3+
+    - { rvm: "2.2.5",   gemfile: "gemfiles/Gemfile.rails-5.1.x" }
+    - { rvm: "2.1.10",  gemfile: "gemfiles/Gemfile.rails-5.1.x" }
+    - { rvm: "2.0.0",   gemfile: "gemfiles/Gemfile.rails-5.1.x" }
+    - { rvm: "1.9.3",   gemfile: "gemfiles/Gemfile.rails-5.1.x" }
     - { rvm: "2.2.5",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
     - { rvm: "2.1.10",  gemfile: "gemfiles/Gemfile.rails-5.0.x" }
     - { rvm: "2.0.0",   gemfile: "gemfiles/Gemfile.rails-5.0.x" }
