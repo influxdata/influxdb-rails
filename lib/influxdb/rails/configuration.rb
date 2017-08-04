@@ -41,7 +41,9 @@ module InfluxDB
 
       attr_accessor :instrumentation_enabled
       attr_accessor :debug
+
       attr_accessor :reraise_global_exceptions
+      deprecate :reraise_global_exceptions => "This method serves no purpose and will be removed in the release after 0.1.13"
 
 
       DEFAULTS = {
@@ -127,10 +129,6 @@ module InfluxDB
 
       def instrumentation_enabled?
         !!@instrumentation_enabled
-      end
-
-      def reraise_global_exceptions?
-        !!@reraise_global_exceptions
       end
 
       def ignore_user_agent?(incoming_user_agent)
