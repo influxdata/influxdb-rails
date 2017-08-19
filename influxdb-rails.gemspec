@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["todd@influxdb.com"]
   s.homepage    = "http://influxdb.com"
   s.summary     = %q{InfluxDB bindings for Ruby on Rails.}
-  s.description = %q{This gem automatically instruments your Ruby on Rails 3.x/4.x applications using InfluxDB for storage.}
+  s.description = %q{This gem automatically instruments your Ruby on Rails 4.x/5.x applications using InfluxDB for storage.}
 
   s.rubyforge_project = "influxdb-rails"
 
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.licenses = ['MIT']
 
   s.add_runtime_dependency 'influxdb', '~> 0.3.0'
-  s.add_runtime_dependency 'railties'
+  s.add_runtime_dependency 'railties', '> 3'
 
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'fakeweb', ['>= 0']
