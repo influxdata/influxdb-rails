@@ -5,6 +5,11 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## Unreleased changes
 
+## v0.4.0, released 2017-08-19
+
+- Drop support for Rails 3, Ruby < 2.2
+- Sync version with `influxdb` gem
+
 ## v0.1.12, released 2017-06-06
 
 - Added Rails 5.1 compatibility (#31, @djgould).
