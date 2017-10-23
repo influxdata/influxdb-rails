@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.licenses = ['MIT']
 
-  s.add_runtime_dependency 'influxdb', '~> 0.4.0'
+  s.add_runtime_dependency 'influxdb', '~> 0.5.0'
   s.add_runtime_dependency 'railties', '> 3'
 
   s.add_development_dependency 'bundler', ['>= 1.0.0']
