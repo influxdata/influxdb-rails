@@ -5,6 +5,10 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## Unreleased changes
 
+## v0.4.1, released 2017-10-23
+
+- Bump `influx` version dependency (#40, @rockclimber73)
+
 ## v0.4.0, released 2017-08-19
 
 - Drop support for Rails 3, Ruby < 2.2
