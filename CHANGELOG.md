@@ -5,6 +5,15 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## Unreleased changes
 
+- None.
+
+## v0.4.2, released 2017-11-28
+
+- Added `open_timeout`, `read_timeout`, and `max_delay` config options
+  (#41, @emaxi)
+- Deprecate unused method (`#reraise_global_exceptions` in
+  `InfluxDB::Rails::Configuration`, #37, @vassilevsky)
+
 ## v0.4.1, released 2017-10-23
 
 - Bump `influx` version dependency (#40, @rockclimber73)
