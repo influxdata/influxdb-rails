@@ -7,6 +7,10 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 - None.
 
+## v0.4.3, released 2017-12-12
+
+- Added `time_precision` config option (#42, @kkentzo)
+
 ## v0.4.2, released 2017-11-28
 
 - Added `open_timeout`, `read_timeout`, and `max_delay` config options
