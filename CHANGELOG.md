@@ -5,7 +5,7 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## Unreleased changes
 
-- None.
+- Added config parameter for app name (#44, @stefanhorning)
 
 ## v0.4.3, released 2017-12-12
 

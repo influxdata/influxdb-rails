@@ -59,7 +59,13 @@ InfluxDB::Rails.configure do |config|
   # config.series_name_for_view_runtimes       = "rails.view"
   # config.series_name_for_db_runtimes         = "rails.db"
 
+  # If you have multiple Rails apps running on the same host, you propably
+  # want to differentiate between them. By default, the metrics are only
+  # tagged with the hostname. You can add the Rails application name as
+  # additional tag with `config.rails_app_name` (nil by default).
+
   config.rails_app_name = "my-rails-app"
+  # config.rails_app_name = Rails.application.class.name.underscore
 end
 ```
 
