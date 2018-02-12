@@ -22,9 +22,6 @@ module InfluxDB
 
       attr_accessor :rails_app_name
 
-      attr_accessor :application_id
-      deprecate :application_id => "This method serve no purpose and will be removed in the release after 0.1.12"
-
       attr_accessor :application_name
       attr_accessor :application_root
 
@@ -46,9 +43,6 @@ module InfluxDB
 
       attr_accessor :instrumentation_enabled
       attr_accessor :debug
-
-      attr_accessor :reraise_global_exceptions
-      deprecate :reraise_global_exceptions => "This method serves no purpose and will be removed in the release after 0.1.13"
 
       DEFAULTS = {
         influxdb_hosts:     ["localhost"],
@@ -172,11 +166,6 @@ module InfluxDB
       def add_custom_exception_data(exception_presenter)
         @custom_exception_data_handler.call(exception_presenter) if @custom_exception_data_handler
       end
-
-      def database_name
-        @application_id.to_s + @environment.to_s
-      end
-      deprecate :database_name => "This method will be removed in the release after 0.1.12, you ought to use #influxdb_database"
 
       private
 
