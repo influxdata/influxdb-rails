@@ -4,7 +4,6 @@ RSpec.describe "collecting metrics through ActiveSupport::Notifications", :type 
   before do
     InfluxDB::Rails.configure do |config|
       config.ignored_environments = %w{development}
-      config.instrumentation_enabled = true
     end
   end
 

@@ -29,8 +29,6 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
   describe "#retry" do
     it "defaults to nil" do
-      InfluxDB::Rails.configure do |config|
-      end
       expect(InfluxDB::Rails.configuration.retry).to be_nil
     end
 
@@ -44,8 +42,6 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
   describe "#open_timeout" do
     it "defaults to 5" do
-      InfluxDB::Rails.configure do |config|
-      end
       expect(InfluxDB::Rails.configuration.open_timeout).to eql(5)
     end
 
@@ -59,8 +55,6 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
   describe "#read_timeout" do
     it "defaults to 300" do
-      InfluxDB::Rails.configure do |config|
-      end
       expect(InfluxDB::Rails.configuration.read_timeout).to eql(300)
     end
 
@@ -74,8 +68,6 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
   describe "#max_delay" do
     it "defaults to 30" do
-      InfluxDB::Rails.configure do |config|
-      end
       expect(InfluxDB::Rails.configuration.max_delay).to eql(30)
     end
 
@@ -89,8 +81,6 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
   describe "#time_precision" do
     it "defaults to seconds" do
-      InfluxDB::Rails.configure do |config|
-      end
       expect(InfluxDB::Rails.configuration.time_precision).to eql('s')
     end
 

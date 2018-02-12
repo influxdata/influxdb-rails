@@ -26,14 +26,11 @@ RSpec.describe "exception handling", :type => :request do
     it "should not make an HTTP call to the API" do
       expect(InfluxDB::Rails.client).not_to receive(:write_point)
 
-      InfluxDB::Rails.configure do |config|
-        config.ignored_user_agents = %w{Googlebot}
-      end
-
+      # note: GoogleBot is ignored by default
       if Rails::VERSION::MAJOR >= 5
-        get "/widgets/new", headers: { "HTTP_USER_AGENT" => "Googlebot/2.1" }
+        get "/widgets/new", headers: { "HTTP_USER_AGENT" => "GoogleBot/2.1" }
       else
-        get "/widgets/new", {}, { "HTTP_USER_AGENT" => "Googlebot/2.1" }
+        get "/widgets/new", {}, { "HTTP_USER_AGENT" => "GoogleBot/2.1" }
       end
     end
   end

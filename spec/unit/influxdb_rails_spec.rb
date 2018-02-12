@@ -43,7 +43,6 @@ RSpec.describe InfluxDB::Rails do
       before do
         InfluxDB::Rails.configure do |config|
           config.rails_app_name = nil
-          config.ignored_environments = []
         end
       end
 
@@ -135,11 +134,6 @@ RSpec.describe InfluxDB::Rails do
 
   describe 'rescue' do
     it "should transmit an exception when passed" do
-      InfluxDB::Rails.configure do |config|
-        config.ignored_environments = []
-        config.instrumentation_enabled = false
-      end
-
       expect(InfluxDB::Rails.client).to receive(:write_point)
 
       InfluxDB::Rails.rescue do
@@ -148,7 +142,9 @@ RSpec.describe InfluxDB::Rails do
     end
 
     it "should also raise the exception when in an ignored environment" do
-      InfluxDB::Rails.configure { |config| config.ignored_environments = %w{development test} }
+      InfluxDB::Rails.configure do |config|
+        config.ignored_environments = %w{development test}
+      end
 
       expect {
         InfluxDB::Rails.rescue do
@@ -160,8 +156,6 @@ RSpec.describe InfluxDB::Rails do
 
   describe "rescue_and_reraise" do
     it "should transmit an exception when passed" do
-      InfluxDB::Rails.configure { |config| config.ignored_environments = [] }
-
       expect(InfluxDB::Rails.client).to receive(:write_point)
 
       expect {

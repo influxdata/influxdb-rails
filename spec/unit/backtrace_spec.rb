@@ -33,7 +33,6 @@ RSpec.describe InfluxDB::Rails::Backtrace do
   context "nil backtrace" do
     before do
       @raw_backtrace = nil
-
       @backtrace = InfluxDB::Rails::Backtrace.new(@raw_backtrace)
     end
 
@@ -47,7 +46,6 @@ RSpec.describe InfluxDB::Rails::Backtrace do
         expect(@backtrace.to_a.is_a?(Array)).to be_truthy
       end
     end
-
   end
 
   describe "backtrace filters" do

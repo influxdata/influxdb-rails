@@ -24,5 +24,15 @@ else
   require "rspec/rails"
 end
 
-# use expect syntax
-RSpec.configure { |c| c.disable_monkey_patching! }
+RSpec.configure do |config|
+  # use expect syntax
+  config.disable_monkey_patching!
+
+  # reset configuration for each spec
+  config.before :each do
+    InfluxDB::Rails.instance_variable_set :@configuration, nil
+    InfluxDB::Rails.configure do |c|
+      c.environment = "test"
+    end
+  end
+end
