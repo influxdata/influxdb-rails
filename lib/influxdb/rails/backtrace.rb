@@ -1,8 +1,8 @@
 module InfluxDB
   module Rails
-    class Backtrace
-      class Line
-        FORMAT = %r{^((?:[a-zA-Z]:)?[^:]+):(\d+)(?::in `([^']+)')?$}.freeze
+    class Backtrace # rubocop:disable Style/Documentation
+      class Line # rubocop:disable Style/Documentation
+        FORMAT = /^((?:[a-zA-Z]:)?[^:]+):(\d+)(?::in `([^']+)')?$/
 
         attr_reader :file
         attr_reader :number
@@ -17,7 +17,7 @@ module InfluxDB
         end
 
         def inspect
-          "<Line: #{to_s}>"
+          "<Line: #{to_s}>" # rubocop:disable Lint/StringConversionInInterpolation
         end
       end
 
@@ -37,7 +37,7 @@ module InfluxDB
       end
 
       def inspect
-        "<Backtrace: " + lines.collect { |line| line.to_s }.join(", ") + ">"
+        "<Backtrace: " + lines.collect(&:to_s).join(", ") + ">"
       end
     end
   end

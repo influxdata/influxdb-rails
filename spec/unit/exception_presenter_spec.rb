@@ -3,8 +3,8 @@ require 'spec_helper'
 RSpec.describe InfluxDB::Rails::ExceptionPresenter do
   before do
     begin
-      1/0
-    rescue Exception => e
+      1 / 0
+    rescue ZeroDivisionError => e
       @exception = e
     end
   end

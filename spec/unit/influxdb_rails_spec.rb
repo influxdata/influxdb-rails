@@ -10,10 +10,10 @@ RSpec.describe InfluxDB::Rails do
   end
 
   describe '.handle_action_controller_metrics' do
-    let(:start)   { Time.at(1517567368) }
-    let(:finish)  { Time.at(1517567370) }
+    let(:start)   { Time.at(1_517_567_368) }
+    let(:finish)  { Time.at(1_517_567_370) }
     let(:payload) { { view_runtime: 2, db_runtime: 2, controller: 'MyController', action: 'show' } }
-    let(:data)    {
+    let(:data)    do
       {
         values: {
           value: 2
@@ -23,14 +23,14 @@ RSpec.describe InfluxDB::Rails do
           server: Socket.gethostname,
           app_name: 'my-rails-app'
         },
-        timestamp: 1517567370000
+        timestamp: 1_517_567_370_000
       }
-    }
+    end
 
     context 'rails_app_name is set' do
       it 'sends metrics with taggings and timestamps' do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          'rails.controller', data.merge({ values: { value: 2000}})
+          'rails.controller', data.merge(values: { value: 2000 })
         )
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with('rails.view', data)
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with('rails.db', data)
@@ -50,7 +50,7 @@ RSpec.describe InfluxDB::Rails do
         tags = { method: 'MyController#show', server: Socket.gethostname }
 
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          'rails.controller', data.merge({ values: { value: 2000}, tags: tags })
+          'rails.controller', data.merge(values: { value: 2000 }, tags: tags)
         )
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with('rails.view', data.merge(tags: tags))
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with('rails.db', data.merge(tags: tags))
@@ -66,13 +66,13 @@ RSpec.describe InfluxDB::Rails do
     before { allow(InfluxDB::Rails).to receive(:configuration).and_return configuration }
 
     {
-      "ns"  => 1513009229111222272,
-      nil   => 1513009229111222272,
-      "u"   => 1513009229111222,
-      "ms"  => 1513009229111,
-      "s"   => 1513009229,
-      "m"   => 25216820,
-      "h"   => 420280,
+      "ns"  => 1_513_009_229_111_222_333,
+      nil   => 1_513_009_229_111_222_333,
+      "u"   => 1_513_009_229_111_222,
+      "ms"  => 1_513_009_229_111,
+      "s"   => 1_513_009_229,
+      "m"   => 25_216_820,
+      "h"   => 420_280,
     }.each do |precision, converted_value|
       it "should return the timestamp in nanoseconds when precision is #{precision.inspect}" do
         allow(configuration).to receive(:time_precision).and_return(precision)
@@ -82,8 +82,8 @@ RSpec.describe InfluxDB::Rails do
 
     it "should raise an excpetion when precision is unrecognized" do
       allow(configuration).to receive(:time_precision).and_return('whatever')
-      expect{InfluxDB::Rails.convert_timestamp(sometime)}.
-        to raise_exception /invalid time precision.*whatever/i
+      expect { InfluxDB::Rails.convert_timestamp(sometime) }
+        .to raise_exception(/invalid time precision.*whatever/i)
     end
   end
 
@@ -91,14 +91,14 @@ RSpec.describe InfluxDB::Rails do
     it "should return the current timestamp in the configured precision" do
       now = Time.parse('2017-12-11 16:20:29.111222333 UTC')
       allow(Time).to receive(:now).and_return(now)
-      InfluxDB::Rails.configure {|config| config.time_precision = 'ms'}
-      expect(InfluxDB::Rails.current_timestamp).to eq(1513009229111)
+      InfluxDB::Rails.configure { |config| config.time_precision = 'ms' }
+      expect(InfluxDB::Rails.current_timestamp).to eq(1_513_009_229_111)
     end
   end
 
   describe ".ignorable_exception?" do
     it "should be true for exception types specified in the configuration" do
-      class DummyException < Exception; end
+      class DummyException < RuntimeError; end
       exception = DummyException.new
 
       InfluxDB::Rails.configure do |config|
@@ -124,20 +124,20 @@ RSpec.describe InfluxDB::Rails do
       expect(InfluxDB::Rails.client).to receive(:write_point)
 
       InfluxDB::Rails.rescue do
-        raise ArgumentError.new('wrong')
+        raise ArgumentError, 'wrong'
       end
     end
 
     it "should also raise the exception when in an ignored environment" do
       InfluxDB::Rails.configure do |config|
-        config.ignored_environments = %w{development test}
+        config.ignored_environments = %w[development test]
       end
 
-      expect {
+      expect do
         InfluxDB::Rails.rescue do
-          raise ArgumentError.new('wrong')
+          raise ArgumentError, 'wrong'
         end
-      }.to raise_error(ArgumentError)
+      end.to raise_error(ArgumentError)
     end
   end
 
@@ -145,9 +145,9 @@ RSpec.describe InfluxDB::Rails do
     it "should transmit an exception when passed" do
       expect(InfluxDB::Rails.client).to receive(:write_point)
 
-      expect {
-        InfluxDB::Rails.rescue_and_reraise { raise ArgumentError.new('wrong') }
-      }.to raise_error(ArgumentError)
+      expect do
+        InfluxDB::Rails.rescue_and_reraise { raise ArgumentError, 'wrong' }
+      end.to raise_error(ArgumentError)
     end
   end
 end

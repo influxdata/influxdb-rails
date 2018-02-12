@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.email       = ["dominik.menke@gmail.com", "todd@influxdb.com"]
   spec.homepage    = "https://influxdata.com"
   spec.summary     = "InfluxDB bindings for Ruby on Rails."
-  spec.description = "This gem automatically instruments your Ruby on Rails 4.x/5.x applications using InfluxDB for storage."
+  spec.description = "This gem automatically instruments your Ruby on Rails" \
+                     " 4.x/5.x applications using InfluxDB for storage."
   spec.licenses    = ["MIT"]
 
   spec.files         = `git ls-files`.split($/) # rubocop:disable Style/SpecialGlobalVars

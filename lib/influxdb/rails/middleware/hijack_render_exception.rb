@@ -1,7 +1,7 @@
 module InfluxDB
   module Rails
     module Middleware
-      module HijackRenderException
+      module HijackRenderException # rubocop:disable Style/Documentation
         def render_exception(env, e)
           controller = env["action_controller.instance"]
           request_data = controller.try(:influxdb_request_data) || {}
@@ -12,7 +12,7 @@ module InfluxDB
         end
       end
 
-      module OldHijackRenderException
+      module OldHijackRenderException # rubocop:disable Style/Documentation
         def self.included(base)
           base.send(:alias_method_chain, :render_exception, :influxdb)
         end

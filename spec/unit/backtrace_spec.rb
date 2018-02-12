@@ -73,7 +73,7 @@ RSpec.describe InfluxDB::Rails::Backtrace do
 
     it "should allow the addition of custom backtrace filters" do
       InfluxDB::Rails.configure do |config|
-        config.backtrace_filters << lambda { |line| line.gsub(/foo/, "F00") }
+        config.backtrace_filters << ->(line) { line.gsub(/foo/, "F00") }
       end
 
       filtered_backtrace = InfluxDB::Rails::Backtrace.new(@raw_backtrace)
@@ -83,4 +83,3 @@ RSpec.describe InfluxDB::Rails::Backtrace do
     end
   end
 end
-

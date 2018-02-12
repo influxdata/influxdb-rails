@@ -4,7 +4,7 @@ require "json"
 
 module InfluxDB
   module Rails
-    class ExceptionPresenter
+    class ExceptionPresenter # rubocop:disable Style/Documentation
       attr_reader :exception
       attr_reader :backtrace
       attr_reader :params
@@ -22,34 +22,26 @@ module InfluxDB
         e = e.continued_exception if e.respond_to?(:continued_exception)
         e = e.original_exception if e.respond_to?(:original_exception)
 
-        @exception = e.is_a?(String) ? Exception.new(e) : e
-        @backtrace = InfluxDB::Rails::Backtrace.new(@exception.backtrace)
-        @params = params[:params]
-        @session_data = params[:session_data] || {}
-        @current_user = params[:current_user]
-        @controller = params[:controller]
-        @action = params[:action]
-        @request_url = params[:request_url]
-        @user_agent = params[:user_agent]
-        @referer = params[:referer]
-        @remote_ip = params[:remote_ip]
-        @custom_data = params[:custom_data] || {}
+        @exception    = e.is_a?(String) ? Exception.new(e) : e
+        @backtrace    = InfluxDB::Rails::Backtrace.new(@exception.backtrace)
+        @dimensions   = {}
+        configure_from_params(params)
+
         @environment_variables = ENV.to_hash || {}
-        @dimensions = {}
       end
 
-      def context
+      def context # rubocop:disable Metrics/MethodLength
         c = {
-          :time => InfluxDB::Rails.current_timestamp,
-          :application_name => InfluxDB::Rails.configuration.application_name,
-          :application_root => InfluxDB::Rails.configuration.application_root,
-          :framework => InfluxDB::Rails.configuration.framework,
-          :framework_version => InfluxDB::Rails.configuration.framework_version,
-          :message => @exception.message,
-          :backtrace => JSON.generate(@backtrace.to_a),
-          :language => "Ruby",
-          :language_version => "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
-          :custom_data => @custom_data
+          time:               InfluxDB::Rails.current_timestamp,
+          application_name:   InfluxDB::Rails.configuration.application_name,
+          application_root:   InfluxDB::Rails.configuration.application_root,
+          framework:          InfluxDB::Rails.configuration.framework,
+          framework_version:  InfluxDB::Rails.configuration.framework_version,
+          message:            @exception.message,
+          backtrace:          JSON.generate(@backtrace.to_a),
+          language:           "Ruby",
+          language_version:   "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
+          custom_data:        @custom_data,
         }
 
         InfluxDB::Rails.configuration.add_custom_exception_data(self)
@@ -57,26 +49,41 @@ module InfluxDB
       end
 
       def dimensions
-        d = {
-          :class => @exception.class.to_s,
-          :method => "#{@controller}##{@action}",
-          :filename => File.basename(@backtrace.lines.first.try(:file)),
-          :server => Socket.gethostname,
-          :status => "open"
+        {
+          class:    @exception.class.to_s,
+          method:   "#{@controller}##{@action}",
+          filename: File.basename(@backtrace.lines.first.try(:file)),
+          server:   Socket.gethostname,
+          status:   "open",
         }.merge(@dimensions)
       end
 
       def request_data
         {
-          :params => @params,
-          :session_data => @session_data,
-          :controller => @controller,
-          :action => @action,
-          :request_url => @request_url,
-          :referer => @referer,
-          :remote_ip => @remote_ip,
-          :user_agent => @user_agent
+          params:       @params,
+          session_data: @session_data,
+          controller:   @controller,
+          action:       @action,
+          request_url:  @request_url,
+          referer:      @referer,
+          remote_ip:    @remote_ip,
+          user_agent:   @user_agent,
         }
+      end
+
+      private
+
+      def configure_from_params(params)
+        @params       = params[:params]
+        @session_data = params[:session_data] || {}
+        @current_user = params[:current_user]
+        @controller   = params[:controller]
+        @action       = params[:action]
+        @request_url  = params[:request_url]
+        @user_agent   = params[:user_agent]
+        @referer      = params[:referer]
+        @remote_ip    = params[:remote_ip]
+        @custom_data  = params[:custom_data] || {}
       end
     end
   end

@@ -1,6 +1,6 @@
 module InfluxDB
   module Rails
-    class Rack
+    class Rack # rubocop:disable Style/Documentation
       def initialize(app)
         @app = app
       end
@@ -12,7 +12,7 @@ module InfluxDB
       def _call(env)
         begin
           response = @app.call(env)
-        rescue => e
+        rescue StandardError => e
           InfluxDB::Rails.transmit_unless_ignorable(e, env)
           raise(e)
         end

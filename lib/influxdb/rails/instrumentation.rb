@@ -1,32 +1,31 @@
 module InfluxDB
   module Rails
-    module Instrumentation
-      def benchmark_for_instrumentation
+    module Instrumentation # rubocop:disable Style/Documentation
+      def benchmark_for_instrumentationn # rubocop:disable Metrics/MethodLength
         start = Time.now
         yield
 
-        unless InfluxDB::Rails.configuration.ignore_current_environment?
-          elapsed = ((Time.now - start) * 1000).ceil
-          InfluxDB::Rails.client.write_point "instrumentation", {
-            values: {
-              value: elapsed,
-            },
-            tags: {
-              method: "#{controller_name}##{action_name}",
-              server: Socket.gethostname,
-            },
+        return if InfluxDB::Rails.configuration.ignore_current_environment?
+
+        InfluxDB::Rails.client.write_point \
+          "instrumentation",
+          values: {
+            value: ((Time.now - start) * 1000).ceil,
+          },
+          tags: {
+            method: "#{controller_name}##{action_name}",
+            server: Socket.gethostname,
           }
-        end
       end
 
       def self.included(base)
         base.extend(ClassMethods)
       end
 
-      module ClassMethods
+      module ClassMethods # rubocop:disable Style/Documentation
         def instrument(methods = [])
           methods = [methods] unless methods.is_a?(Array)
-          around_filter :benchmark_for_instrumentation, :only => methods
+          around_filter :benchmark_for_instrumentation, only: methods
         end
       end
     end

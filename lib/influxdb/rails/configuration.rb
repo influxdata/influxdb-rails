@@ -1,6 +1,8 @@
 module InfluxDB
   module Rails
-    class Configuration
+    # rubocop:disable Metrics/ClassLength
+
+    class Configuration # rubocop:disable Style/Documentation
       attr_accessor :influxdb_hosts
       attr_accessor :influxdb_port
       attr_accessor :influxdb_username
@@ -48,43 +50,46 @@ module InfluxDB
       attr_accessor :reraise_global_exceptions
       deprecate :reraise_global_exceptions => "This method serves no purpose and will be removed in the release after 0.1.13"
 
-
       DEFAULTS = {
-        :influxdb_hosts     => ["localhost"],
-        :influxdb_port      => 8086,
-        :influxdb_username  => "root",
-        :influxdb_password  => "root",
-        :influxdb_database  => nil,
-        :async              => true,
-        :use_ssl            => false,
-        :retry              => nil,
-        :open_timeout       => 5,
-        :read_timeout       => 300,
-        :max_delay          => 30,
-        :time_precision     => "s",
+        influxdb_hosts:     ["localhost"],
+        influxdb_port:      8086,
+        influxdb_username:  "root",
+        influxdb_password:  "root",
+        influxdb_database:  nil,
+        async:              true,
+        use_ssl:            false,
+        retry:              nil,
+        open_timeout:       5,
+        read_timeout:       300,
+        max_delay:          30,
+        time_precision:     "s",
 
-        :series_name_for_controller_runtimes  => "rails.controller",
-        :series_name_for_view_runtimes        => "rails.view",
-        :series_name_for_db_runtimes          => "rails.db",
+        series_name_for_controller_runtimes:  "rails.controller",
+        series_name_for_view_runtimes:        "rails.view",
+        series_name_for_db_runtimes:          "rails.db",
 
-        :rails_app_name => nil,
+        rails_app_name: nil,
 
-        :ignored_exceptions => %w{ActiveRecord::RecordNotFound
-                                  ActionController::RoutingError},
-        :ignored_exception_messages => [],
-        :ignored_reports => [],
-        :ignored_environments => %w{test cucumber selenium},
-        :ignored_user_agents => %w{GoogleBot},
-        :environment_variable_filters => [
+        ignored_exceptions: %w[
+          ActiveRecord::RecordNotFound
+          ActionController::RoutingError
+        ],
+
+        ignored_exception_messages:   [],
+        ignored_reports:              [],
+        ignored_environments:         %w[test cucumber selenium],
+        ignored_user_agents:          %w[GoogleBot],
+        environment_variable_filters: [
           /password/i,
           /key/i,
           /secret/i,
           /ps1/i,
           /rvm_.*_clr/i,
-          /color/i
+          /color/i,
         ],
-        :backtrace_filters => [
-          lambda { |line| line.gsub(/^\.\//, "") },
+
+        backtrace_filters: [
+          ->(line) { line.gsub(%r{/^\.//}, "") },
           lambda { |line|
             return line if InfluxDB::Rails.configuration.application_root.to_s.empty?
             line.gsub(/#{InfluxDB::Rails.configuration.application_root}/, "[APP_ROOT]")
@@ -94,9 +99,12 @@ module InfluxDB
               Gem.path.each { |path| line = line.gsub(/#{path}/, "[GEM_ROOT]") }
             end
             line
-          }
-        ]
-      }
+          },
+        ],
+      }.freeze
+
+      # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
 
       def initialize
         @influxdb_hosts     = DEFAULTS[:influxdb_hosts]
@@ -132,21 +140,29 @@ module InfluxDB
         @instrumentation_enabled  = true
       end
 
+      # rubocop:enable Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize
+
       def debug?
-        !!@debug
+        !!@debug # rubocop:disable Style/DoubleNegation
       end
 
       def instrumentation_enabled?
-        !!@instrumentation_enabled
+        !!@instrumentation_enabled # rubocop:disable Style/DoubleNegation
       end
 
       def ignore_user_agent?(incoming_user_agent)
-        return false if self.ignored_user_agents.nil?
-        self.ignored_user_agents.any? {|agent| incoming_user_agent =~ /#{agent}/}
+        return false if ignored_user_agents.nil?
+        ignored_user_agents.any? { |agent| incoming_user_agent =~ /#{agent}/ }
       end
 
       def ignore_current_environment?
-        self.ignored_environments.include?(self.environment)
+        ignored_environments.include?(environment)
+      end
+
+      def ignore_exception?(e)
+        !ignored_exception_messages.find { |msg| /.*#{msg}.*/ =~ e.message }.nil? ||
+          ignored_exceptions.include?(e.class.to_s)
       end
 
       def define_custom_exception_data(&block)
@@ -163,9 +179,12 @@ module InfluxDB
       deprecate :database_name => "This method will be removed in the release after 0.1.12, you ought to use #influxdb_database"
 
       private
+
       def initialize_http_connection
         Net::HTTP.new(@app_host, "80")
       end
     end
+
+    # rubocop:enable Metrics/ClassLength
   end
 end

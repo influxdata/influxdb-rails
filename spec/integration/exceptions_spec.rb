@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + "/integration_helper")
 
-RSpec.describe "exception handling", :type => :request do
+RSpec.describe "exception handling", type: :request do
   before do
     InfluxDB::Rails.configure do |config|
-      config.ignored_environments = %w{development}
+      config.ignored_environments = %w[development]
       config.instrumentation_enabled = false
     end
   end
@@ -30,9 +30,8 @@ RSpec.describe "exception handling", :type => :request do
       if Rails::VERSION::MAJOR >= 5
         get "/widgets/new", headers: { "HTTP_USER_AGENT" => "GoogleBot/2.1" }
       else
-        get "/widgets/new", {}, { "HTTP_USER_AGENT" => "GoogleBot/2.1" }
+        get "/widgets/new", {}, "HTTP_USER_AGENT" => "GoogleBot/2.1"
       end
     end
   end
 end
-

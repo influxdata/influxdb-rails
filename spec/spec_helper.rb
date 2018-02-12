@@ -4,9 +4,7 @@ ENV["RAILS_ENV"] ||= "test"
 
 require "rails"
 
-if Rails::VERSION::MAJOR < 4
-  raise "Sorry, influxdb-rails only supports Rails 4.x and higher."
-end
+raise "Sorry, influxdb-rails only supports Rails 4.x and higher." if Rails::VERSION::MAJOR < 4
 
 require 'bundler/setup'
 Bundler.require
@@ -16,13 +14,8 @@ FakeWeb.allow_net_connect = false
 
 puts "Loading Rails v#{Rails.version}..."
 
-if Rails.version.to_f < 5.0
-  require "support/rails4/app"
-  require "rspec/rails"
-else
-  require "support/rails5/app"
-  require "rspec/rails"
-end
+require "support/rails#{Rails::VERSION::MAJOR}/app"
+require "rspec/rails"
 
 RSpec.configure do |config|
   # use expect syntax
