@@ -5,10 +5,11 @@ module InfluxDB
         start = Time.now
         yield
 
-        return if InfluxDB::Rails.configuration.ignore_current_environment?
+        c = InfluxDB::Rails.configuration
+        return if c.ignore_current_environment?
 
         InfluxDB::Rails.client.write_point \
-          "instrumentation",
+          c.series_name_for_instrumentation,
           values: {
             value: ((Time.now - start) * 1000).ceil,
           },

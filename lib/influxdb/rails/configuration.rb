@@ -19,6 +19,8 @@ module InfluxDB
       attr_accessor :series_name_for_controller_runtimes
       attr_accessor :series_name_for_view_runtimes
       attr_accessor :series_name_for_db_runtimes
+      attr_accessor :series_name_for_exceptions
+      attr_accessor :series_name_for_instrumentation
 
       attr_accessor :rails_app_name
 
@@ -61,6 +63,8 @@ module InfluxDB
         series_name_for_controller_runtimes:  "rails.controller",
         series_name_for_view_runtimes:        "rails.view",
         series_name_for_db_runtimes:          "rails.db",
+        series_name_for_exceptions:           "rails.exceptions",
+        series_name_for_instrumentation:      "instrumentation",
 
         rails_app_name: nil,
 
@@ -117,6 +121,8 @@ module InfluxDB
         @series_name_for_controller_runtimes  = DEFAULTS[:series_name_for_controller_runtimes]
         @series_name_for_view_runtimes        = DEFAULTS[:series_name_for_view_runtimes]
         @series_name_for_db_runtimes          = DEFAULTS[:series_name_for_db_runtimes]
+        @series_name_for_exceptions           = DEFAULTS[:series_name_for_exceptions]
+        @series_name_for_instrumentation      = DEFAULTS[:series_name_for_instrumentation]
 
         @rails_app_name = DEFAULTS[:rails_app_name]
 

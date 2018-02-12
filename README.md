@@ -58,6 +58,8 @@ InfluxDB::Rails.configure do |config|
   # config.series_name_for_controller_runtimes = "rails.controller"
   # config.series_name_for_view_runtimes       = "rails.view"
   # config.series_name_for_db_runtimes         = "rails.db"
+  # config.series_name_for_exceptions          = "rails.exceptions"
+  # config.series_name_for_instrumentation     = "instrumentation"
 
   # If you have multiple Rails apps running on the same host, you propably
   # want to differentiate between them. By default, the metrics are only
@@ -68,6 +70,9 @@ InfluxDB::Rails.configure do |config|
   # config.rails_app_name = Rails.application.class.name.underscore
 end
 ```
+
+To see all default values, take a look into `InfluxDB::Rails::Configuration::DEFAULTS`,
+defined in `lib/influxdb/rails/configuration.rb`
 
 Out of the box, you'll automatically get reporting of your controller,
 view, and db runtimes for each request. You can also call through to the

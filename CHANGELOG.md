@@ -6,6 +6,9 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 ## Unreleased changes
 
 - Added config parameter for app name (#44, @stefanhorning)
+- Added config parameters for additional series:
+  - `InfluxDB::Rails::Configuration#series_name_for_instrumentation`
+  - `InfluxDB::Rails::Configuration#series_name_for_exceptions`
 - Removed previously deprecated methods:
   - `InfluxDB::Rails::Configuration#reraise_global_exceptions`
   - `InfluxDB::Rails::Configuration#database_name`
