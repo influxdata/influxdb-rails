@@ -1,33 +1,31 @@
-# -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "influxdb/rails/version"
 
-Gem::Specification.new do |s|
-  s.name        = "influxdb-rails"
-  s.version     = InfluxDB::Rails::VERSION
-  s.authors     = ["Todd Persen"]
-  s.email       = ["todd@influxdb.com"]
-  s.homepage    = "http://influxdb.com"
-  s.summary     = %q{InfluxDB bindings for Ruby on Rails.}
-  s.description = %q{This gem automatically instruments your Ruby on Rails 4.x/5.x applications using InfluxDB for storage.}
+Gem::Specification.new do |spec|
+  spec.name        = "influxdb-rails"
+  spec.version     = InfluxDB::Rails::VERSION
+  spec.authors     = ["Dominik Menke", "Todd Persen"]
+  spec.email       = ["dominik.menke@gmail.com", "todd@influxdb.com"]
+  spec.homepage    = "https://influxdata.com"
+  spec.summary     = "InfluxDB bindings for Ruby on Rails."
+  spec.description = "This gem automatically instruments your Ruby on Rails 4.x/5.x applications using InfluxDB for storage."
+  spec.licenses    = ["MIT"]
 
-  s.rubyforge_project = "influxdb-rails"
+  spec.files         = `git ls-files`.split($/) # rubocop:disable Style/SpecialGlobalVars
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features|smoke)/})
+  spec.require_paths = ["lib"]
 
-  s.files         = Dir.glob('**/*')
-  s.test_files    = Dir.glob('test/**/*') + Dir.glob('spec/**/*') + Dir.glob('features/**/*')
-  s.executables   = Dir.glob('bin/**/*').map {|f| File.basename(f)}
-  s.require_paths = ["lib"]
+  spec.required_ruby_version = ">= 2.2.0"
 
-  s.licenses = ['MIT']
+  spec.add_runtime_dependency "influxdb", "~> 0.5.0"
+  spec.add_runtime_dependency "railties", "> 3"
 
-  s.add_runtime_dependency 'influxdb', '~> 0.5.0'
-  s.add_runtime_dependency 'railties', '> 3'
-
-  s.add_development_dependency 'bundler', ['>= 1.0.0']
-  s.add_development_dependency 'fakeweb', ['>= 0']
-  s.add_development_dependency 'rake', ['>= 0']
-  s.add_development_dependency 'rdoc', ['>= 0']
-  s.add_development_dependency 'rspec', ['>= 0']
-  s.add_development_dependency 'rspec-rails', ['>= 3.0.0']
-  s.add_development_dependency 'tzinfo', ['>= 0']
+  spec.add_development_dependency "bundler", ">= 1.0.0"
+  spec.add_development_dependency "fakeweb"
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rdoc"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec-rails", ">= 3.0.0"
+  spec.add_development_dependency "tzinfo"
 end
