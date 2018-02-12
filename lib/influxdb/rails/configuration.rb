@@ -47,10 +47,10 @@ module InfluxDB
       attr_accessor :debug
 
       DEFAULTS = {
-        influxdb_hosts:     ["localhost"],
+        influxdb_hosts:     ["localhost"].freeze,
         influxdb_port:      8086,
-        influxdb_username:  "root",
-        influxdb_password:  "root",
+        influxdb_username:  "root".freeze,
+        influxdb_password:  "root".freeze,
         influxdb_database:  nil,
         async:              true,
         use_ssl:            false,
@@ -58,25 +58,25 @@ module InfluxDB
         open_timeout:       5,
         read_timeout:       300,
         max_delay:          30,
-        time_precision:     "s",
+        time_precision:     "s".freeze,
 
-        series_name_for_controller_runtimes:  "rails.controller",
-        series_name_for_view_runtimes:        "rails.view",
-        series_name_for_db_runtimes:          "rails.db",
-        series_name_for_exceptions:           "rails.exceptions",
-        series_name_for_instrumentation:      "instrumentation",
+        series_name_for_controller_runtimes:  "rails.controller".freeze,
+        series_name_for_view_runtimes:        "rails.view".freeze,
+        series_name_for_db_runtimes:          "rails.db".freeze,
+        series_name_for_exceptions:           "rails.exceptions".freeze,
+        series_name_for_instrumentation:      "instrumentation".freeze,
 
         rails_app_name: nil,
 
         ignored_exceptions: %w[
           ActiveRecord::RecordNotFound
           ActionController::RoutingError
-        ],
+        ].freeze,
 
-        ignored_exception_messages:   [],
-        ignored_reports:              [],
-        ignored_environments:         %w[test cucumber selenium],
-        ignored_user_agents:          %w[GoogleBot],
+        ignored_exception_messages:   [].freeze,
+        ignored_reports:              [].freeze,
+        ignored_environments:         %w[test cucumber selenium].freeze,
+        ignored_user_agents:          %w[GoogleBot].freeze,
         environment_variable_filters: [
           /password/i,
           /key/i,
@@ -84,10 +84,10 @@ module InfluxDB
           /ps1/i,
           /rvm_.*_clr/i,
           /color/i,
-        ],
+        ].freeze,
 
         backtrace_filters: [
-          ->(line) { line.gsub(%r{/^\.//}, "") },
+          ->(line) { line.gsub(%r{^\./}, "") },
           lambda { |line|
             return line if InfluxDB::Rails.configuration.application_root.to_s.empty?
             line.gsub(/#{InfluxDB::Rails.configuration.application_root}/, "[APP_ROOT]")
@@ -98,7 +98,7 @@ module InfluxDB
             end
             line
           },
-        ],
+        ].freeze,
       }.freeze
 
       # rubocop:disable Metrics/MethodLength
