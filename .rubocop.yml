@@ -1,0 +1,62 @@
+AllCops:
+  Include:
+  - 'Rakefile'
+  - '*.gemspec'
+  - 'lib/**/*.rb'
+  - 'spec/**/*.rb'
+  Exclude:
+  - 'bin/**/*'
+  - 'smoke/**/*'
+  - 'Gemfile'
+  DisplayCopNames: true
+  StyleGuideCopsOnly: false
+  TargetRubyVersion: 2.2
+
+Rails:
+  Enabled: false
+
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyleForEmptyBraces: space
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/BlockLength:
+  Exclude:
+  - 'spec/**/*.rb'
+
+Metrics/LineLength:
+  Max: 100
+  Exclude:
+  - 'spec/**/*.rb'
+
+Metrics/ModuleLength:
+  CountComments: false  # count full line comments?
+  Max: 120
+
+Metrics/ParameterLists:
+  Max: 6
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+  Exclude:
+  - "spec/**/*.rb"
+
