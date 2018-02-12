@@ -64,17 +64,17 @@ module InfluxDB
       # rubocop:disable Metrics/MethodLength
 
       def report_exception(e, env = {})
+        timestamp = InfluxDB::Rails.current_timestamp
         env = influxdb_request_data if env.empty? && defined? influxdb_request_data
         exception_presenter = ExceptionPresenter.new(e, env)
         log :info, "Exception: #{exception_presenter.to_json[0..512]}..."
 
-        tags = exception_presenter.context.merge(exception_presenter.dimensions)
-        timestamp = tags.delete(:time)
+        ex_data =
 
         client.write_point \
           configuration.series_name_for_exceptions,
-          values:    { ts: timestamp },
-          tags:      tags,
+          values:    exception_presenter.values.merge(ts: timestamp),
+          tags:      exception_presenter.context.merge(exception_presenter.dimensions),
           timestamp: timestamp
       rescue StandardError => e
         log :info, "[InfluxDB::Rails] Something went terribly wrong." \
