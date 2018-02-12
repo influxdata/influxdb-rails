@@ -87,54 +87,52 @@ module InfluxDB
         hostname = Socket.gethostname
         app_name = configuration.rails_app_name
 
-        begin
-          client.write_point(
-            configuration.series_name_for_controller_runtimes,
-            {
-              values: {
-                value: controller_runtime,
-              },
-              tags: {
-                method:   method,
-                server:   hostname,
-                app_name: app_name
-              }.compact,
-              timestamp: timestamp,
-            }
-          )
+        client.write_point(
+          configuration.series_name_for_controller_runtimes,
+          {
+            values: {
+              value: controller_runtime,
+            },
+            tags: hash_compact({
+              method:   method,
+              server:   hostname,
+              app_name: app_name
+            }),
+            timestamp: timestamp,
+          }
+        )
 
-          client.write_point(
-            configuration.series_name_for_view_runtimes,
-            {
-              values: {
-                value: view_runtime,
-              },
-              tags: {
-                method:   method,
-                server:   hostname,
-                app_name: app_name
-              }.compact,
-              timestamp: timestamp,
-            }
-          )
+        client.write_point(
+          configuration.series_name_for_view_runtimes,
+          {
+            values: {
+              value: view_runtime,
+            },
+            tags: hash_compact({
+              method:   method,
+              server:   hostname,
+              app_name: app_name
+            }),
+            timestamp: timestamp,
+          }
+        )
 
-          client.write_point(
-            configuration.series_name_for_db_runtimes,
-            {
-              values: {
-                value: db_runtime,
-              },
-              tags: {
-                method:   method,
-                server:   hostname,
-                app_name: app_name
-              }.compact,
-              timestamp: timestamp,
-            }
-          )
-        rescue => e
-          log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
-        end
+        client.write_point(
+          configuration.series_name_for_db_runtimes,
+          {
+            values: {
+              value: db_runtime,
+            },
+            tags: hash_compact({
+              method:   method,
+              server:   hostname,
+              app_name: app_name
+            }),
+            timestamp: timestamp,
+          }
+        )
+      rescue => e
+        log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
       end
 
       def convert_timestamp(ts)
@@ -190,6 +188,12 @@ module InfluxDB
         else
           opts[:to].send(:include, opts[:from].const_get("Old" + module_name))
         end
+      end
+
+      def hash_compact(hash)
+        # Hash#compact was introduced in Rails 4.2 and is a language
+        # feature since Ruby 2.4
+        hash.select { |_, value| !value.nil? }
       end
     end
   end
