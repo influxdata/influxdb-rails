@@ -65,34 +65,21 @@ RSpec.describe InfluxDB::Rails do
     let(:configuration) { double("Configuration") }
     before { allow(InfluxDB::Rails).to receive(:configuration).and_return configuration }
 
-    it "should return the timestamp in nanoseconds when precision is 'ns'" do
-      allow(configuration).to receive(:time_precision).and_return('ns')
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(1513009229111222272)
+    {
+      "ns"  => 1513009229111222272,
+      nil   => 1513009229111222272,
+      "u"   => 1513009229111222,
+      "ms"  => 1513009229111,
+      "s"   => 1513009229,
+      "m"   => 25216820,
+      "h"   => 420280,
+    }.each do |precision, converted_value|
+      it "should return the timestamp in nanoseconds when precision is #{precision.inspect}" do
+        allow(configuration).to receive(:time_precision).and_return(precision)
+        expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(converted_value)
+      end
     end
-    it "should return the timestamp in nanoseconds when precision is nil" do
-      allow(configuration).to receive(:time_precision)
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(1513009229111222272)
-    end
-    it "should return the timestamp in microseconds when precision is u" do
-      allow(configuration).to receive(:time_precision).and_return('u')
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(1513009229111222)
-    end
-    it "should return the timestamp in milliseconds when precision is ms" do
-      allow(configuration).to receive(:time_precision).and_return('ms')
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(1513009229111)
-    end
-    it "should return the timestamp in seconds when precision is s" do
-      allow(configuration).to receive(:time_precision).and_return('s')
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(1513009229)
-    end
-    it "should return the timestamp in minutes when precision is m" do
-      allow(configuration).to receive(:time_precision).and_return('m')
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(25216820)
-    end
-    it "should return the timestamp in hours when precision is h" do
-      allow(configuration).to receive(:time_precision).and_return('h')
-      expect(InfluxDB::Rails.convert_timestamp(sometime)).to eq(420280)
-    end
+
     it "should raise an excpetion when precision is unrecognized" do
       allow(configuration).to receive(:time_precision).and_return('whatever')
       expect{InfluxDB::Rails.convert_timestamp(sometime)}.
