@@ -9,6 +9,18 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 - Added config parameters for additional series:
   - `InfluxDB::Rails::Configuration#series_name_for_instrumentation`
   - `InfluxDB::Rails::Configuration#series_name_for_exceptions`
+
+### Breaking changes
+
+- Changed keys for exceptions (#43, @vassilevsky & @kkentzo)
+  - Exception message and backtrace are now InfluxDB values (changed from tags).
+  - The keys changed from `message` to `exception_message` and from
+    `backtrace` to `exception_backtrace`, since a single shard does not
+    allow for tags and values to share the same key
+  - To convert existing exception traces into the new format for
+    consistency, see [this gist][TODO!!!]
+- Removed `time` key from InfluxDB::Rails::ExceptionPresenter#context`
+  - use `InfluxDB::Rails.current_timestamp` directly
 - Removed previously deprecated methods:
   - `InfluxDB::Rails::Configuration#reraise_global_exceptions`
   - `InfluxDB::Rails::Configuration#database_name`
