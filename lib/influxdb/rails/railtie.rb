@@ -12,12 +12,7 @@ module InfluxDB
 
       config.after_initialize do
         InfluxDB::Rails.configure(true) do |config|
-          config.logger           ||= ::Rails.logger
-          config.environment      ||= ::Rails.env
-          config.application_root ||= ::Rails.root
-          config.application_name ||= ::Rails.application.class.parent_name
-          config.framework          = "Rails"
-          config.framework_version  = ::Rails.version
+          config.load_rails_defaults
         end
 
         ActiveSupport.on_load(:action_controller) do

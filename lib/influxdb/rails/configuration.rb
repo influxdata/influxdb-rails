@@ -173,6 +173,15 @@ module InfluxDB
         @custom_exception_data_handler.call(exception_presenter) if @custom_exception_data_handler
       end
 
+      def load_rails_defaults
+        @logger           ||= ::Rails.logger
+        @environment      ||= ::Rails.env
+        @application_root ||= ::Rails.root
+        @application_name ||= ::Rails.application.class.parent_name
+        @framework          = "Rails"
+        @framework_version  = ::Rails.version
+      end
+
       private
 
       def initialize_http_connection

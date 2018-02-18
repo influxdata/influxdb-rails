@@ -25,7 +25,7 @@ RSpec.configure do |config|
   config.before :each do
     InfluxDB::Rails.instance_variable_set :@configuration, nil
     InfluxDB::Rails.configure do |c|
-      c.environment = "test"
+      c.load_rails_defaults
     end
   end
 end
