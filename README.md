@@ -1,24 +1,17 @@
+> You are looking at the README for the master branch of this gem.
+> The latest released version lives in the stable-04 branch,
+> [see here](https://github.com/influxdata/influxdb-rails/tree/stable-04#readme)
+> for an online version.
+
 # influxdb-rails
-
-> This library is now updated to require `influxdb-ruby` v0.2.0 and greater,
-> meaning that only InfluxDB v0.9.x and higher will be supported.  **If
-> you want to use this library with InfluxDB v0.8.x, you'll need to use
-> v0.1.10 or earlier. You will also need to manually specify
-> `gem 'influxdb', '0.1.9'` in your gemfile.**
-
-We encourage you to submit a pull request if you have a contribution.
-Maintained by [@toddboom][] and [@dmke][].
-
-[@toddboom]: https://github.com/toddboom
-[@dmke]: https://github.com/dmke
-
----
 
 [![Gem Version](https://badge.fury.io/rb/influxdb-rails.svg)](https://badge.fury.io/rb/influxdb-rails)
 [![Build Status](https://travis-ci.org/influxdata/influxdb-rails.svg?branch=master)](https://travis-ci.org/influxdata/influxdb-rails)
 
 Automatically instrument your Ruby on Rails applications and write the
 metrics directly into [InfluxDB](http://influxdb.org/).
+
+This gem is designed for Rails 4.0+, Ruby 2.2+ and InfluxDB 0.9+.
 
 ## Install
 
@@ -85,4 +78,35 @@ InfluxDB::Rails.client.write_point "events",
 ```
 
 Additional documentation for `InfluxDB::Client` lives in the
-[influxdb-ruby](http://github.com/influxdb/influxdb-ruby) repo.
+[influxdb-ruby](http://github.com/influxdata/influxdb-ruby) repo.
+
+## Testing
+
+```
+git clone git@github.com:influxdata/influxdb-rails.git
+cd influxdb-rails
+bundle
+bundle exec rake
+```
+
+## Contributing
+
+- Fork this repository on GitHub.
+- Make your changes.
+  - Add tests.
+  - Add an entry in the `CHANGELOG.md` in the "unreleased" section on top.
+- Run the tests:
+  - Either run them manually:
+    ```sh
+    for gemfile in gemfiles/Gemfile.rails-*.x; do     \
+      BUNDLE_GEMFILE=$gemfile bundle install --quiet; \
+      BUNDLE_GEMFILE=$gemfile bundle exec rspec;      \
+    done
+    ```
+  - or wait for [Travis][travis-pr] to pick up your changes, *after*
+    you made a pull request.
+- Send a pull request.
+  - Please rebase against the master branch.
+- If your changes look good, we'll merge them.
+
+[travis-pr]: https://travis-ci.org/influxdata/influxdb-rails/pull_requests
