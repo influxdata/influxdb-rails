@@ -62,14 +62,13 @@ module InfluxDB
       alias transmit_unless_ignorable report_exception_unless_ignorable
 
       # rubocop:disable Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
 
       def report_exception(e, env = {})
         timestamp = InfluxDB::Rails.current_timestamp
         env = influxdb_request_data if env.empty? && defined? influxdb_request_data
         exception_presenter = ExceptionPresenter.new(e, env)
         log :info, "Exception: #{exception_presenter.to_json[0..512]}..."
-
-        ex_data =
 
         client.write_point \
           configuration.series_name_for_exceptions,
@@ -81,8 +80,6 @@ module InfluxDB
           " Exception failed to take off! #{e.class}: #{e.message}"
       end
       alias transmit report_exception
-
-      # rubocop:disable Metrics/AbcSize
 
       def handle_action_controller_metrics(_name, start, finish, _id, payload)
         tags = {
@@ -148,15 +145,6 @@ module InfluxDB
       rescue StandardError => e
         transmit_unless_ignorable(e)
         raise(e)
-      end
-
-      def safely_prepend(module_name, opts = {})
-        return if opts[:to].nil? || opts[:from].nil?
-        if opts[:to].respond_to?(:prepend, true)
-          opts[:to].send(:prepend, opts[:from].const_get(module_name))
-        else
-          opts[:to].send(:include, opts[:from].const_get("Old" + module_name))
-        end
       end
     end
   end

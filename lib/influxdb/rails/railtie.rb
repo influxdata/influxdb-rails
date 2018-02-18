@@ -27,19 +27,8 @@ module InfluxDB
           include InfluxDB::Rails::Instrumentation
         end
 
-        if defined?(::ActionDispatch::DebugExceptions)
-          require 'influxdb/rails/middleware/hijack_render_exception'
-          exceptions_class = ::ActionDispatch::DebugExceptions
-        elsif defined?(::ActionDispatch::ShowExceptions)
-          require 'influxdb/rails/middleware/hijack_render_exception'
-          exceptions_class = ::ActionDispatch::ShowExceptions
-        end
-
-        InfluxDB::Rails.safely_prepend(
-          "HijackRenderException",
-          from: InfluxDB::Rails::Middleware,
-          to: exceptions_class
-        )
+        require 'influxdb/rails/middleware/hijack_render_exception'
+        ::ActionDispatch::DebugExceptions.prepend InfluxDB::Rails::Middleware::HijackRenderException
 
         if defined?(ActiveSupport::Notifications)
           listen = lambda do |name, start, finish, id, payload|
