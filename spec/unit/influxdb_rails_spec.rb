@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe InfluxDB::Rails do
   before do
     InfluxDB::Rails.configure do |config|
-      config.rails_app_name = 'my-rails-app'
+      config.application_name = 'my-rails-app'
       config.ignored_environments = []
       config.time_precision = "ms"
     end
@@ -21,13 +21,13 @@ RSpec.describe InfluxDB::Rails do
         tags: {
           method: 'MyController#show',
           server: Socket.gethostname,
-          app_name: 'my-rails-app'
+          app_name: 'my-rails-app',
         },
         timestamp: 1_517_567_370_000
       }
     end
 
-    context 'rails_app_name is set' do
+    context 'application_name is set' do
       it 'sends metrics with taggings and timestamps' do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
           'rails.controller', data.merge(values: { value: 2000 })
@@ -39,10 +39,10 @@ RSpec.describe InfluxDB::Rails do
       end
     end
 
-    context 'rails_app_name is nil' do
+    context 'application_name is nil' do
       before do
         InfluxDB::Rails.configure do |config|
-          config.rails_app_name = nil
+          config.application_name = nil
         end
       end
 

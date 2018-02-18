@@ -85,7 +85,7 @@ module InfluxDB
         tags = {
           method:   "#{payload[:controller]}##{payload[:action]}",
           server:   Socket.gethostname,
-          app_name: configuration.rails_app_name,
+          app_name: configuration.application_name,
         }.reject { |_, value| value.nil? }
 
         ts = convert_timestamp(finish.utc)

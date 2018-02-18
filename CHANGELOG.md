@@ -5,7 +5,7 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## Unreleased changes
 
-- Added config parameter for app name (#44, @stefanhorning)
+- Added app name to the measurement's tag sets (#44, @stefanhorning)
 - Added config parameters for additional series:
   - `InfluxDB::Rails::Configuration#series_name_for_instrumentation`
   - `InfluxDB::Rails::Configuration#series_name_for_exceptions`

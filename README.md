@@ -54,13 +54,9 @@ InfluxDB::Rails.configure do |config|
   # config.series_name_for_exceptions          = "rails.exceptions"
   # config.series_name_for_instrumentation     = "instrumentation"
 
-  # If you have multiple Rails apps running on the same host, you propably
-  # want to differentiate between them. By default, the metrics are only
-  # tagged with the hostname. You can add the Rails application name as
-  # additional tag with `config.rails_app_name` (nil by default).
-
-  config.rails_app_name = "my-rails-app"
-  # config.rails_app_name = Rails.application.class.name.underscore
+  # Set the application name to something meaningful, by default we
+  # infer the app name from the Rails.application class name.
+  # config.application_name = Rails.application.class.parent_name
 end
 ```
 
