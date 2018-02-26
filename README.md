@@ -76,6 +76,78 @@ InfluxDB::Rails.client.write_point "events",
 Additional documentation for `InfluxDB::Client` lives in the
 [influxdb-ruby](http://github.com/influxdata/influxdb-ruby) repo.
 
+## Frequently Asked Questions
+
+
+**Q: I'm seeing far less requests recorded in InfluxDB than my logs suggest.**
+
+By default, this gem only sends data points with *second time precision*
+to the InfluxDB server. If you experience multiple requests per second,
+**only the last** point (with the same tag set) is stored.
+
+See [InfluxDB server docs][duplicate-points] for further details.
+To work around this limitation, set the `config.time_precision` to one
+of `"ms"` (milliseconds, 1·10<sup>-3</sup>s), `"us"` (microseconds,
+1·10<sup>-6</sup>s) or `"ns"` (nanoseconds, 1·10<sup>-9</sup>s).
+
+[duplicate-points]: https://docs.influxdata.com/influxdb/v1.4/troubleshooting/frequently-asked-questions/#how-does-influxdb-handle-duplicate-points
+
+
+**Q: How does the measurement influence the response time?**
+
+This gem subscribes to the `process_action.action_controller` controller
+notification (via `ActiveSupport::Notifications` · [guide][arn-guide] ·
+[docs][arn-docs] · [impl][arn-impl]), i.e. it runs *after* a controller
+action has finished.
+
+The thread processing incoming HTTP requests however is blocked until
+the notification is processed. By default, this means calculating and
+enqueueing some data points for later processing (`config.async = true`),
+which usually is negligible. The asynchronuous sending happens in a seperate
+thread, which batches multiple data points.
+
+If you, however, use a synchronous client (`config.async = false`), the
+data points are immediately sent to the InfluxDB server. Depending on
+the network link, this might cause the HTTP thread to block a lot longer.
+
+[arn-guide]: http://guides.rubyonrails.org/v5.1/active_support_instrumentation.html#process-action-action-controller
+[arn-docs]: http://api.rubyonrails.org/v5.1/classes/ActiveSupport/Notifications.html
+[arn-impl]: https://github.com/rails/rails/blob/5-1-stable/actionpack/lib/action_controller/metal/instrumentation.rb#L30-L38
+
+
+**Q: How does this gem handle an unreachable InfluxDB server?**
+
+By default, the InfluxDB client will retry indefinetly, until a write
+succeedes (see [client docs][] for details). This has two important
+implcations, depending on the value of `config.async`:
+
+- if the client runs asynchronously (i.e. in a seperate thread), the queue
+  might fill up with hundrets of megabytes of data points
+- if the client runs synchronously (i.e. inline in the request/response
+  cycle), it might block all available request threads
+
+In both cases, your application server might become inresponsive and needs
+to be restarted (which can happen automatically in `cgroups` contexts).
+
+If you setup a maximum retry value (`Integer === config.retry`), the
+client will try upto that amount of times to send the data to the server
+and (on final error) log an error and discard the values.
+
+[client docs]: https://github.com/influxdata/influxdb-ruby#retry
+
+
+**Q: What happens with unwritten points, when the application restarts?**
+
+The data points are simply discarded.
+
+
+**Q: What happens, when the InfluxDB client or this gem throws an exception? Will the user see 500 errors?**
+
+No. The controller instrumentation is wrapped in a `rescue StandardError`
+clause, i.e. this gem will only write the error to the `client.logger`
+(`Rails.logger` by default) and not disturb the user experience.
+
+
 ## Testing
 
 ```
