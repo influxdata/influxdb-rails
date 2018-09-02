@@ -32,9 +32,7 @@ RSpec.describe InfluxDB::Rails do
 
     context "application_name is set" do
       it "sends metrics with taggings and timestamps" do
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "rails.controller", data.merge(values: { value: 2000 })
-        )
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.controller", data.merge(values: { value: 2000 }))
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", data)
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", data)
 
@@ -44,9 +42,7 @@ RSpec.describe InfluxDB::Rails do
 
     context "application_name is nil" do
       before do
-        InfluxDB::Rails.configure do |config|
-          config.application_name = nil
-        end
+        allow(InfluxDB::Rails.configuration).to receive(:application_name).and_return(nil)
       end
 
       it "does not add the app_name tag to metrics" do
@@ -58,11 +54,27 @@ RSpec.describe InfluxDB::Rails do
           server:      Socket.gethostname,
         }
 
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "rails.controller", data.merge(values: { value: 2000 }, tags: tags)
-        )
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", data.merge(tags: tags))
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", data.merge(tags: tags))
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.controller", include(tags: tags))
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", include(tags: tags))
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", include(tags: tags))
+
+        described_class.handle_action_controller_metrics("unused", start, finish, "unused", payload)
+      end
+    end
+
+    context "when tags_middleware is overwritten" do
+      before do
+        allow(InfluxDB::Rails.configuration).to receive(:tags_middleware).and_return(tags_middleware)
+      end
+
+      let(:tags_middleware) { ->(tags) { tags.merge(static: "value") } }
+
+      it "processes tags throught the middleware" do
+        tags = data[:tags].merge(static: "value")
+
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.controller", include(tags: tags))
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", include(tags: tags))
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", include(tags: tags))
 
         described_class.handle_action_controller_metrics("unused", start, finish, "unused", payload)
       end
