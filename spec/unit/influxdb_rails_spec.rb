@@ -12,16 +12,20 @@ RSpec.describe InfluxDB::Rails do
   describe ".handle_action_controller_metrics" do
     let(:start)   { Time.at(1_517_567_368) }
     let(:finish)  { Time.at(1_517_567_370) }
-    let(:payload) { { view_runtime: 2, db_runtime: 2, controller: "MyController", action: "show" } }
+    let(:payload) { { view_runtime: 2, db_runtime: 2, controller: "MyController", action: "show", method: "GET", format: "*/*", path: "/posts", status: 200 } }
     let(:data)    do
       {
         values:    {
           value: 2
         },
-        tags:      {
-          method:   "MyController#show",
-          server:   Socket.gethostname,
-          app_name: "my-rails-app",
+        tags: {
+          method:      "MyController#show",
+          status:      200,
+          format:      "*/*",
+          http_method: "GET",
+          path:        "/posts",
+          server:      Socket.gethostname,
+          app_name:    "my-rails-app",
         },
         timestamp: 1_517_567_370_000
       }
@@ -46,8 +50,16 @@ RSpec.describe InfluxDB::Rails do
         end
       end
 
-      it "doesn not add the app_name tag to metrics" do
-        tags = { method: "MyController#show", server: Socket.gethostname }
+
+      it "does not add the app_name tag to metrics" do
+        tags = {
+          method:      "MyController#show",
+          status:      200,
+          format:      "*/*",
+          http_method: "GET",
+          path:        "/posts",
+          server:      Socket.gethostname,
+        }
 
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
           "rails.controller", data.merge(values: { value: 2000 }, tags: tags)
