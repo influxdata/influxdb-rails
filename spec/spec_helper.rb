@@ -4,7 +4,9 @@ ENV["RAILS_ENV"] ||= "test"
 
 require "rails"
 
-raise "Sorry, influxdb-rails only supports Rails 4.x and higher." if Rails::VERSION::MAJOR < 4
+if Rails::VERSION::MAJOR < 4 || Rails::VERSION::MAJOR == 4 && Rails::VERSION::MINOR < 2
+  raise "Sorry, influxdb-rails only supports Rails 4.2 and higher."
+end
 
 require 'bundler/setup'
 Bundler.require
