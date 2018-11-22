@@ -13,20 +13,22 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 ### Breaking changes
 
 - Support for Ruby <= 2.2.x has been removed
-- Support for Rails <= 4.1.x and lower has been removed
+- Support for Rails <= 4.1.x has been removed
 - Changed keys for exceptions (#43, @vassilevsky & @kkentzo)
   - Exception message and backtrace are now InfluxDB values (changed from tags).
   - The keys changed from `message` to `exception_message` and from
     `backtrace` to `exception_backtrace`, since a single shard does not
     allow for tags and values to share the same key
   - To convert existing exception traces into the new format for
-    consistency, see [this gist][TODO!!!]
+    consistency, see [this gist][migrate].
 - Removed `time` key from InfluxDB::Rails::ExceptionPresenter#context`
   - use `InfluxDB::Rails.current_timestamp` directly
 - Removed previously deprecated methods:
   - `InfluxDB::Rails::Configuration#reraise_global_exceptions`
   - `InfluxDB::Rails::Configuration#database_name`
   - `InfluxDB::Rails::Configuration#application_id`
+
+[migrate]: https://gist.github.com/dmke/2d0f4ccf9f43faf82e732dc041e90ca2
 
 ## v0.4.3, released 2017-12-12
 
