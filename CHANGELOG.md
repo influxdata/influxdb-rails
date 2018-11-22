@@ -3,12 +3,13 @@
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
 
-## Unreleased changes
+## v1.0.0.beta1, released 2018-11-22
 
 - Added app name to the measurement's tag sets (#44, @stefanhorning)
 - Added config parameters for additional series:
   - `InfluxDB::Rails::Configuration#series_name_for_instrumentation`
   - `InfluxDB::Rails::Configuration#series_name_for_exceptions`
+- Added method, status and format tags to metrics (#50, @ChrisBr)
 
 ### Breaking changes
 
