@@ -12,8 +12,8 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ### Breaking changes
 
-- Support for Ruby 2.2 and lower has been removed
-- Support for Rails 4.1 and lower has been removed
+- Support for Ruby <= 2.2.x has been removed
+- Support for Rails <= 4.1.x and lower has been removed
 - Changed keys for exceptions (#43, @vassilevsky & @kkentzo)
   - Exception message and backtrace are now InfluxDB values (changed from tags).
   - The keys changed from `message` to `exception_message` and from

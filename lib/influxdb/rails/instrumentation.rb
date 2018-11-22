@@ -13,7 +13,7 @@ module InfluxDB
           values: {
             value: ((Time.now - start) * 1000).ceil,
           },
-          tags: {
+          tags:   {
             method: "#{controller_name}##{action_name}",
             server: Socket.gethostname,
           }

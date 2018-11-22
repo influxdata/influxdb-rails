@@ -1,4 +1,4 @@
-require 'action_controller/railtie'
+require "action_controller/railtie"
 
 app = Class.new(Rails::Application)
 app.config.secret_key_base = "1234567890abcdef1234567890abcdef"

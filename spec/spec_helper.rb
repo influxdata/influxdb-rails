@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 ENV["RAILS_ENV"] ||= "test"
 
@@ -8,7 +8,7 @@ if Rails::VERSION::MAJOR < 4 || Rails::VERSION::MAJOR == 4 && Rails::VERSION::MI
   raise "Sorry, influxdb-rails only supports Rails 4.2 and higher."
 end
 
-require 'bundler/setup'
+require "bundler/setup"
 Bundler.require
 
 require "fakeweb"
@@ -26,8 +26,6 @@ RSpec.configure do |config|
   # reset configuration for each spec
   config.before :each do
     InfluxDB::Rails.instance_variable_set :@configuration, nil
-    InfluxDB::Rails.configure do |c|
-      c.load_rails_defaults
-    end
+    InfluxDB::Rails.configure(&:load_rails_defaults)
   end
 end
