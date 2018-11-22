@@ -18,7 +18,7 @@ RSpec.describe InfluxDB::Rails do
         values:    {
           value: 2
         },
-        tags: {
+        tags:      {
           method:      "MyController#show",
           status:      200,
           format:      "*/*",
@@ -49,7 +49,6 @@ RSpec.describe InfluxDB::Rails do
           config.application_name = nil
         end
       end
-
 
       it "does not add the app_name tag to metrics" do
         tags = {
