@@ -19,9 +19,9 @@ end
 
 class ApplicationController < ActionController::Base; end
 class WidgetsController < ApplicationController
-  def index
-    head 200
-  end
+  prepend_view_path File.join(File.dirname(__FILE__), "..", "views")
+
+  def index; end
 
   def new
     1 / 0

@@ -21,6 +21,8 @@ module InfluxDB
       attr_accessor :series_name_for_db_runtimes
       attr_accessor :series_name_for_exceptions
       attr_accessor :series_name_for_instrumentation
+      attr_accessor :series_name_for_render_template
+      attr_accessor :series_name_for_render_partial
 
       attr_accessor :tags_middleware
       attr_accessor :rails_app_name
@@ -66,6 +68,8 @@ module InfluxDB
         series_name_for_db_runtimes:         "rails.db".freeze,
         series_name_for_exceptions:          "rails.exceptions".freeze,
         series_name_for_instrumentation:     "instrumentation".freeze,
+        series_name_for_render_template:     "rails.render_template".freeze,
+        series_name_for_render_partial:      "rails.render_partial".freeze,
 
         tags_middleware:                     ->(tags) { tags },
         rails_app_name:                      nil,
@@ -126,6 +130,8 @@ module InfluxDB
         @series_name_for_db_runtimes          = DEFAULTS[:series_name_for_db_runtimes]
         @series_name_for_exceptions           = DEFAULTS[:series_name_for_exceptions]
         @series_name_for_instrumentation      = DEFAULTS[:series_name_for_instrumentation]
+        @series_name_for_render_template      = DEFAULTS[:series_name_for_render_template]
+        @series_name_for_render_partial       = DEFAULTS[:series_name_for_render_partial]
 
         @tags_middleware = DEFAULTS[:tags_middleware]
         @rails_app_name = DEFAULTS[:rails_app_name]

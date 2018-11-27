@@ -55,6 +55,8 @@ InfluxDB::Rails.configure do |config|
   # config.series_name_for_controller_runtimes = "rails.controller"
   # config.series_name_for_view_runtimes       = "rails.view"
   # config.series_name_for_db_runtimes         = "rails.db"
+  # config.series_name_for_render_template     = "rails.render_template"
+  # config.series_name_for_render_partial      = "rails.render_partial"
   # config.series_name_for_exceptions          = "rails.exceptions"
   # config.series_name_for_instrumentation     = "instrumentation"
 

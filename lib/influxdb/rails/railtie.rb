@@ -25,6 +25,12 @@ module InfluxDB
           config = InfluxDB::Rails.configuration
           request_subsriber = Middleware::RequestSubscriber.new(config)
           ActiveSupport::Notifications.subscribe "process_action.action_controller", request_subsriber
+
+          render_template_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_template)
+          ActiveSupport::Notifications.subscribe "render_template.action_view", render_template_subscriber
+
+          render_partial_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_partial)
+          ActiveSupport::Notifications.subscribe "render_partial.action_view", render_partial_subscriber
         end
       end
     end

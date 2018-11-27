@@ -9,7 +9,7 @@ RSpec.describe WidgetsController, type: :controller do
 
   describe "in a normal request" do
     it "should result in attempts to write metrics via the client" do
-      expect(InfluxDB::Rails.client).to receive(:write_point).exactly(3).times
+      expect(InfluxDB::Rails.client).to receive(:write_point).exactly(5).times
       get :index
     end
   end
