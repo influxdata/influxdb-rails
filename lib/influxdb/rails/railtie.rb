@@ -22,19 +22,9 @@ module InfluxDB
         ::ActionDispatch::DebugExceptions.prepend InfluxDB::Rails::Middleware::HijackRenderException
 
         if defined?(ActiveSupport::Notifications)
-          listen = lambda do |name, start, finish, id, payload|
-            c = InfluxDB::Rails.configuration
-
-            if c.instrumentation_enabled? && !c.ignore_current_environment?
-              begin
-                InfluxDB::Rails.handle_action_controller_metrics(name, start, finish, id, payload)
-              rescue StandardError => e
-                c.logger.error "[InfluxDB::Rails] Failed writing points to InfluxDB: #{e.message}"
-              end
-            end
-          end
-
-          ActiveSupport::Notifications.subscribe "process_action.action_controller", &listen
+          config = InfluxDB::Rails.configuration
+          request_subsriber = Middleware::RequestSubscriber.new(config)
+          ActiveSupport::Notifications.subscribe "process_action.action_controller", request_subsriber
         end
       end
     end
