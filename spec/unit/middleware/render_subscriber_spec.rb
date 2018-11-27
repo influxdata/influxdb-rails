@@ -14,7 +14,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
     let(:start_time)   { Time.at(1_517_567_368) }
     let(:finish_time)  { Time.at(1_517_567_370) }
     let(:series_name) { "series_name" }
-    let(:payload) { { identifier: "index.html" } }
+    let(:payload) { { identifier: "index.html", count: 43, cache_hits: 42 } }
     let(:result) {
       {
         values:
@@ -23,7 +23,9 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
         },
         tags:
         {
-          file_name: "index.html"
+          filename: "index.html",
+          count: 43,
+          cache_hits: 42
         },
         timestamp: 1_517_567_370_000
       }
@@ -37,6 +39,20 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
           series_name, result
         )
         subject.call("name", start_time, finish_time, "id", payload)
+      end
+
+      context "with empty tags" do
+        before do
+          payload[:count] = nil
+          result[:tags].delete(:count)
+        end
+
+        it "does not write empty tags" do
+          expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
+            series_name, result
+          )
+          subject.call("name", start_time, finish_time, "id", payload)
+        end
       end
     end
 

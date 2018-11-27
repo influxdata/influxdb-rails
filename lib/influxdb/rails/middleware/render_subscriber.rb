@@ -20,15 +20,22 @@ module InfluxDB
                     config.ignore_current_environment?
 
           value = ((finished - started) * 1000).ceil
-          tags = {
-            file_name: payload[:identifier],
-          }
           ts = convert_timestamp(finished.utc, config.time_precision)
           begin
-            InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags, timestamp: ts
+            InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: ts
           rescue StandardError => e
             log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
           end
+        end
+
+        private
+
+        def tags(payload)
+          {
+            filename:   payload[:identifier],
+            count:      payload[:count],
+            cache_hits: payload[:cache_hits],
+          }.reject { |_, value| value.nil? }
         end
       end
     end

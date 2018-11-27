@@ -31,6 +31,9 @@ module InfluxDB
 
           render_partial_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_partial)
           ActiveSupport::Notifications.subscribe "render_partial.action_view", render_partial_subscriber
+
+          render_collection_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_collection)
+          ActiveSupport::Notifications.subscribe "render_collection.action_view", render_collection_subscriber
         end
       end
     end
