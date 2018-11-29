@@ -11,7 +11,7 @@
 Automatically instrument your Ruby on Rails applications and write the
 metrics directly into [InfluxDB](http://influxdb.org/).
 
-This gem is designed for Rails 4.0+, Ruby 2.2+ and InfluxDB 0.9+.
+This gem is designed for Rails 4.2+, Ruby 2.3+ and InfluxDB 0.9+.
 
 
 ## Installation
