@@ -1,48 +1,10 @@
-require "influxdb/rails/middleware/subscriber"
+require "influxdb/rails/middleware/simple_subscriber"
 
 module InfluxDB
   module Rails
     module Middleware
-      class RenderSubscriber < Subscriber # :nodoc:
-        attr_reader :series_name
-
-        def initialize(configuration, series_name)
-          @series_name = series_name
-          super(configuration)
-        end
-
-        # rubocop:disable Metrics/MethodLength
-
-        def call(_name, started, finished, _unique_id, payload)
-          return unless enabled?
-
-          value = ((finished - started) * 1000).ceil
-          ts = InfluxDB.convert_timestamp(finished.utc, configuration.time_precision)
-          begin
-            InfluxDB::Rails.client.write_point \
-              series_name,
-              values:    { value: value },
-              tags:      tags(payload),
-              timestamp: ts
-          rescue StandardError => e
-            log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
-          end
-        end
-
-        # rubocop:enable Metrics/MethodLength
-
+      class RenderSubscriber < SimpleSubscriber # :nodoc:
         private
-
-        def enabled?
-          super && series_name.present?
-        end
-
-        def location
-          [
-            Thread.current[:_influxdb_rails_controller],
-            Thread.current[:_influxdb_rails_action],
-          ].reject(&:blank?).join("#")
-        end
 
         def tags(payload)
           {

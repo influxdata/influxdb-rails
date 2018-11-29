@@ -8,7 +8,7 @@ module InfluxDB
         app.config.middleware.insert 0, InfluxDB::Rails::Rack
       end
 
-      config.after_initialize do
+      config.after_initialize do # rubocop:disable Metrics/BlockLength
         InfluxDB::Rails.configure(true, &:load_rails_defaults)
 
         ActiveSupport.on_load(:action_controller) do
@@ -40,6 +40,9 @@ module InfluxDB
 
           collections = Middleware::RenderSubscriber.new(c, c.series_name_for_render_collection)
           ActiveSupport::Notifications.subscribe "render_collection.action_view", collections
+
+          sql = Middleware::SqlSubscriber.new(c, c.series_name_for_sql)
+          ActiveSupport::Notifications.subscribe "sql.active_record", sql
         end
       end
     end

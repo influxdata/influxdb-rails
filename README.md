@@ -58,6 +58,7 @@ InfluxDB::Rails.configure do |config|
   # config.series_name_for_render_template     = "rails.render_template"
   # config.series_name_for_render_partial      = "rails.render_partial"
   # config.series_name_for_render_collection   = "rails.render_collection"
+  # config.series_name_for_sql                 = nil
   # config.series_name_for_exceptions          = "rails.exceptions"
   # config.series_name_for_instrumentation     = "instrumentation"
 
@@ -72,6 +73,10 @@ defined in `lib/influxdb/rails/configuration.rb`
 
 Out of the box, you'll automatically get reporting of your controller,
 view, and db runtimes and rendering of template, partial and collection for each request.
+Reporting of SQL queries is disabled by default because it is still in experimental mode
+and currently requires String parsing which might cause performance issues on query
+intensive applications. You can enable it by setting the `series_name_for_sql`
+configuration.
 
 It is possible to disable the rendering series by setting the series_name to nil.
 

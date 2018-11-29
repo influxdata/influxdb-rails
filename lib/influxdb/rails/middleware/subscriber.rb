@@ -25,6 +25,13 @@ module InfluxDB
           configuration.instrumentation_enabled? &&
             !configuration.ignore_current_environment?
         end
+
+        def location
+          [
+            Thread.current[:_influxdb_rails_controller],
+            Thread.current[:_influxdb_rails_action],
+          ].reject(&:blank?).join("#")
+        end
       end
     end
   end
