@@ -13,13 +13,15 @@ metrics directly into [InfluxDB](http://influxdb.org/).
 
 This gem is designed for Rails 4.0+, Ruby 2.2+ and InfluxDB 0.9+.
 
-## Install
+
+## Installation
 
 ```
 $ [sudo] gem install influxdb-rails
 ```
 
 Or add it to your `Gemfile`, etc.
+
 
 ## Usage
 
@@ -78,9 +80,13 @@ InfluxDB::Rails.client.write_point "events",
 Additional documentation for `InfluxDB::Client` lives in the
 [influxdb-ruby](http://github.com/influxdata/influxdb-ruby) repo.
 
+
 ### Tags
 
-You can modify tags, that are sent to InfluxDB by defining the `tags_middleware`.
+You can modify the tags sent to InfluxDB by defining a middleware, which
+receives the current tag set (`Hash` with `Symbol` keys and `String`
+values) as argument and returns a hash in the same form. The middleware
+can be any object, as long it responds to `#call` (like a `Proc`):
 
 ```ruby
 InfluxDB::Rails.configure do |config|
@@ -90,7 +96,8 @@ InfluxDB::Rails.configure do |config|
 end
 ```
 
-By default, the following tags are sent for **actions series**:
+By default, the following tags are sent for *non-exception series*
+(`rails.controller`, `rails.view`, `rails.db` and `instrumentation`):
 
 ```ruby
 {
@@ -100,7 +107,7 @@ By default, the following tags are sent for **actions series**:
 }
 ```
 
-and for the exceptions:
+and for the exceptions (series name `rails.exceptions`):
 
 ```ruby
 {
@@ -111,13 +118,14 @@ and for the exceptions:
   language:           "Ruby",
   language_version:   "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
   custom_data:        @custom_data,
-  class:    @exception.class.to_s,
-  method:   "#{@controller}##{@action}",
-  filename: File.basename(@backtrace.lines.first.try(:file)),
-  server:   Socket.gethostname,
-  status:   "open",
+  class:              @exception.class.to_s,
+  method:             "#{@controller}##{@action}",
+  filename:           File.basename(@backtrace.lines.first.try(:file)),
+  server:             Socket.gethostname,
+  status:             "open",
 }
 ```
+
 
 ## Frequently Asked Questions
 
@@ -199,6 +207,7 @@ cd influxdb-rails
 bundle
 bundle exec rake
 ```
+
 
 ## Contributing
 

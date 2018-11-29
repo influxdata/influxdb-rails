@@ -23,7 +23,6 @@ module InfluxDB
       attr_accessor :series_name_for_instrumentation
 
       attr_accessor :tags_middleware
-
       attr_accessor :rails_app_name
 
       attr_accessor :application_name
