@@ -22,6 +22,11 @@ module InfluxDB
         ::ActionDispatch::DebugExceptions.prepend InfluxDB::Rails::Middleware::HijackRenderException
 
         if defined?(ActiveSupport::Notifications)
+          ActiveSupport::Notifications.subscribe "start_processing.action_controller" do |name, start, finish, id, payload|
+            Thread.current[:_influxdb_rails_controller] = payload[:controller]
+            Thread.current[:_influxdb_rails_action]     = payload[:action]
+          end
+
           config = InfluxDB::Rails.configuration
           request_subsriber = Middleware::RequestSubscriber.new(config)
           ActiveSupport::Notifications.subscribe "process_action.action_controller", request_subsriber

@@ -24,6 +24,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
         tags:
         {
           filename: "index.html",
+          location: "Foo#bar",
           count: 43,
           cache_hits: 42
         },
@@ -32,6 +33,16 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
     }
 
     subject { described_class.new(config, series_name) }
+
+    before do
+      Thread.current[:_influxdb_rails_controller] = "Foo"
+      Thread.current[:_influxdb_rails_action]     = "bar"
+    end
+
+    after do
+      Thread.current[:_influxdb_rails_action]     = nil
+      Thread.current[:_influxdb_rails_controller] = nil
+    end
 
     context 'successfully' do
       it "writes to InfluxDB" do

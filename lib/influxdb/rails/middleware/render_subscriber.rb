@@ -30,12 +30,20 @@ module InfluxDB
 
         private
 
+        def location
+          [
+            Thread.current[:_influxdb_rails_controller],
+            Thread.current[:_influxdb_rails_action],
+          ].reject(&:blank?).join("#")
+        end
+
         def tags(payload)
           {
+            location:   location,
             filename:   payload[:identifier],
             count:      payload[:count],
             cache_hits: payload[:cache_hits],
-          }.reject { |_, value| value.nil? }
+          }.reject { |_, value| value.blank? }
         end
       end
     end
