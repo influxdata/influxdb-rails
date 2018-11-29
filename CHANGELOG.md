@@ -3,6 +3,12 @@
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
 
+## v1.0.0.beta2, unreleased
+
+- Added `tags_middleware` config option (#47, @ @Kukunin)
+- Removed path tag from metrics (introduced with #50), because it
+  potentially produces "exceed tag value limit" (#54, @ChrisBr)
+
 ## v1.0.0.beta1, released 2018-11-22
 
 - Added app name to the measurement's tag sets (#44, @stefanhorning)
