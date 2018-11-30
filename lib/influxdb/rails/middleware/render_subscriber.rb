@@ -1,11 +1,9 @@
-require "influxdb/rails/timestamp_conversion"
 require "influxdb/rails/logger"
 
 module InfluxDB
   module Rails
     module Middleware
       class RenderSubscriber
-        include InfluxDB::Rails::TimestampConversion
         include InfluxDB::Rails::Logger
 
         attr_reader :series_name, :config
@@ -20,7 +18,7 @@ module InfluxDB
                     config.ignore_current_environment?
 
           value = ((finished - started) * 1000).ceil
-          ts = convert_timestamp(finished.utc, config.time_precision)
+          ts = InfluxDB.convert_timestamp(finished.utc, config.time_precision)
           begin
             InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: ts
           rescue StandardError => e

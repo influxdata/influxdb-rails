@@ -1,11 +1,9 @@
-require "influxdb/rails/timestamp_conversion"
 require "influxdb/rails/logger"
 
 module InfluxDB
   module Rails
     module Middleware
       class RequestSubscriber
-        include InfluxDB::Rails::TimestampConversion
         include InfluxDB::Rails::Logger
 
         attr_reader :configuration
@@ -18,9 +16,10 @@ module InfluxDB
           return if !configuration.instrumentation_enabled? ||
                     configuration.ignore_current_environment?
 
+          ts = InfluxDB.convert_timestamp(finish.utc, configuration.time_precision)
           begin
             series(payload, start, finish).each do |series_name, value|
-              InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: convert_timestamp(finish.utc, configuration.time_precision)
+              InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: ts
             end
           rescue StandardError => e
             log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"

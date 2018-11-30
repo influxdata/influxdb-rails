@@ -10,7 +10,6 @@ require "influxdb/rails/exception_presenter"
 require "influxdb/rails/configuration"
 require "influxdb/rails/backtrace"
 require "influxdb/rails/rack"
-require "influxdb/rails/timestamp_conversion"
 
 require "influxdb/rails/railtie" if defined?(Rails::Railtie)
 
@@ -20,7 +19,6 @@ module InfluxDB
   module Rails
     class << self
       include InfluxDB::Rails::Logger
-      include InfluxDB::Rails::TimestampConversion
 
       attr_writer :configuration
       attr_writer :client
@@ -92,7 +90,7 @@ module InfluxDB
       # rubocop:enable Metrics/AbcSize
 
       def current_timestamp
-        convert_timestamp(Time.now.utc, configuration.time_precision)
+        InfluxDB.convert_timestamp(Time.now.utc, configuration.time_precision)
       end
 
       def ignorable_exception?(ex)
