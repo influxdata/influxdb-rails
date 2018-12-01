@@ -65,6 +65,15 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
           subject.call("name", start_time, finish_time, "id", payload)
         end
       end
+
+      context "disabled" do
+        subject { described_class.new(config, nil) }
+
+        it "does not write a data point" do
+          expect_any_instance_of(InfluxDB::Client).not_to receive(:write_point)
+          subject.call("name", start_time, finish_time, "id", payload)
+        end
+      end
     end
 
     context "unsuccessfully" do

@@ -25,6 +25,10 @@ module InfluxDB
 
         private
 
+        def enabled?
+          super && series_name.present?
+        end
+
         def location
           [
             Thread.current[:_influxdb_rails_controller],
