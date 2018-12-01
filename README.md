@@ -71,8 +71,17 @@ To see all default values, take a look into `InfluxDB::Rails::Configuration::DEF
 defined in `lib/influxdb/rails/configuration.rb`
 
 Out of the box, you'll automatically get reporting of your controller,
-view, and db runtimes for each request. You can also call through to the
-underlying `InfluxDB::Client` object to write arbitrary data like this:
+view, and db runtimes and rendering of template, partial and collection for each request.
+
+It is possible to disable the rendering series by setting the series_name to nil.
+
+```ruby
+  # config.series_name_for_render_template     = nil
+  # config.series_name_for_render_partial      = nil
+  # config.series_name_for_render_collection   = nil
+```
+
+You can also call through to the underlying `InfluxDB::Client` object to write arbitrary data like this:
 
 ``` ruby
 InfluxDB::Rails.client.write_point "events",
