@@ -6,7 +6,7 @@ app.config.secret_token = "1234567890abcdef1234567890abcdef"
 app.config.session_store :cookie_store, key: "_myapp_session"
 app.config.active_support.deprecation = :log
 app.config.eager_load = false
-app.config.root = File.dirname(__FILE__)
+app.config.root = __dir__
 Rails.backtrace_cleaner.remove_silencers!
 app.initialize!
 
@@ -19,7 +19,7 @@ end
 
 class ApplicationController < ActionController::Base; end
 class WidgetsController < ApplicationController
-  prepend_view_path File.join(File.dirname(__FILE__), "..", "views")
+  prepend_view_path File.join(__dir__, "..", "views")
 
   def index; end
 
