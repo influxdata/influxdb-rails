@@ -1,24 +1,22 @@
-require "influxdb/rails/logger"
+require "influxdb/rails/middleware/subscriber"
 
 module InfluxDB
   module Rails
     module Middleware
-      class RenderSubscriber
-        include InfluxDB::Rails::Logger
+      class RenderSubscriber < Subscriber
+        attr_reader :series_name
 
-        attr_reader :series_name, :config
-
-        def initialize(config, series_name)
-          @config = config
+        def initialize(configuration, series_name)
           @series_name = series_name
+          super(configuration)
         end
 
         def call(_name, started, finished, _unique_id, payload)
-          return if !config.instrumentation_enabled? ||
-                    config.ignore_current_environment?
+          return if !configuration.instrumentation_enabled? ||
+                    configuration.ignore_current_environment?
 
           value = ((finished - started) * 1000).ceil
-          ts = InfluxDB.convert_timestamp(finished.utc, config.time_precision)
+          ts = InfluxDB.convert_timestamp(finished.utc, configuration.time_precision)
           begin
             InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: ts
           rescue StandardError => e

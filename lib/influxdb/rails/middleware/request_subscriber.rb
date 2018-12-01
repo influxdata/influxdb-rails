@@ -1,17 +1,9 @@
-require "influxdb/rails/logger"
+require "influxdb/rails/middleware/subscriber"
 
 module InfluxDB
   module Rails
     module Middleware
-      class RequestSubscriber
-        include InfluxDB::Rails::Logger
-
-        attr_reader :configuration
-
-        def initialize(configuration)
-          @configuration = configuration
-        end
-
+      class RequestSubscriber < Subscriber
         def call(_name, start, finish, _id, payload)
           return if !configuration.instrumentation_enabled? ||
                     configuration.ignore_current_environment?
