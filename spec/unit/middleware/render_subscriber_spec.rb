@@ -17,15 +17,13 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
     let(:payload) { { identifier: "index.html", count: 43, cache_hits: 42 } }
     let(:result) {
       {
-        values:
-        {
+        values:    {
           value: 2000
         },
-        tags:
-        {
-          filename: "index.html",
-          location: "Foo#bar",
-          count: 43,
+        tags:      {
+          filename:   "index.html",
+          location:   "Foo#bar",
+          count:      43,
           cache_hits: 42
         },
         timestamp: 1_517_567_370_000
@@ -44,7 +42,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
       Thread.current[:_influxdb_rails_controller] = nil
     end
 
-    context 'successfully' do
+    context "successfully" do
       it "writes to InfluxDB" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
           series_name, result
