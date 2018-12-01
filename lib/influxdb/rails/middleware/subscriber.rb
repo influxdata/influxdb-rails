@@ -11,6 +11,13 @@ module InfluxDB
         def initialize(configuration)
           @configuration = configuration
         end
+
+        private
+
+        def enabled?
+          configuration.instrumentation_enabled? &&
+            !configuration.ignore_current_environment?
+        end
       end
     end
   end

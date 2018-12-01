@@ -5,8 +5,7 @@ module InfluxDB
     module Middleware
       class RequestSubscriber < Subscriber
         def call(_name, start, finish, _id, payload)
-          return if !configuration.instrumentation_enabled? ||
-                    configuration.ignore_current_environment?
+          return unless enabled?
 
           ts = InfluxDB.convert_timestamp(finish.utc, configuration.time_precision)
           begin

@@ -12,8 +12,7 @@ module InfluxDB
         end
 
         def call(_name, started, finished, _unique_id, payload)
-          return if !configuration.instrumentation_enabled? ||
-                    configuration.ignore_current_environment?
+          return unless enabled?
 
           value = ((finished - started) * 1000).ceil
           ts = InfluxDB.convert_timestamp(finished.utc, configuration.time_precision)
