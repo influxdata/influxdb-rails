@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 2.3.0"
 
-  spec.add_runtime_dependency "influxdb", "~> 0.6.2"
+  spec.add_runtime_dependency "influxdb", "~> 0.6", ">= 0.6.4"
   spec.add_runtime_dependency "railties", ">= 4.2"
 
   spec.add_development_dependency "bundler", ">= 1.0.0"

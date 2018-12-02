@@ -90,7 +90,7 @@ module InfluxDB
       # rubocop:enable Metrics/AbcSize
 
       def current_timestamp
-        InfluxDB.convert_timestamp(Time.now.utc, configuration.time_precision)
+        InfluxDB.now(configuration.time_precision)
       end
 
       def ignorable_exception?(ex)

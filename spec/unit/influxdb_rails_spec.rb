@@ -10,11 +10,14 @@ RSpec.describe InfluxDB::Rails do
   end
 
   describe ".current_timestamp" do
+    let(:timestamp) { 1_513_009_229_111 }
+
     it "should return the current timestamp in the configured precision" do
-      now = Time.parse("2017-12-11 16:20:29.111222333 UTC")
-      allow(Time).to receive(:now).and_return(now)
-      InfluxDB::Rails.configure { |config| config.time_precision = "ms" }
-      expect(InfluxDB::Rails.current_timestamp).to eq(1_513_009_229_111)
+      expect(Process).to receive(:clock_gettime).
+        with(Process::CLOCK_REALTIME, :millisecond).
+        and_return(timestamp)
+
+      expect(InfluxDB::Rails.current_timestamp).to eq(timestamp)
     end
   end
 
