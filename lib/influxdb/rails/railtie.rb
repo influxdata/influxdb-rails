@@ -22,23 +22,24 @@ module InfluxDB
         ::ActionDispatch::DebugExceptions.prepend InfluxDB::Rails::Middleware::HijackRenderException
 
         if defined?(ActiveSupport::Notifications)
-          ActiveSupport::Notifications.subscribe "start_processing.action_controller" do |name, start, finish, id, payload|
+          cache = lambda do |_, _, _, _, payload|
             Thread.current[:_influxdb_rails_controller] = payload[:controller]
             Thread.current[:_influxdb_rails_action]     = payload[:action]
           end
+          ActiveSupport::Notifications.subscribe "start_processing.action_controller", &cache
 
-          config = InfluxDB::Rails.configuration
-          request_subsriber = Middleware::RequestSubscriber.new(config)
-          ActiveSupport::Notifications.subscribe "process_action.action_controller", request_subsriber
+          c = InfluxDB::Rails.configuration
+          requests = Middleware::RequestSubscriber.new(c)
+          ActiveSupport::Notifications.subscribe "process_action.action_controller", requests
 
-          render_template_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_template)
-          ActiveSupport::Notifications.subscribe "render_template.action_view", render_template_subscriber
+          templates = Middleware::RenderSubscriber.new(c, c.series_name_for_render_template)
+          ActiveSupport::Notifications.subscribe "render_template.action_view", templates
 
-          render_partial_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_partial)
-          ActiveSupport::Notifications.subscribe "render_partial.action_view", render_partial_subscriber
+          partials = Middleware::RenderSubscriber.new(c, c.series_name_for_render_partial)
+          ActiveSupport::Notifications.subscribe "render_partial.action_view", partials
 
-          render_collection_subscriber = Middleware::RenderSubscriber.new(config, config.series_name_for_render_collection)
-          ActiveSupport::Notifications.subscribe "render_collection.action_view", render_collection_subscriber
+          collections = Middleware::RenderSubscriber.new(c, c.series_name_for_render_collection)
+          ActiveSupport::Notifications.subscribe "render_collection.action_view", collections
         end
       end
     end

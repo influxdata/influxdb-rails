@@ -3,14 +3,18 @@ require "influxdb/rails/middleware/subscriber"
 module InfluxDB
   module Rails
     module Middleware
-      class RequestSubscriber < Subscriber
-        def call(_name, start, finish, _id, payload)
+      class RequestSubscriber < Subscriber # :nodoc:
+        def call(_name, start, finish, _id, payload) # rubocop:disable Metrics/MethodLength
           return unless enabled?
 
           ts = InfluxDB.convert_timestamp(finish.utc, configuration.time_precision)
           begin
             series(payload, start, finish).each do |series_name, value|
-              InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: ts
+              InfluxDB::Rails.client.write_point \
+                series_name,
+                values:    { value: value },
+                tags:      tags(payload),
+                timestamp: ts
             end
           rescue StandardError => e
             log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
@@ -31,15 +35,14 @@ module InfluxDB
         end
 
         def tags(payload)
-          configuration.tags_middleware.call(
-            {
-              method:      "#{payload[:controller]}##{payload[:action]}",
-              status:      payload[:status],
-              format:      payload[:format],
-              http_method: payload[:method],
-              server:      Socket.gethostname,
-              app_name:    configuration.application_name,
-            }.reject { |_, value| value.nil? })
+          configuration.tags_middleware.call({
+            method:      "#{payload[:controller]}##{payload[:action]}",
+            status:      payload[:status],
+            format:      payload[:format],
+            http_method: payload[:method],
+            server:      Socket.gethostname,
+            app_name:    configuration.application_name,
+          }.reject { |_, value| value.nil? })
         end
       end
     end

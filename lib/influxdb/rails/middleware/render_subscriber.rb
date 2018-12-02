@@ -3,7 +3,7 @@ require "influxdb/rails/middleware/subscriber"
 module InfluxDB
   module Rails
     module Middleware
-      class RenderSubscriber < Subscriber
+      class RenderSubscriber < Subscriber # :nodoc:
         attr_reader :series_name
 
         def initialize(configuration, series_name)
@@ -11,17 +11,25 @@ module InfluxDB
           super(configuration)
         end
 
+        # rubocop:disable Metrics/MethodLength
+
         def call(_name, started, finished, _unique_id, payload)
           return unless enabled?
 
           value = ((finished - started) * 1000).ceil
           ts = InfluxDB.convert_timestamp(finished.utc, configuration.time_precision)
           begin
-            InfluxDB::Rails.client.write_point series_name, values: { value: value }, tags: tags(payload), timestamp: ts
+            InfluxDB::Rails.client.write_point \
+              series_name,
+              values:    { value: value },
+              tags:      tags(payload),
+              timestamp: ts
           rescue StandardError => e
             log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
           end
         end
+
+        # rubocop:enable Metrics/MethodLength
 
         private
 

@@ -15,7 +15,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
     let(:finish_time)  { Time.at(1_517_567_370) }
     let(:series_name) { "series_name" }
     let(:payload) { { identifier: "index.html", count: 43, cache_hits: 42 } }
-    let(:result) {
+    let(:result) do
       {
         values:    {
           value: 2000
@@ -28,7 +28,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
         },
         timestamp: 1_517_567_370_000
       }
-    }
+    end
 
     subject { described_class.new(config, series_name) }
 

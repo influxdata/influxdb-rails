@@ -17,4 +17,4 @@ RSpec.configure do |config|
   config.formatter = :documentation
 end
 
-task default: [:spec, :rubocop]
+task default: %i[spec rubocop]
