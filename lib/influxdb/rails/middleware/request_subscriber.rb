@@ -8,12 +8,13 @@ module InfluxDB
           return unless enabled?
 
           ts = InfluxDB.convert_timestamp(finish.utc, configuration.time_precision)
+          tags = tags(payload)
           begin
             series(payload, start, finish).each do |series_name, value|
               InfluxDB::Rails.client.write_point \
                 series_name,
                 values:    { value: value },
-                tags:      tags(payload),
+                tags:      tags,
                 timestamp: ts
             end
           rescue StandardError => e
