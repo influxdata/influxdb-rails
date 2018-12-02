@@ -32,4 +32,4 @@ addons:
     packages:
       - haveged
       - libgmp-dev
-script: bundle exec rake spec
+script: bundle exec rake $TEST_TASK
