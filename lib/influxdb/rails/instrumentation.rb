@@ -9,11 +9,11 @@ module InfluxDB
         return if c.ignore_current_environment?
 
         InfluxDB::Rails.client.write_point \
-          c.series_name_for_instrumentation,
+          "instrumentation".freeze,
           values: {
             value: ((Time.now - start) * 1000).ceil,
           },
-          tags:   configuration.tags_middleware.call(
+          tags:   c.tags_middleware.call(
             method: "#{controller_name}##{action_name}",
             server: Socket.gethostname
           )

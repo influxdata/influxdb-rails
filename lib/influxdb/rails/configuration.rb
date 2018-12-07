@@ -1,93 +1,83 @@
+require "active_support/concern"
+
 module InfluxDB
   module Rails
-    # rubocop:disable Metrics/ClassLength
+    module Configurable
+      extend ActiveSupport::Concern
 
-    class Configuration # rubocop:disable Style/Documentation
-      attr_accessor :influxdb_hosts
-      attr_accessor :influxdb_port
-      attr_accessor :influxdb_username
-      attr_accessor :influxdb_password
-      attr_accessor :influxdb_database
-      attr_accessor :async
-      attr_accessor :use_ssl
-      attr_accessor :retry
-      attr_accessor :open_timeout
-      attr_accessor :read_timeout
-      attr_accessor :max_delay
-      attr_accessor :time_precision
+      class_methods do
+        def defaults
+          @defaults ||= {}
+        end
 
-      attr_accessor :series_name_for_controller_runtimes
-      attr_accessor :series_name_for_view_runtimes
-      attr_accessor :series_name_for_db_runtimes
-      attr_accessor :series_name_for_exceptions
-      attr_accessor :series_name_for_instrumentation
-      attr_accessor :series_name_for_render_template
-      attr_accessor :series_name_for_render_partial
-      attr_accessor :series_name_for_render_collection
-      attr_accessor :series_name_for_sql
+        def set_defaults(**values) # rubocop:disable Naming/AccessorMethodName:
+          defaults.merge! values
+          attr_accessor(*defaults.keys)
+        end
+      end
 
-      attr_accessor :tags_middleware
-      attr_accessor :rails_app_name
+      def load_defaults
+        self.class.defaults.each do |key, value|
+          val = value.dup rescue value
+          public_send "#{key}=", val
+        end
+      end
+    end
+    private_constant :Configurable
 
-      attr_accessor :application_name
-      attr_accessor :application_root
+    class ClientConfig
+      include Configurable
 
-      attr_accessor :logger
-      attr_accessor :environment
-      attr_accessor :framework
-      attr_accessor :framework_version
-      attr_accessor :language
-      attr_accessor :language_version
-      attr_accessor :ignored_exceptions
-      attr_accessor :ignored_exception_messages
-      attr_accessor :ignored_reports
-      attr_accessor :ignored_environments
-      attr_accessor :ignored_user_agents
-      attr_accessor :backtrace_filters
-      attr_accessor :aggregated_exception_classes
-      attr_accessor :environment_variables
-      attr_accessor :environment_variable_filters
+      set_defaults(
+        hosts:          ["localhost"].freeze,
+        port:           8086,
+        username:       "root".freeze,
+        password:       "root".freeze,
+        database:       nil,
+        async:          true,
+        use_ssl:        false,
+        retry:          nil,
+        open_timeout:   5,
+        read_timeout:   300,
+        max_delay:      30,
+        time_precision: "s".freeze
+      )
 
-      attr_accessor :instrumentation_enabled
-      attr_accessor :debug
+      def initialize
+        load_defaults
+      end
+    end
+    private_constant :ClientConfig
 
-      DEFAULTS = {
-        influxdb_hosts:                      ["localhost"].freeze,
-        influxdb_port:                       8086,
-        influxdb_username:                   "root".freeze,
-        influxdb_password:                   "root".freeze,
-        influxdb_database:                   nil,
-        async:                               true,
-        use_ssl:                             false,
-        retry:                               nil,
-        open_timeout:                        5,
-        read_timeout:                        300,
-        max_delay:                           30,
-        time_precision:                      "s".freeze,
+    class Configuration
+      include Configurable
 
-        series_name_for_controller_runtimes: "rails.controller".freeze,
-        series_name_for_view_runtimes:       "rails.view".freeze,
-        series_name_for_db_runtimes:         "rails.db".freeze,
-        series_name_for_exceptions:          "rails.exceptions".freeze,
-        series_name_for_instrumentation:     "instrumentation".freeze,
-        series_name_for_render_template:     "rails.render_template".freeze,
-        series_name_for_render_partial:      "rails.render_partial".freeze,
-        series_name_for_render_collection:   "rails.render_collection".freeze,
-        series_name_for_sql:                 nil,
+      set_defaults(
+        measurement_name:             "rails".freeze,
 
-        tags_middleware:                     ->(tags) { tags },
-        rails_app_name:                      nil,
+        report_controller_runtimes:   true,
+        report_view_runtimes:         true,
+        report_db_runtimes:           true,
+        report_sql:                   false,
+        report_render_template:       true,
+        report_render_partial:        true,
+        report_render_collection:     true,
+        report_exceptions:            true,
+        report_instrumentation:       true,
 
-        ignored_exceptions:                  %w[
+        tags_middleware:              ->(tags) { tags },
+        rails_app_name:               nil,
+
+        ignored_exceptions:           %w[
           ActiveRecord::RecordNotFound
           ActionController::RoutingError
         ].freeze,
 
-        ignored_exception_messages:          [].freeze,
-        ignored_reports:                     [].freeze,
-        ignored_environments:                %w[test cucumber selenium].freeze,
-        ignored_user_agents:                 %w[GoogleBot].freeze,
-        environment_variable_filters:        [
+        ignored_exception_messages:   [].freeze,
+        ignored_reports:              [].freeze,
+        ignored_environments:         %w[test cucumber selenium].freeze,
+        ignored_user_agents:          %w[GoogleBot].freeze,
+        environment_variable_filters: [
           /password/i,
           /key/i,
           /secret/i,
@@ -96,7 +86,7 @@ module InfluxDB
           /color/i,
         ].freeze,
 
-        backtrace_filters:                   [
+        backtrace_filters:            [
           ->(line) { line.gsub(%r{^\./}, "") },
           lambda { |line|
             return line if InfluxDB::Rails.configuration.application_root.to_s.empty?
@@ -110,61 +100,36 @@ module InfluxDB
             line
           },
         ].freeze,
-      }.freeze
 
-      # rubocop:disable Metrics/MethodLength
-      # rubocop:disable Metrics/AbcSize
+        debug:                        false,
+        instrumentation_enabled:      true
+      )
+
+      # config option set after_initialize
+      attr_accessor \
+        :environment,      # Rails.env
+        :application_root, # Rails.root
+        :application_name, # Rails.application.class.parent_name
+        :framework,        # "Rails"
+        :framework_version # Rails.version
+
+      # configuration passed to InfluxDB::Client
+      attr_reader :client
+
+      # a logger instance
+      attr_accessor :logger
 
       def initialize
-        @influxdb_hosts     = DEFAULTS[:influxdb_hosts]
-        @influxdb_port      = DEFAULTS[:influxdb_port]
-        @influxdb_username  = DEFAULTS[:influxdb_username]
-        @influxdb_password  = DEFAULTS[:influxdb_password]
-        @influxdb_database  = DEFAULTS[:influxdb_database]
-        @async              = DEFAULTS[:async]
-        @use_ssl            = DEFAULTS[:use_ssl]
-        @retry              = DEFAULTS[:retry]
-        @open_timeout       = DEFAULTS[:open_timeout]
-        @read_timeout       = DEFAULTS[:read_timeout]
-        @max_delay          = DEFAULTS[:max_delay]
-        @time_precision     = DEFAULTS[:time_precision]
-
-        @series_name_for_controller_runtimes  = DEFAULTS[:series_name_for_controller_runtimes]
-        @series_name_for_view_runtimes        = DEFAULTS[:series_name_for_view_runtimes]
-        @series_name_for_db_runtimes          = DEFAULTS[:series_name_for_db_runtimes]
-        @series_name_for_exceptions           = DEFAULTS[:series_name_for_exceptions]
-        @series_name_for_instrumentation      = DEFAULTS[:series_name_for_instrumentation]
-        @series_name_for_render_template      = DEFAULTS[:series_name_for_render_template]
-        @series_name_for_render_partial       = DEFAULTS[:series_name_for_render_partial]
-        @series_name_for_render_collection    = DEFAULTS[:series_name_for_render_collection]
-        @series_name_for_sql                  = DEFAULTS[:series_name_for_sql]
-
-        @tags_middleware = DEFAULTS[:tags_middleware]
-        @rails_app_name = DEFAULTS[:rails_app_name]
-
-        @ignored_exceptions           = DEFAULTS[:ignored_exceptions].dup
-        @ignored_exception_messages   = DEFAULTS[:ignored_exception_messages].dup
-        @ignored_reports              = DEFAULTS[:ignored_reports].dup
-        @ignored_environments         = DEFAULTS[:ignored_environments].dup
-        @ignored_user_agents          = DEFAULTS[:ignored_user_agents].dup
-        @backtrace_filters            = DEFAULTS[:backtrace_filters].dup
-        @environment_variable_filters = DEFAULTS[:environment_variable_filters]
-        @aggregated_exception_classes = []
-
-        @debug                    = false
-        @rescue_global_exceptions = false
-        @instrumentation_enabled  = true
+        @client = ClientConfig.new
+        load_defaults
       end
 
-      # rubocop:enable Metrics/MethodLength
-      # rubocop:enable Metrics/AbcSize
-
       def debug?
-        !!@debug # rubocop:disable Style/DoubleNegation
+        @debug
       end
 
       def instrumentation_enabled?
-        !!@instrumentation_enabled # rubocop:disable Style/DoubleNegation
+        @instrumentation_enabled
       end
 
       def ignore_user_agent?(incoming_user_agent)
@@ -190,22 +155,11 @@ module InfluxDB
         @custom_exception_data_handler&.call(exception_presenter)
       end
 
-      def load_rails_defaults
-        @logger           ||= ::Rails.logger
-        @environment      ||= ::Rails.env
-        @application_root ||= ::Rails.root
-        @application_name ||= ::Rails.application.class.parent_name
-        @framework          = "Rails"
-        @framework_version  = ::Rails.version
-      end
-
       private
 
       def initialize_http_connection
         Net::HTTP.new(@app_host, "80")
       end
     end
-
-    # rubocop:enable Metrics/ClassLength
   end
 end

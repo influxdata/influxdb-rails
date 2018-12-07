@@ -26,6 +26,6 @@ RSpec.configure do |config|
   # reset configuration for each spec
   config.before :each do
     InfluxDB::Rails.instance_variable_set :@configuration, nil
-    InfluxDB::Rails.configure(&:load_rails_defaults)
+    InfluxDB::Rails.configure
   end
 end

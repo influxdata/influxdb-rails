@@ -9,7 +9,14 @@ module InfluxDB
       end
 
       config.after_initialize do # rubocop:disable Metrics/BlockLength
-        InfluxDB::Rails.configure(true, &:load_rails_defaults)
+        InfluxDB::Rails.configure do |config|
+          config.logger           ||= ::Rails.logger
+          config.environment      ||= ::Rails.env
+          config.application_root ||= ::Rails.root
+          config.application_name ||= ::Rails.application.class.parent_name
+          config.framework          = "Rails".freeze
+          config.framework_version  = ::Rails.version
+        end
 
         ActiveSupport.on_load(:action_controller) do
           require "influxdb/rails/air_traffic_controller"
