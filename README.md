@@ -234,11 +234,8 @@ bundle exec rake
   - Add an entry in the `CHANGELOG.md` in the "unreleased" section on top.
 - Run the tests:
   - Either run them manually:
-    ```sh
-    for gemfile in gemfiles/Gemfile.rails-*.x; do     \
-      BUNDLE_GEMFILE=$gemfile bundle install --quiet; \
-      BUNDLE_GEMFILE=$gemfile bundle exec rspec;      \
-    done
+    ```console
+    $ rake test:all
     ```
   - or wait for [Travis][travis-pr] to pick up your changes, *after*
     you made a pull request.

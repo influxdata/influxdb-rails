@@ -18,3 +18,11 @@ RSpec.configure do |config|
 end
 
 task default: %i[spec rubocop]
+
+task "test:all" => :default do
+  Dir.glob("gemfiles/Gemfile.rails-*.x") do |gemfile|
+    puts RSpec::Core::Formatters::ConsoleCodes.wrap(gemfile, :cyan)
+    sh({ "BUNDLE_GEMFILE" => gemfile }, "bundle", "install", "--quiet", "--retry=2", "--jobs=2")
+    sh({ "BUNDLE_GEMFILE" => gemfile }, "bundle", "exec", "rspec")
+  end
+end
