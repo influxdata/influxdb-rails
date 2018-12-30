@@ -52,6 +52,9 @@ Naming/FileName:
   Exclude:
   - lib/influxdb-rails.rb
 
+Style/Documentation:
+  Enabled: false
+
 Style/FormatStringToken:
   Enabled: false
 

@@ -1,6 +1,6 @@
 module InfluxDB
   module Rails
-    class Rack # rubocop:disable Style/Documentation
+    class Rack
       def initialize(app)
         @app = app
       end

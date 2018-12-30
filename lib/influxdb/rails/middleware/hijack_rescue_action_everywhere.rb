@@ -1,7 +1,7 @@
 module InfluxDB
   module Rails
     module Middleware
-      module HijackRescueActionEverywhere # rubocop:disable Style/Documentation
+      module HijackRescueActionEverywhere
         def self.included(base)
           base.send(:alias_method_chain, :rescue_action_in_public, :influxdb)
           base.send(:alias_method_chain, :rescue_action_locally, :influxdb)

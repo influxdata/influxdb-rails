@@ -4,7 +4,7 @@ require "json"
 
 module InfluxDB
   module Rails
-    class ExceptionPresenter # rubocop:disable Style/Documentation
+    class ExceptionPresenter
       attr_reader :exception
       attr_reader :backtrace
       attr_reader :params

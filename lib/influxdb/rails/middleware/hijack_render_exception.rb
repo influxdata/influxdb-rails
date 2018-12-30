@@ -1,7 +1,7 @@
 module InfluxDB
   module Rails
     module Middleware
-      module HijackRenderException # rubocop:disable Style/Documentation
+      module HijackRenderException
         def render_exception(env, ex)
           controller = env["action_controller.instance"] || env.controller_instance
           request_data = controller.try(:influxdb_request_data) || {}

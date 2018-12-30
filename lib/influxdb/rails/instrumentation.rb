@@ -1,6 +1,6 @@
 module InfluxDB
   module Rails
-    module Instrumentation # rubocop:disable Style/Documentation
+    module Instrumentation
       def benchmark_for_instrumentation # rubocop:disable Metrics/MethodLength
         start = Time.now
         yield
@@ -23,7 +23,7 @@ module InfluxDB
         base.extend(ClassMethods)
       end
 
-      module ClassMethods # rubocop:disable Style/Documentation
+      module ClassMethods
         def instrument(methods = [])
           methods = [methods] unless methods.is_a?(Array)
           around_filter :benchmark_for_instrumentation, only: methods

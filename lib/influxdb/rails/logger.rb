@@ -1,6 +1,6 @@
 module InfluxDB
   module Rails
-    module Logger # rubocop:disable Style/Documentation
+    module Logger
       PREFIX = "[InfluxDB::Rails] ".freeze
 
       private
