@@ -7,9 +7,10 @@ before_install:
   - gem update bundler --no-doc
 rvm:
   - ruby-head
-  - 2.5.3
-  - 2.4.5
-  - 2.3.8
+  - "2.6"
+  - "2.5"
+  - "2.4"
+  - "2.3"
 gemfile:
   - gemfiles/Gemfile.rails-5.2.x
   - gemfiles/Gemfile.rails-5.1.x
@@ -21,12 +22,13 @@ matrix:
   allow_failures:
     - rvm: ruby-head
   include:
-    - { rvm: "2.5.3",   gemfile: "Gemfile", env: [TEST_TASK=rubocop] }
+    - { rvm: "2.6",   gemfile: "Gemfile", env: [TEST_TASK=rubocop] }
   exclude:
     # Rails < 5 not on MRI 2.4+
     - { rvm: ruby-head, gemfile: "gemfiles/Gemfile.rails-4.2.x" }
-    - { rvm: "2.4.5",   gemfile: "gemfiles/Gemfile.rails-4.2.x" }
-    - { rvm: "2.5.3",   gemfile: "gemfiles/Gemfile.rails-4.2.x" }
+    - { rvm: "2.6",   gemfile: "gemfiles/Gemfile.rails-4.2.x" }
+    - { rvm: "2.5",   gemfile: "gemfiles/Gemfile.rails-4.2.x" }
+    - { rvm: "2.4",   gemfile: "gemfiles/Gemfile.rails-4.2.x" }
 addons:
   apt:
     packages:

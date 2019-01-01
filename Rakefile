@@ -21,6 +21,12 @@ task default: %i[spec rubocop]
 
 task "test:all" => :default do
   Dir.glob("gemfiles/Gemfile.rails-*.x") do |gemfile|
+    if RUBY_VERSION >= "2.6.0" && gemfile == "gemfiles/Gemfile.rails-4.2.x"
+      msg = "ignore #{gemfile} on Ruby #{RUBY_VERSION}"
+      puts RSpec::Core::Formatters::ConsoleCodes.wrap(msg, :yellow)
+      next
+    end
+
     puts RSpec::Core::Formatters::ConsoleCodes.wrap(gemfile, :cyan)
     sh({ "BUNDLE_GEMFILE" => gemfile }, "bundle", "install", "--quiet", "--retry=2", "--jobs=2")
     sh({ "BUNDLE_GEMFILE" => gemfile }, "bundle", "exec", "rspec")
