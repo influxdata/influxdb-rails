@@ -28,30 +28,27 @@ module InfluxDB
         require "influxdb/rails/middleware/hijack_render_exception"
         ::ActionDispatch::DebugExceptions.prepend InfluxDB::Rails::Middleware::HijackRenderException
 
-        if defined?(ActiveSupport::Notifications)
-          cache = lambda do |_, _, _, _, payload|
-            current = InfluxDB::Rails.current
-            current.controller = payload[:controller]
-            current.action     = payload[:action]
-          end
-          ActiveSupport::Notifications.subscribe "start_processing.action_controller", &cache
-
-          c = InfluxDB::Rails.configuration
-          requests = Middleware::RequestSubscriber.new(c)
-          ActiveSupport::Notifications.subscribe "process_action.action_controller", requests
-
-          templates = Middleware::RenderSubscriber.new(c, c.series_name_for_render_template)
-          ActiveSupport::Notifications.subscribe "render_template.action_view", templates
-
-          partials = Middleware::RenderSubscriber.new(c, c.series_name_for_render_partial)
-          ActiveSupport::Notifications.subscribe "render_partial.action_view", partials
-
-          collections = Middleware::RenderSubscriber.new(c, c.series_name_for_render_collection)
-          ActiveSupport::Notifications.subscribe "render_collection.action_view", collections
-
-          sql = Middleware::SqlSubscriber.new(c, c.series_name_for_sql)
-          ActiveSupport::Notifications.subscribe "sql.active_record", sql
+        cache = lambda do |_, _, _, _, payload|
+          current = InfluxDB::Rails.current
+          current.controller = payload[:controller]
+          current.action     = payload[:action]
         end
+        ActiveSupport::Notifications.subscribe "start_processing.action_controller", &cache
+
+        {
+          "process_action.action_controller" => [Middleware::RequestSubscriber, "requests"],
+          "render_template.action_view"      => [Middleware::RenderSubscriber, "render_template"],
+          "render_partial.action_view"       => [Middleware::RenderSubscriber, "render_partial"],
+          "render_collection.action_view"    => [Middleware::RenderSubscriber, "render_collection"],
+          "sql"                              => [Middleware::SqlSubscriber, "sql"],
+        }.each do |hook_name, (subscriber_class, series_name)|
+          subscribe_to(hook_name, subscriber_class, series_name)
+        end
+      end
+
+      def subscribe_to(hook_name, subscriber_class, series_name)
+        subscriber = subscriber_class.new(InfluxDB::Rails.configuration, series_name)
+        ActiveSupport::Notifications.subscribe hook_name, subscriber
       end
     end
   end

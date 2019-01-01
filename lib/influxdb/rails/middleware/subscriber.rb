@@ -11,8 +11,9 @@ module InfluxDB
 
         attr_reader :configuration
 
-        def initialize(configuration)
+        def initialize(configuration, series_name)
           @configuration = configuration
+          @series_name = series_name
         end
 
         def call(*)
@@ -20,6 +21,10 @@ module InfluxDB
         end
 
         private
+
+        def timestamp(time)
+          InfluxDB.convert_timestamp(time.utc, configuration.time_precision)
+        end
 
         def tags(tags)
           result = tags.merge(InfluxDB::Rails.current.tags)

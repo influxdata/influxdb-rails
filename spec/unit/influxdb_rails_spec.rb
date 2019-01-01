@@ -5,7 +5,7 @@ RSpec.describe InfluxDB::Rails do
     InfluxDB::Rails.configure do |config|
       config.application_name = "my-rails-app"
       config.ignored_environments = []
-      config.time_precision = "ms"
+      config.client.time_precision = "ms"
     end
   end
 

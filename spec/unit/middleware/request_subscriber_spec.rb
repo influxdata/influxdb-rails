@@ -5,10 +5,10 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
   let(:config) { InfluxDB::Rails::Configuration.new }
 
   before do
-    allow(config).to receive(:time_precision).and_return("ms")
+    allow(config.client).to receive(:time_precision).and_return("ms")
   end
 
-  subject { described_class.new(config) }
+  subject { described_class.new(config, "requests") }
 
   describe "#call" do
     let(:start)   { Time.at(1_517_567_368) }
