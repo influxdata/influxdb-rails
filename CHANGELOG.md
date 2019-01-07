@@ -3,9 +3,17 @@
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
 
+## v1.0.0.beta3, released 2019-01-07
+
+- Add dynamic tags (#62, @ChrisBr)
+- Reduce cardinality of resulting InfluxDB measurement by moving
+  some tags to values (#63, @ChrisBr)
+- Remove SCHEMA queries from SQL instrumentation (#61, @ChrisBr)
+
+
 ## v1.0.0.beta2, released 2018-12-07
 
-- Added `tags_middleware` config option (#47, @ @Kukunin)
+- Added `tags_middleware` config option (#47, @Kukunin)
 - Removed path tag from metrics (introduced with #50), because it
   potentially produces "exceed tag value limit" (#54, @ChrisBr)
 - Added render instrumentation (#53, @ChrisBr)
