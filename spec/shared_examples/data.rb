@@ -27,7 +27,7 @@ RSpec.shared_examples_for "with additional data" do |series_names|
         allow(config).to receive(:tags_middleware).and_return(tags_middleware)
       end
 
-      let(:tags_middleware) { ->(tags) { tags.merge(static: "value") } }
+      let(:tags_middleware) { ->(tags) { tags.merge(static: "value", nil: nil, empty: "") } }
 
       it "processes tags throught the middleware" do
         tags = data[:tags].merge(static: "value")
@@ -41,7 +41,10 @@ RSpec.shared_examples_for "with additional data" do |series_names|
     end
 
     context "when tags are set in the current context" do
-      let(:additional_tags) do
+      let(:input) do
+        { another: :value, nil: nil, empty: "" }
+      end
+      let(:output) do
         { another: :value }
       end
 
@@ -50,8 +53,8 @@ RSpec.shared_examples_for "with additional data" do |series_names|
       end
 
       it "does include the tags" do
-        InfluxDB::Rails.current.tags = additional_tags
-        tags = data[:tags].merge(additional_tags)
+        InfluxDB::Rails.current.tags = input
+        tags = data[:tags].merge(output)
 
         series_names.each do |series_name|
           expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(series_name, include(tags: tags))
