@@ -28,6 +28,7 @@ module InfluxDB
         Thread.current[:_influxdb_rails_controller] = nil
         Thread.current[:_influxdb_rails_action] = nil
         Thread.current[:_influxdb_rails_tags] = nil
+        Thread.current[:_influxdb_rails_values] = nil
       end
 
       def tags
@@ -36,6 +37,14 @@ module InfluxDB
 
       def tags=(tags)
         Thread.current[:_influxdb_rails_tags] = tags
+      end
+
+      def values
+        Thread.current[:_influxdb_rails_values] || {}
+      end
+
+      def values=(values)
+        Thread.current[:_influxdb_rails_values] = values
       end
     end
   end

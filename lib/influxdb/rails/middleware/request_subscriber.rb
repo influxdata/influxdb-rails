@@ -13,7 +13,7 @@ module InfluxDB
             series(payload, start, finish).each do |series_name, value|
               InfluxDB::Rails.client.write_point \
                 series_name,
-                values:    { value: value },
+                values:    values(value),
                 tags:      tags,
                 timestamp: ts
             end
@@ -25,6 +25,12 @@ module InfluxDB
         end
 
         private
+
+        def values(time)
+          { value: time }.merge(InfluxDB::Rails.current.values).reject do |_, value|
+            value.nil? || value == ""
+          end
+        end
 
         def series(payload, start, finish)
           {

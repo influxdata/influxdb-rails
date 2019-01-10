@@ -1,5 +1,5 @@
 require "spec_helper"
-require "shared_examples/tags"
+require "shared_examples/data"
 
 RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
   let(:config) { InfluxDB::Rails::Configuration.new }
@@ -46,7 +46,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
         subject.call("unused", start, finish, "unused", payload)
       end
 
-      it_behaves_like "with additional tags", ["rails.controller", "rails.view", "rails.db"]
+      it_behaves_like "with additional data", ["rails.controller", "rails.view", "rails.db"]
     end
 
     context "application_name is nil" do

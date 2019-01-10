@@ -1,5 +1,5 @@
 require "spec_helper"
-require "shared_examples/tags"
+require "shared_examples/data"
 
 RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
   let(:config) { InfluxDB::Rails::Configuration.new }
@@ -62,7 +62,7 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
         end
       end
 
-      it_behaves_like "with additional tags", ["rails.sql"]
+      it_behaves_like "with additional data", ["rails.sql"]
     end
 
     context "unsuccessfully" do

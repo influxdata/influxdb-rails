@@ -30,7 +30,10 @@ module InfluxDB
         private
 
         def values(started, finished, _payload)
-          { value: ((finished - started) * 1000).ceil }
+          result = { value: ((finished - started) * 1000).ceil }
+          result.merge(InfluxDB::Rails.current.values).reject do |_, value|
+            value.nil? || value == ""
+          end
         end
 
         def timestamp(finished)
