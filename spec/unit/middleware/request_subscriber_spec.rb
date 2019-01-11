@@ -17,7 +17,8 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
     let(:data)    do
       {
         values:    {
-          value: 2
+          value:   2,
+          started: InfluxDB.convert_timestamp(start.utc, config.time_precision),
         },
         tags:      {
           method:      "MyController#show",
@@ -38,7 +39,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
 
       it "sends metrics with taggings and timestamps" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "rails.controller", data.merge(values: { value: 2000 })
+          "rails.controller", data.deep_merge(values: { value: 2000 })
         )
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", data)
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", data)
@@ -50,21 +51,23 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
     end
 
     context "application_name is nil" do
-      before do
-        allow(config).to receive(:application_name).and_return(nil)
-      end
-
-      it "does not add the app_name tag to metrics" do
-        tags = {
+      let(:tags) do
+        {
           method:      "MyController#show",
           status:      200,
           format:      "*/*",
           http_method: "GET",
           server:      Socket.gethostname,
         }
+      end
 
+      before do
+        allow(config).to receive(:application_name).and_return(nil)
+      end
+
+      it "does not add the app_name tag to metrics" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "rails.controller", data.merge(values: { value: 2000 }, tags: tags)
+          "rails.controller", data.merge(tags: tags).deep_merge(values: { value: 2000 })
         )
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", data.merge(tags: tags))
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", data.merge(tags: tags))

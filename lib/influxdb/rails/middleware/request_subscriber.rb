@@ -7,15 +7,16 @@ module InfluxDB
         def call(_name, start, finish, _id, payload) # rubocop:disable Metrics/MethodLength
           return unless enabled?
 
-          ts = InfluxDB.convert_timestamp(finish.utc, configuration.time_precision)
+          finished = InfluxDB.convert_timestamp(finish.utc, configuration.time_precision)
+          started = InfluxDB.convert_timestamp(start.utc, configuration.time_precision)
           tags = tags(payload)
           begin
             series(payload, start, finish).each do |series_name, value|
               InfluxDB::Rails.client.write_point \
                 series_name,
-                values:    values(value),
+                values:    values(value, started),
                 tags:      tags,
-                timestamp: ts
+                timestamp: finished
             end
           rescue StandardError => e
             log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
@@ -26,8 +27,9 @@ module InfluxDB
 
         private
 
-        def values(time)
-          { value: time }.merge(InfluxDB::Rails.current.values).reject do |_, value|
+        def values(duration, started)
+          addititional_values = InfluxDB::Rails.current.values
+          { value: duration, started: started }.merge(addititional_values).reject do |_, value|
             value.nil? || value == ""
           end
         end
