@@ -2,6 +2,10 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
+## v1.0.0.beta4, unreleased
+
+- Add dynamic values (#65, @ChrisBr)
+- Remove empty tags (#64, @ChrisBr)
 
 ## v1.0.0.beta3, released 2019-01-07
 
@@ -9,7 +13,6 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 - Reduce cardinality of resulting InfluxDB measurement by moving
   some tags to values (#63, @ChrisBr)
 - Remove SCHEMA queries from SQL instrumentation (#61, @ChrisBr)
-
 
 ## v1.0.0.beta2, released 2018-12-07
 
