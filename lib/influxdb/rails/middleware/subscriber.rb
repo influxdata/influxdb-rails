@@ -25,7 +25,11 @@ module InfluxDB
         attr_reader :series_name
 
         def timestamp(time)
-          InfluxDB.convert_timestamp(time.utc, configuration.time_precision)
+          InfluxDB.convert_timestamp(time.utc, client.time_precision)
+        end
+
+        def client
+          @client = configuration.client
         end
 
         def tags(tags)
