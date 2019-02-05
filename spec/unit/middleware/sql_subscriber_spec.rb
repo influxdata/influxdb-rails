@@ -8,13 +8,14 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
   before do
     allow(config).to receive(:application_name).and_return("my-rails-app")
     allow(config).to receive(:ignored_environments).and_return([])
+    allow(config).to receive(:report_sql).and_return(true)
     allow(config.client).to receive(:time_precision).and_return("ms")
   end
 
   describe ".call" do
     let(:start)   { Time.at(1_517_567_368) }
     let(:finish)  { Time.at(1_517_567_370) }
-    let(:series_name) { "rails.sql" }
+    let(:series_name) { "sql" }
     let(:payload) { { sql: "SELECT * FROM POSTS WHERE id = 1", name: "Post Load", binds: %w[1 2 3] } }
     let(:data) do
       {
@@ -62,7 +63,7 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
         end
       end
 
-      it_behaves_like "with additional data", ["rails.sql"]
+      it_behaves_like "with additional data", ["sql"]
 
       context "without location" do
         before do

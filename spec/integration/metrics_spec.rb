@@ -15,7 +15,7 @@ RSpec.describe WidgetsController, type: :controller do
 
     context "with sql reports enabled" do
       before do
-        allow_any_instance_of(InfluxDB::Rails::Middleware::SqlSubscriber).to receive(:series_name).and_return("rails.sql")
+        allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:report_sql).and_return(true)
         get :index # to not count ActiveRecord initialization
       end
 
