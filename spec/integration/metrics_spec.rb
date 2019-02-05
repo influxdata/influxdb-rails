@@ -20,7 +20,7 @@ RSpec.describe WidgetsController, type: :controller do
       end
 
       it "should result in attempts to write metrics via the client" do
-        expect(InfluxDB::Rails.client).to receive(:write_point).exactly(7).times
+        expect(InfluxDB::Rails.client).to receive(:write_point).exactly(5).times
         get :index
       end
     end
