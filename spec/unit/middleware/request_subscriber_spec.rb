@@ -6,6 +6,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
 
   before do
     allow(config.client).to receive(:time_precision).and_return("ms")
+    allow(config).to receive(:environment).and_return("production")
   end
 
   subject { described_class.new(config, "requests") }

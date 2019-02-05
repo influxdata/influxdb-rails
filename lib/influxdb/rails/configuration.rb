@@ -85,6 +85,7 @@ module InfluxDB
           /rvm_.*_clr/i,
           /color/i,
         ].freeze,
+        environment:                  ::Rails.env,
 
         backtrace_filters:            [
           ->(line) { line.gsub(%r{^\./}, "") },
