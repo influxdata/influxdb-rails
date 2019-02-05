@@ -8,7 +8,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
   before do
     allow(config).to receive(:application_name).and_return("my-rails-app")
     allow(config).to receive(:ignored_environments).and_return([])
-    allow(config).to receive(:time_precision).and_return("ms")
+    allow(config.client).to receive(:time_precision).and_return("ms")
   end
 
   describe ".call" do

@@ -18,7 +18,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
       {
         values:    {
           value:   2,
-          started: InfluxDB.convert_timestamp(start.utc, config.time_precision),
+          started: InfluxDB.convert_timestamp(start.utc, config.client.time_precision),
         },
         tags:      {
           method:      "MyController#show",
