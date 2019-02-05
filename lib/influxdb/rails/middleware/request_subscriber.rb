@@ -37,6 +37,7 @@ module InfluxDB
             controller: ((finished - started) * 1000).ceil,
             view:       (payload[:view_runtime] || 0).ceil,
             db:         (payload[:db_runtime] || 0).ceil,
+            started:    timestamp(started),
           }.merge(InfluxDB::Rails.current.values).reject do |_, value|
             value.nil? || value == ""
           end

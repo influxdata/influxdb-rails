@@ -17,8 +17,8 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
     let(:data)    do
       {
         values:    {
-          value:   2,
-          started: InfluxDB.convert_timestamp(start.utc, config.client.time_precision),
+          controller: 2,
+          started:    InfluxDB.convert_timestamp(start.utc, config.client.time_precision),
         },
         tags:      {
           method:      "MyController#show",
@@ -39,15 +39,13 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
 
       it "sends metrics with taggings and timestamps" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "rails.controller", data.deep_merge(values: { value: 2000 })
+          "requests", data.deep_merge(values: { controller: 2000, db: 2, view: 2 })
         )
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", data)
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", data)
 
         subject.call("unused", start, finish, "unused", payload)
       end
 
-      it_behaves_like "with additional data", ["rails.controller", "rails.view", "rails.db"]
+      it_behaves_like "with additional data", ["requests"]
     end
 
     context "application_name is nil" do
@@ -67,10 +65,8 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
 
       it "does not add the app_name tag to metrics" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "rails.controller", data.merge(tags: tags).deep_merge(values: { value: 2000 })
+          "requests", data.merge(tags: tags).deep_merge(values: { controller: 2000, db: 2, view: 2 })
         )
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.view", data.merge(tags: tags))
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with("rails.db", data.merge(tags: tags))
 
         subject.call("unused", start, finish, "unused", payload)
       end
