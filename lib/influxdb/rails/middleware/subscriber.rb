@@ -22,6 +22,8 @@ module InfluxDB
 
         private
 
+        attr_reader :series_name
+
         def timestamp(time)
           InfluxDB.convert_timestamp(time.utc, configuration.time_precision)
         end
