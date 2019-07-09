@@ -29,14 +29,8 @@ InfluxDB::Rails.configure do |config|
   ## Since 1.0.0.beta3, we're now using a single measurements
   # config.measurement_name = "rails"
 
-  ## Disable or enable various measurements.
-  # config.report_requests = true
-  # config.report_sql = false
-  # config.report_render_template = true
-  # config.report_render_partial = true
-  # config.report_render_collection = true
-  # config.report_exceptions = true
-  # config.report_instrumentation = true
+  ## Disable rails framework hooks.
+  # config.ignored_hooks = ['sql.active_record', 'render_template.action_view']
 
   # Modify tags on the fly.
   # config.tags_middleware = ->(tags) { tags }

@@ -36,18 +36,18 @@ module InfluxDB
         ActiveSupport::Notifications.subscribe "start_processing.action_controller", &cache
 
         {
-          "process_action.action_controller" => [Middleware::RequestSubscriber, "requests"],
-          "render_template.action_view"      => [Middleware::RenderSubscriber, "render_template"],
-          "render_partial.action_view"       => [Middleware::RenderSubscriber, "render_partial"],
-          "render_collection.action_view"    => [Middleware::RenderSubscriber, "render_collection"],
-          "sql.active_record"                => [Middleware::SqlSubscriber, "sql"],
-        }.each do |hook_name, (subscriber_class, series_name)|
-          subscribe_to(hook_name, subscriber_class, series_name)
+          "process_action.action_controller": Middleware::RequestSubscriber,
+          "render_template.action_view":      Middleware::RenderSubscriber,
+          "render_partial.action_view":       Middleware::RenderSubscriber,
+          "render_collection.action_view":    Middleware::RenderSubscriber,
+          "sql.active_record":                Middleware::SqlSubscriber
+        }.each do |hook_name, subscriber_class|
+          subscribe_to(hook_name, subscriber_class)
         end
       end
 
-      def subscribe_to(hook_name, subscriber_class, series_name)
-        subscriber = subscriber_class.new(InfluxDB::Rails.configuration, series_name)
+      def subscribe_to(hook_name, subscriber_class)
+        subscriber = subscriber_class.new(InfluxDB::Rails.configuration, hook_name)
         ActiveSupport::Notifications.subscribe hook_name, subscriber
       end
     end

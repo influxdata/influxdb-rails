@@ -8,7 +8,7 @@ module InfluxDB
           return unless enabled?
 
           InfluxDB::Rails.client.write_point \
-            series_name,
+            configuration.measurement_name,
             values:    values(start, finish, payload),
             tags:      tags(payload),
             timestamp: timestamp(finish)

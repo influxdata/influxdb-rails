@@ -11,9 +11,9 @@ module InfluxDB
 
         attr_reader :configuration
 
-        def initialize(configuration, series_name)
+        def initialize(configuration, hook_name)
           @configuration = configuration
-          @series_name = series_name
+          @hook_name = hook_name
         end
 
         def call(*)
@@ -22,7 +22,9 @@ module InfluxDB
 
         private
 
-        attr_reader :series_name
+        def hook_name
+          @hook_name.split('.')[0]
+        end
 
         def timestamp(time)
           InfluxDB.convert_timestamp(time.utc, client.time_precision)
@@ -33,7 +35,8 @@ module InfluxDB
         end
 
         def tags(tags)
-          result = tags.merge(InfluxDB::Rails.current.tags)
+          result = tags.merge(hook: hook_name)
+          result = result.merge(InfluxDB::Rails.current.tags)
           result = configuration.tags_middleware.call(result)
           result.reject! do |_, value|
             value.nil? || value == ""
@@ -43,7 +46,8 @@ module InfluxDB
 
         def enabled?
           configuration.instrumentation_enabled? &&
-            !configuration.ignore_current_environment?
+            !configuration.ignore_current_environment? &&
+            !configuration.ignored_hooks.include?(@hook_name)
         end
 
         def location

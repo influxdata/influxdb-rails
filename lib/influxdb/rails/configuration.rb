@@ -54,17 +54,7 @@ module InfluxDB
 
       set_defaults(
         measurement_name:             "rails".freeze,
-
-        report_controller_runtimes:   true,
-        report_view_runtimes:         true,
-        report_db_runtimes:           true,
-        report_sql:                   false,
-        report_render_template:       true,
-        report_render_partial:        true,
-        report_render_collection:     true,
-        report_exceptions:            true,
-        report_instrumentation:       true,
-
+        ignored_hooks:                [].freeze,
         tags_middleware:              ->(tags) { tags },
         rails_app_name:               nil,
 
@@ -74,7 +64,6 @@ module InfluxDB
         ].freeze,
 
         ignored_exception_messages:   [].freeze,
-        ignored_reports:              [].freeze,
         ignored_environments:         %w[test cucumber selenium].freeze,
         ignored_user_agents:          %w[GoogleBot].freeze,
         environment_variable_filters: [

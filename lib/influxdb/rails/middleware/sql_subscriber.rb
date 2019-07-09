@@ -6,7 +6,7 @@ module InfluxDB
     module Middleware
       class SqlSubscriber < SimpleSubscriber # :nodoc:
         def call(_name, started, finished, _unique_id, payload)
-          super if InfluxDB::Rails::Sql::Query.new(payload).track? && configuration.report_sql
+          super if InfluxDB::Rails::Sql::Query.new(payload).track?
         end
 
         private

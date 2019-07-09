@@ -11,7 +11,7 @@ module InfluxDB
           return unless enabled?
 
           InfluxDB::Rails.client.write_point \
-            series_name,
+            configuration.measurement_name,
             values:    values(started, finished, payload),
             tags:      tags(payload),
             timestamp: timestamp(finished)
@@ -26,10 +26,6 @@ module InfluxDB
           result.merge(InfluxDB::Rails.current.values).reject do |_, value|
             value.nil? || value == ""
           end
-        end
-
-        def enabled?
-          super && series_name.present?
         end
       end
     end
