@@ -22,10 +22,6 @@ module InfluxDB
 
         private
 
-        def hook_name
-          @hook_name.split('.')[0]
-        end
-
         def timestamp(time)
           InfluxDB.convert_timestamp(time.utc, client.time_precision)
         end
@@ -35,8 +31,7 @@ module InfluxDB
         end
 
         def tags(tags)
-          result = tags.merge(hook: hook_name)
-          result = result.merge(InfluxDB::Rails.current.tags)
+          result = tags.merge(InfluxDB::Rails.current.tags)
           result = configuration.tags_middleware.call(result)
           result.reject! do |_, value|
             value.nil? || value == ""

@@ -24,6 +24,7 @@ module InfluxDB
           query = InfluxDB::Rails::Sql::Query.new(payload)
           tags = {
             location:   location,
+            hook:       "sql",
             operation:  query.operation,
             class_name: query.class_name,
             name:       query.name,

@@ -23,6 +23,7 @@ module InfluxDB
         def tags(payload)
           tags = {
             method:      "#{payload[:controller]}##{payload[:action]}",
+            hook:        "process_action",
             status:      payload[:status],
             format:      payload[:format],
             http_method: payload[:method],
