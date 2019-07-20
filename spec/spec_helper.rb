@@ -19,6 +19,8 @@ puts "Loading Rails v#{Rails.version}..."
 require "support/rails#{Rails::VERSION::MAJOR}/app"
 require "rspec/rails"
 
+require 'pry'
+
 RSpec.configure do |config|
   # use expect syntax
   config.disable_monkey_patching!
