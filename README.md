@@ -13,30 +13,140 @@ metrics directly into [InfluxDB](http://influxdb.org/).
 
 This gem is designed for Rails 4.2+, Ruby 2.3+ and InfluxDB 0.9+.
 
-
 ## Installation
 
 Add the gem to your `Gemfile`:
 
 ```console
-$ echo 'gem "influxdb-rails"' >>Gemfile
-$ bundle install
+echo 'gem "influxdb-rails"' >>Gemfile
+bundle install
 ```
 
-## Usage
-
-To get things set up, just create an initializer:
+To get things set up, create an initializer:
 
 ```console
-$ bundle exec rails generate influxdb
+bundle exec rails generate influxdb
 ```
 
 This creates a file `config/initializers/influxdb_rails.rb`, which allows
 configuration of this gem.
 
-The only setting you actually need to update is the name of the database
-within the InfluxDB server instance (also don't forget to create this
-database as well):
+## Usage
+
+Out of the box, you'll automatically get reporting for sql, model, view and
+controller Rails instrumentation for every request. Additionally all exceptions
+are reported.
+
+### Action Controller
+
+Reported ActiveSupport instrumentation hooks:
+
+- [start\_processing.action\_controller](https://guides.rubyonrails.org/active_support_instrumentation.html#start-processing-action-controller)
+- [process\_action.action\_controller](https://guides.rubyonrails.org/active_support_instrumentation.html#process-action-action-controller)
+
+Reported values:
+
+```ruby
+  controller: 48.467,
+  view: 46.848
+  db: 0.157,
+  started: 1465839830100400200
+```
+
+Reported tags:
+
+```ruby
+{
+  server:      Socket.gethostname,
+  app_name:    configuration.application_name,
+  method:      "PostsController#index",
+  hook:	       "process_action"
+  http_method: "GET",
+  format:      "html",
+  status:      "200"
+}
+```
+
+### Action View
+
+Reported ActiveSupport instrumentation hooks:
+
+- [render\_template.action\_view](https://guides.rubyonrails.org/active_support_instrumentation.html#render-template-action-view)
+- [render\_partial.action\_view](https://guides.rubyonrails.org/active_support_instrumentation.html#render-partial-action-view)
+- [render\_collection.action\_view](https://guides.rubyonrails.org/active_support_instrumentation.html#render-collection-action-view)
+
+Reported values:
+
+```ruby
+  value: 48.467,
+  count: 3,
+  cache_hits: 0
+```
+
+Reported tags:
+
+```ruby
+  server:     Socket.gethostname,
+  app_name:   configuration.application_name,
+  location:   "PostsController#index",
+  filename:   "/some/file/action.html",
+```
+
+### Active Record
+
+Reported ActiveSupport instrumentation hooks:
+
+- [sql.active\_record](https://guides.rubyonrails.org/active_support_instrumentation.html#sql-active-record)
+
+Reported values:
+
+```ruby
+  sql: "SELECT \"posts\".* FROM \"posts\""
+```
+
+Reported tags:
+
+```ruby
+  server:     Socket.gethostname,
+  app_name:   configuration.application_name,
+  location:   "PostsController#index",
+  operation:  "SELECT",
+  class_name: "POST",
+  name:       "Post Load"
+```
+
+### Exceptions
+
+Reported values:
+
+```ruby
+  exception_message:   "The Exception Message",
+  exception_backtrace: "The Exception Backtrace"
+```
+
+Reported tags:
+
+```ruby
+{
+  application_name:   InfluxDB::Rails.configuration.application_name,
+  application_root:   InfluxDB::Rails.configuration.application_root,
+  framework:          InfluxDB::Rails.configuration.framework,
+  framework_version:  InfluxDB::Rails.configuration.framework_version,
+  language:           "Ruby",
+  language_version:   "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
+  custom_data:        @custom_data,
+  class:              @exception.class.to_s,
+  method:             "#{@controller}##{@action}",
+  filename:           File.basename(@backtrace.lines.first.try(:file)),
+  server:             Socket.gethostname,
+  status:             "open"
+}
+```
+
+## Configuration
+
+The only setting you actually need to configure is the name of the database
+within the InfluxDB server instance (don't forget to create this database!).
 
 ```ruby
 InfluxDB::Rails.configure do |config|
@@ -44,54 +154,11 @@ InfluxDB::Rails.configure do |config|
 end
 ```
 
-You'll find *most* of the config settings in the initializer file. The
+You'll find *most* of the configuration settings in the initializer file. The
 canonical list of default values is located in `lib/influxdb/rails/configuration.rb`
 (`InfluxDB::Rails::Configuration::DEFAULTS`).
 
-### Reporting options
-
-Out of the box, you'll automatically get reporting of your controller, view,
-and db runtimes and rendering of template, partial and collection for each
-request:
-
-```ruby
-InfluxDB::Rails.configure do |config|
-  config.report_controller_runtimes = true
-  config.report_view_runtimes       = true
-  config.report_render_template     = true
-  config.report_render_partial      = true
-  config.report_render_collection   = true
-  config.report_db_runtimes         = true
-  config.report_sql                 = false
-  config.report_exceptions          = true
-  config.report_instrumentation     = true
-end
-```
-
-Reporting of SQL queries is disabled by default, because it's still considered
-experimantal: It relies on String parsing which might cause performance
-issues on query intensive applications.
-
-### InfluxDB client
-
-The settings named `config.client.*` are used to construct an `InfluxDB::Client`
-instance, which is used internally to transmit the reporting datapoints
-to your InfluxDB server. You can access this client as well, and perform
-arbitrary operations on your data:
-
-```ruby
-InfluxDB::Rails.client.write_point "events",
-  tags:   { url: "/foo", user_id: current_user.id, location: InfluxDB::Rails.current.location },
-  values: { value: 0 }
-```
-
-If you do that, it might be usefull to add the current context to these custom
-data points which can get accessed with `InfluxDB::Rails.current.location`.
-
-See [influxdb-ruby](http://github.com/influxdata/influxdb-ruby) for a
-full list of config options and detailed usage.
-
-### Tags
+### Custom Tags
 
 You can modify the tags sent to InfluxDB by defining a middleware, which
 receives the current tag set as argument and returns a hash in the same
@@ -125,71 +192,34 @@ class ApplicationController
 end
 ```
 
-#### Default values
+### Custom client configuration
 
-> N.B. this list might not be exhaustive. If you encounter a discrepance,
-> please [open an issue](https://github.com/influxdata/influxdb-rails/issus/new).
-
-By default, the following tags are sent for requests (`report_requests`):
-
-```ruby
-{
-  method:      "#{payload[:controller]}##{payload[:action]}",
-  server:      Socket.gethostname,
-  app_name:    configuration.application_name,
-  http_method: payload[:method],
-  format:      payload[:format],
-  status:      payload[:status]
-}
-```
-
-For the render series (`report_render_template`, `report_render_partial`,
-and `report_render_collection`):
+The settings named `config.client.*` are used to construct an `InfluxDB::Client`
+instance, which is used internally to transmit the reporting data points
+to your InfluxDB server. You can access this client as well, and perform
+arbitrary operations on your data:
 
 ```ruby
-  server:     Socket.gethostname,
-  app_name:   configuration.application_name,
-  location:   "#{payload[:controller]}##{payload[:action]}",
-  filename:   payload[:identifier],
-  count:      payload[:count],
-  cache_hits: payload[:cache_hits],
+InfluxDB::Rails.client.write_point "events",
+  tags:   { url: "/foo", user_id: current_user.id, location: InfluxDB::Rails.current.location },
+  values: { value: 0 }
 ```
 
-For the SQL series (`report_sql`, disabled by default)
+If you do that, it might be useful to add the current context to these custom
+data points which can get accessed with `InfluxDB::Rails.current.location`.
+
+See [influxdb-ruby](http://github.com/influxdata/influxdb-ruby) for a
+full list of configuration options and detailed usage.
+
+### Disabling hooks
+
+If you are not interested in certain reports you can disable them in the configuration.
 
 ```ruby
-  server:     Socket.gethostname,
-  app_name:   configuration.application_name,
-  location:   "#{payload[:controller]}##{payload[:action]}",,
-  operation:  "SELECT",
-  class_name: "USER",
-  name:       payload[:name],
+InfluxDB::Rails.configure do |config|
+  config.ignored_hooks = ['sql.active_record', 'render_template.action_view']
+end
 ```
-
-For more information about the payload, have a look at the
-[official ActiveSupport documentation][1].
-
-[1]: https://guides.rubyonrails.org/active_support_instrumentation.html#process-action-action-controller
-
-For the exceptions (`report_exceptions`):
-
-```ruby
-{
-  application_name:   InfluxDB::Rails.configuration.application_name,
-  application_root:   InfluxDB::Rails.configuration.application_root,
-  framework:          InfluxDB::Rails.configuration.framework,
-  framework_version:  InfluxDB::Rails.configuration.framework_version,
-  language:           "Ruby",
-  language_version:   "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
-  custom_data:        @custom_data,
-  class:              @exception.class.to_s,
-  method:             "#{@controller}##{@action}",
-  filename:           File.basename(@backtrace.lines.first.try(:file)),
-  server:             Socket.gethostname,
-  status:             "open",
-}
-```
-
 
 ## Frequently Asked Questions
 
@@ -205,7 +235,7 @@ To work around this limitation, set the `config.client.time_precision`
 to one of `"us"` (microseconds, 1·10<sup>-6</sup>s) or `"ns"` (nanoseconds,
 1·10<sup>-9</sup>s).
 
-Please note: This will only ever reduce the likelyhood of data points
+Please note: This will only ever reduce the likelihood of data points
 overwriting each other, but not eliminate it completely.
 
 [duplicate-points]: https://docs.influxdata.com/influxdb/v1.4/troubleshooting/frequently-asked-questions/#how-does-influxdb-handle-duplicate-points
@@ -218,9 +248,11 @@ This gem subscribes to various `ActiveSupport::Notifications` hooks.
 controller notifications are run *after* a controller action has finished,
 and should not impact the response time.
 
-Other notification hooks (mainly for rendering templates and, if enabled,
-SQL queries) run *inline* in the request processing. The amount of overhead
-introduced should be negligible, though.
+Other notification hooks (rendering and SQL queries) run *inline* in the
+request processing. The amount of overhead introduced should be negligible,
+though. However reporting of SQL queries relies on Ruby string parsing which
+might cause performance issues on traffic intensive applications. Disable it in
+the configuration if you are not willing to tolerate this.
 
 By default, this gem performs writes to InfluxDB asynchronously. A single
 hooks usually only performs some time delta calculations, and then enqueues
@@ -235,33 +267,30 @@ the network link, this might cause the HTTP thread to block a lot longer.
 [arn-docs]: http://api.rubyonrails.org/v5.1/classes/ActiveSupport/Notifications.html
 [arn-impl]: https://github.com/rails/rails/blob/5-1-stable/actionpack/lib/action_controller/metal/instrumentation.rb#L30-L38
 
-
 ### How does this gem handle an unreachable InfluxDB server?
 
-By default, the InfluxDB client will retry indefinetly, until a write
-succeedes (see [client docs][] for details). This has two important
-implcations, depending on the value of `config.client.async`:
+By default, the InfluxDB client will retry indefinitely, until a write
+succeeds (see [client docs][] for details). This has two important
+implications, depending on the value of `config.client.async`:
 
-- if the client runs asynchronously (i.e. in a seperate thread), the queue
-  might fill up with hundrets of megabytes of data points
+- if the client runs asynchronously (i.e. in a separate thread), the queue
+  might fill up with hundreds of megabytes of data points
 - if the client runs synchronously (i.e. inline in the request/response
   cycle), it might block all available request threads
 
-In both cases, your application server might become inresponsive and needs
+In both cases, your application server might become unresponsive and needs
 to be restarted (which can happen automatically in `cgroups` contexts,
 like Docker containers).
 
 If you setup a maximum retry value (`Integer === config.client.retry`),
-the client will try upto that amount of times to send the data to the server
+the client will try up to that amount of times to send the data to the server
 and (on final error) log an error and discard the values.
 
 [client docs]: https://github.com/influxdata/influxdb-ruby#retry
 
-
 ### What happens with unwritten points, when the application restarts?
 
 The data points are simply discarded.
-
 
 ### What happens, when the InfluxDB client or this gem throws an exception? Will the user see 500 errors?
 
@@ -269,33 +298,31 @@ No. The controller instrumentation is wrapped in a `rescue StandardError`
 clause, i.e. this gem will only write the error to the `client.logger`
 (`Rails.logger` by default) and not disturb the user experience.
 
-
-## Testing
-
-```console
-$ git clone git@github.com:influxdata/influxdb-rails.git
-$ cd influxdb-rails
-$ bundle install
-$ rake            # unit tests + Rubocop linting
-$ rake spec       # only unit tests
-$ rake rubocop    # only Rubocop linter
-$ rake test:all   # integration tests with various Rails version
-```
-
 ## Contributing
 
-- Fork this repository on GitHub.
-- Make your changes.
+- Fork this repository on GitHub
+- Make your changes
   - Add tests.
   - Add an entry in the `CHANGELOG.md` in the "unreleased" section on top.
 - Run the tests:
   - Either run them manually:
+
     ```console
-    $ rake test:all
+    rake test:all
     ```
+
   - or wait for [Travis][travis-pr] to pick up your changes, *after*
     you made a pull request.
 - Send a pull request.
 - If your changes are looking good, we'll merge them.
 
 [travis-pr]: https://travis-ci.org/influxdata/influxdb-rails/pull_requests
+
+### Testing Tasks
+
+```console
+rake            # unit tests + Rubocop linting
+rake spec       # only unit tests
+rake rubocop    # only Rubocop linter
+rake test:all   # integration tests with various Rails version
+```
