@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.shared_examples_for "with additional data" do |series_names|
+RSpec.shared_examples_for "with additional data" do
   context "values" do
     let(:additional_values) do
       { another: :value }
@@ -13,9 +13,7 @@ RSpec.shared_examples_for "with additional data" do |series_names|
     it "does include the tags" do
       InfluxDB::Rails.current.values = additional_values
 
-      series_names.each do |series_name|
-        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(series_name, hash_including(values: hash_including(another: :value)))
-      end
+      expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(config.measurement_name, hash_including(values: hash_including(another: :value)))
 
       subject.call("unused", start, finish, "unused", payload)
     end
@@ -32,9 +30,7 @@ RSpec.shared_examples_for "with additional data" do |series_names|
       it "processes tags throught the middleware" do
         tags = data[:tags].merge(static: "value")
 
-        series_names.each do |series_name|
-          expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(series_name, include(tags: tags))
-        end
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(config.measurement_name, include(tags: tags))
 
         subject.call("unused", start, finish, "unused", payload)
       end
@@ -56,9 +52,7 @@ RSpec.shared_examples_for "with additional data" do |series_names|
         InfluxDB::Rails.current.tags = input
         tags = data[:tags].merge(output)
 
-        series_names.each do |series_name|
-          expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(series_name, include(tags: tags))
-        end
+        expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(config.measurement_name, include(tags: tags))
 
         subject.call("unused", start, finish, "unused", payload)
       end

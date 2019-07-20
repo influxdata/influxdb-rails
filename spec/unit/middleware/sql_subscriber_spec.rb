@@ -8,14 +8,13 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
   before do
     allow(config).to receive(:application_name).and_return("my-rails-app")
     allow(config).to receive(:ignored_environments).and_return([])
-    allow(config).to receive(:report_sql).and_return(true)
     allow(config.client).to receive(:time_precision).and_return("ms")
   end
 
   describe ".call" do
     let(:start)   { Time.at(1_517_567_368) }
     let(:finish)  { Time.at(1_517_567_370) }
-    let(:series_name) { "sql" }
+    let(:hook_name) { "sql.active_record" }
     let(:payload) { { sql: "SELECT * FROM POSTS WHERE id = 1", name: "Post Load", binds: %w[1 2 3] } }
     let(:data) do
       {
@@ -27,13 +26,14 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
           location:   "Foo#bar",
           operation:  "SELECT",
           class_name: "Post",
+          hook:       "sql",
           name:       "Post Load",
         },
         timestamp: 1_517_567_370_000
       }
     end
 
-    subject { described_class.new(config, series_name) }
+    subject { described_class.new(config, hook_name) }
 
     before do
       InfluxDB::Rails.current.controller = "Foo"
@@ -47,7 +47,7 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
     context "successfully" do
       it "writes to InfluxDB" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          series_name, data
+          config.measurement_name, data
         )
         subject.call("name", start, finish, "id", payload)
       end
@@ -73,7 +73,7 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
         it "does use the default location" do
           data[:tags] = data[:tags].merge(location: :raw)
           expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-            series_name, data
+            config.measurement_name, data
           )
           subject.call("name", start, finish, "id", payload)
         end
@@ -89,6 +89,19 @@ RSpec.describe InfluxDB::Rails::Middleware::SqlSubscriber do
       it "does log exceptions" do
         allow_any_instance_of(InfluxDB::Client).to receive(:write_point).and_raise("boom")
         expect(logger).to receive(:error).with(/boom/)
+        subject.call("name", start, finish, "id", payload)
+      end
+    end
+
+    context "disabled" do
+      before do
+        allow(config).to receive(:ignored_hooks).and_return(["sql.active_record"])
+      end
+
+      subject { described_class.new(config, "sql.active_record") }
+
+      it "does not write a data point" do
+        expect_any_instance_of(InfluxDB::Client).not_to receive(:write_point)
         subject.call("name", start, finish, "id", payload)
       end
     end

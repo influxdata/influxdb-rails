@@ -9,7 +9,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
     allow(config).to receive(:environment).and_return("production")
   end
 
-  subject { described_class.new(config, "requests") }
+  subject { described_class.new(config, "process_action.action_controller") }
 
   describe "#call" do
     let(:start)   { Time.at(1_517_567_368) }
@@ -23,6 +23,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
         },
         tags:      {
           method:      "MyController#show",
+          hook:        "process_action",
           status:      200,
           format:      "*/*",
           http_method: "GET",
@@ -40,7 +41,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
 
       it "sends metrics with taggings and timestamps" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "requests", data.deep_merge(values: { controller: 2000, db: 2, view: 2 })
+          config.measurement_name, data.deep_merge(values: { controller: 2000, db: 2, view: 2 })
         )
 
         subject.call("unused", start, finish, "unused", payload)
@@ -53,6 +54,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
       let(:tags) do
         {
           method:      "MyController#show",
+          hook:        "process_action",
           status:      200,
           format:      "*/*",
           http_method: "GET",
@@ -66,7 +68,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
 
       it "does not add the app_name tag to metrics" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          "requests", data.merge(tags: tags).deep_merge(values: { controller: 2000, db: 2, view: 2 })
+          config.measurement_name, data.merge(tags: tags).deep_merge(values: { controller: 2000, db: 2, view: 2 })
         )
 
         subject.call("unused", start, finish, "unused", payload)
@@ -84,6 +86,19 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
       it "does log an error" do
         allow_any_instance_of(InfluxDB::Client).to receive(:write_point).and_raise("boom")
         expect(logger).to receive(:error).with(/boom/)
+        subject.call("name", start, finish, "id", payload)
+      end
+    end
+
+    context "disabled" do
+      before do
+        allow(config).to receive(:ignored_hooks).and_return(["process_action.action_controller"])
+      end
+
+      subject { described_class.new(config, "process_action.action_controller") }
+
+      it "does not write a data point" do
+        expect_any_instance_of(InfluxDB::Client).not_to receive(:write_point)
         subject.call("name", start, finish, "id", payload)
       end
     end

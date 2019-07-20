@@ -14,7 +14,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
   describe ".call" do
     let(:start)   { Time.at(1_517_567_368) }
     let(:finish)  { Time.at(1_517_567_370) }
-    let(:series_name) { "series_name" }
+    let(:hook_name) { "render_partial.action_view" }
     let(:payload) { { identifier: "index.html", count: 43, cache_hits: 42 } }
     let(:data) do
       {
@@ -26,12 +26,13 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
         tags:      {
           filename: "index.html",
           location: "Foo#bar",
+          hook:     "render_partial",
         },
         timestamp: 1_517_567_370_000
       }
     end
 
-    subject { described_class.new(config, series_name) }
+    subject { described_class.new(config, hook_name) }
 
     before do
       InfluxDB::Rails.current.controller = "Foo"
@@ -45,12 +46,12 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
     context "successfully" do
       it "writes to InfluxDB" do
         expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-          series_name, data
+          config.measurement_name, data
         )
         subject.call("name", start, finish, "id", payload)
       end
 
-      it_behaves_like "with additional data", ["series_name"]
+      it_behaves_like "with additional data"
 
       context "with an empty value" do
         before do
@@ -60,13 +61,17 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
 
         it "does not write empty value" do
           expect_any_instance_of(InfluxDB::Client).to receive(:write_point).with(
-            series_name, data
+            config.measurement_name, data
           )
           subject.call("name", start, finish, "id", payload)
         end
       end
 
       context "disabled" do
+        before do
+          allow(config).to receive(:ignored_hooks).and_return(['render_partial.action_view'])
+        end
+
         subject { described_class.new(config, nil) }
 
         it "does not write a data point" do

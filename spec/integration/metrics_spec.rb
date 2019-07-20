@@ -12,17 +12,5 @@ RSpec.describe WidgetsController, type: :controller do
       expect(InfluxDB::Rails.client).to receive(:write_point).exactly(4).times
       get :index
     end
-
-    context "with sql reports enabled" do
-      before do
-        allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:report_sql).and_return(true)
-        get :index # to not count ActiveRecord initialization
-      end
-
-      it "should result in attempts to write metrics via the client" do
-        expect(InfluxDB::Rails.client).to receive(:write_point).exactly(5).times
-        get :index
-      end
-    end
   end
 end
