@@ -37,10 +37,10 @@ module InfluxDB
 
         {
           "process_action.action_controller" => Middleware::RequestSubscriber,
-          "render_template.action_view" =>      Middleware::RenderSubscriber,
-          "render_partial.action_view" =>       Middleware::RenderSubscriber,
-          "render_collection.action_view" =>    Middleware::RenderSubscriber,
-          "sql.active_record" =>                Middleware::SqlSubscriber
+          "render_template.action_view"      => Middleware::RenderSubscriber,
+          "render_partial.action_view"       => Middleware::RenderSubscriber,
+          "render_collection.action_view"    => Middleware::RenderSubscriber,
+          "sql.active_record"                => Middleware::SqlSubscriber,
         }.each do |hook_name, subscriber_class|
           subscribe_to(hook_name, subscriber_class)
         end

@@ -69,7 +69,7 @@ RSpec.describe InfluxDB::Rails::Middleware::RenderSubscriber do
 
       context "disabled" do
         before do
-          allow(config).to receive(:ignored_hooks).and_return(['render_partial.action_view'])
+          allow(config).to receive(:ignored_hooks).and_return(["render_partial.action_view"])
         end
 
         subject { described_class.new(config, nil) }

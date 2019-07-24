@@ -19,7 +19,7 @@ puts "Loading Rails v#{Rails.version}..."
 require "support/rails#{Rails::VERSION::MAJOR}/app"
 require "rspec/rails"
 
-require 'pry'
+require "pry"
 
 RSpec.configure do |config|
   # use expect syntax
