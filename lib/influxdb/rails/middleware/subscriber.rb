@@ -10,6 +10,7 @@ module InfluxDB
         include InfluxDB::Rails::Logger
 
         attr_reader :configuration
+        attr_reader :hook_name
 
         def initialize(configuration, hook_name)
           @configuration = configuration
@@ -42,7 +43,7 @@ module InfluxDB
         def enabled?
           configuration.instrumentation_enabled? &&
             !configuration.ignore_current_environment? &&
-            !configuration.ignored_hooks.include?(@hook_name)
+            !configuration.ignored_hooks.include?(hook_name)
         end
 
         def location
