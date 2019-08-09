@@ -4,8 +4,8 @@ services:
     image: influxdb:1.7
     environment:
       - INFLUXDB_DB=rails
-      - INFLUXDB_USER=rails
-      - INFLUXDB_USER_PASSWORD=rails
+      - INFLUXDB_USER=root
+      - INFLUXDB_USER_PASSWORD=root
       - INFLUXDB_READ_USER=grafana
       - INFLUXDB_READ_USER_PASSWORD=grafana
     volumes:
