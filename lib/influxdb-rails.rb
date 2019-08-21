@@ -26,36 +26,36 @@ module InfluxDB
       attr_writer :configuration
       attr_writer :client
 
-      def configure(_silent = false)
-        yield(configuration)
+      def configure
+        return configuration unless block_given?
 
-        # if we change configuration, reload the client
-        self.client = nil
-
+        yield configuration
+        self.client = nil # if we change configuration, reload the client
         InfluxDB::Logging.logger = configuration.logger unless configuration.logger.nil?
       end
 
       # rubocop:disable Metrics/MethodLength
-      # rubocop:disable Metrics/AbcSize
 
       def client
-        @client ||= InfluxDB::Client.new \
-          database:       configuration.influxdb_database,
-          username:       configuration.influxdb_username,
-          password:       configuration.influxdb_password,
-          hosts:          configuration.influxdb_hosts,
-          port:           configuration.influxdb_port,
-          async:          configuration.async,
-          use_ssl:        configuration.use_ssl,
-          retry:          configuration.retry,
-          open_timeout:   configuration.open_timeout,
-          read_timeout:   configuration.read_timeout,
-          max_delay:      configuration.max_delay,
-          time_precision: configuration.time_precision
+        @client ||= begin
+          cfg = configuration.client
+          InfluxDB::Client.new \
+            database:       cfg.database,
+            username:       cfg.username,
+            password:       cfg.password,
+            hosts:          cfg.hosts,
+            port:           cfg.port,
+            async:          cfg.async,
+            use_ssl:        cfg.use_ssl,
+            retry:          cfg.retry,
+            open_timeout:   cfg.open_timeout,
+            read_timeout:   cfg.read_timeout,
+            max_delay:      cfg.max_delay,
+            time_precision: cfg.time_precision
+        end
       end
 
       # rubocop:enable Metrics/MethodLength
-      # rubocop:enable Metrics/AbcSize
 
       def configuration
         @configuration ||= InfluxDB::Rails::Configuration.new
@@ -83,7 +83,7 @@ module InfluxDB
         )
 
         client.write_point \
-          configuration.series_name_for_exceptions,
+          "exceptions".freeze,
           values:    exception_presenter.values.merge(ts: timestamp),
           tags:      tags,
           timestamp: timestamp
@@ -97,7 +97,7 @@ module InfluxDB
       # rubocop:enable Metrics/AbcSize
 
       def current_timestamp
-        InfluxDB.now(configuration.time_precision)
+        InfluxDB.now(configuration.client.time_precision)
       end
 
       def ignorable_exception?(ex)

@@ -19,6 +19,8 @@ puts "Loading Rails v#{Rails.version}..."
 require "support/rails#{Rails::VERSION::MAJOR}/app"
 require "rspec/rails"
 
+require "pry"
+
 RSpec.configure do |config|
   # use expect syntax
   config.disable_monkey_patching!
@@ -26,6 +28,6 @@ RSpec.configure do |config|
   # reset configuration for each spec
   config.before :each do
     InfluxDB::Rails.instance_variable_set :@configuration, nil
-    InfluxDB::Rails.configure(&:load_rails_defaults)
+    InfluxDB::Rails.configure
   end
 end

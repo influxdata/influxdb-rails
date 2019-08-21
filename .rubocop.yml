@@ -32,6 +32,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
   - 'spec/**/*.rb'
+  - 'influxdb-rails.gemspec'
 
 Metrics/LineLength:
   Max: 100
@@ -51,6 +52,9 @@ Naming/UncommunicativeMethodParamName:
 Naming/FileName:
   Exclude:
   - lib/influxdb-rails.rb
+
+Style/Documentation:
+  Enabled: false
 
 Style/FormatStringToken:
   Enabled: false

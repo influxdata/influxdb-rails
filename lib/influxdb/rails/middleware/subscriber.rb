@@ -10,9 +10,11 @@ module InfluxDB
         include InfluxDB::Rails::Logger
 
         attr_reader :configuration
+        attr_reader :hook_name
 
-        def initialize(configuration)
+        def initialize(configuration, hook_name)
           @configuration = configuration
+          @hook_name = hook_name
         end
 
         def call(*)
@@ -20,6 +22,14 @@ module InfluxDB
         end
 
         private
+
+        def timestamp(time)
+          InfluxDB.convert_timestamp(time.utc, client.time_precision)
+        end
+
+        def client
+          @client = configuration.client
+        end
 
         def tags(tags)
           result = tags.merge(InfluxDB::Rails.current.tags)
@@ -32,7 +42,8 @@ module InfluxDB
 
         def enabled?
           configuration.instrumentation_enabled? &&
-            !configuration.ignore_current_environment?
+            !configuration.ignore_current_environment? &&
+            !configuration.ignored_hooks.include?(hook_name)
         end
 
         def location

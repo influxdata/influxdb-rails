@@ -4,6 +4,12 @@ module InfluxDB
   module Rails
     module Middleware
       class RenderSubscriber < SimpleSubscriber # :nodoc:
+        def short_hook_name
+          return "render_template" if hook_name.include?("render_template")
+          return "render_partial" if hook_name.include?("render_partial")
+          return "render_collection" if hook_name.include?("render_collection")
+        end
+
         private
 
         def values(started, finished, payload)
@@ -16,6 +22,7 @@ module InfluxDB
         def tags(payload)
           tags = {
             location: location,
+            hook:     short_hook_name,
             filename: payload[:identifier],
           }
           super(tags)

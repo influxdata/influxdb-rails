@@ -1,6 +1,6 @@
 module InfluxDB
   module Rails
-    class Context # rubocop:disable Style/Documentation
+    class Context
       def controller
         Thread.current[:_influxdb_rails_controller]
       end

@@ -1,6 +1,6 @@
 module InfluxDB
   module Rails
-    module Instrumentation # rubocop:disable Style/Documentation
+    module Instrumentation
       def benchmark_for_instrumentation # rubocop:disable Metrics/MethodLength
         start = Time.now
         yield
@@ -9,11 +9,11 @@ module InfluxDB
         return if c.ignore_current_environment?
 
         InfluxDB::Rails.client.write_point \
-          c.series_name_for_instrumentation,
+          "instrumentation".freeze,
           values: {
             value: ((Time.now - start) * 1000).ceil,
           },
-          tags:   configuration.tags_middleware.call(
+          tags:   c.tags_middleware.call(
             method: "#{controller_name}##{action_name}",
             server: Socket.gethostname
           )
@@ -23,7 +23,7 @@ module InfluxDB
         base.extend(ClassMethods)
       end
 
-      module ClassMethods # rubocop:disable Style/Documentation
+      module ClassMethods
         def instrument(methods = [])
           methods = [methods] unless methods.is_a?(Array)
           around_filter :benchmark_for_instrumentation, only: methods
