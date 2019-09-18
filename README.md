@@ -13,6 +13,14 @@ metrics directly into [InfluxDB](http://influxdb.org/).
 
 This gem is designed for Rails 4.2+, Ruby 2.3+ and InfluxDB 0.9+.
 
+## Table of contents
+- [Installation](#installation)
+- [Usage](#installation)
+- [Configuration](#configuration)
+- [Demo](#demo)
+- [FAQ](#frequently-asked-questions)
+- [Contributing](#contributing)
+
 ## Installation
 
 Add the gem to your `Gemfile`:
@@ -220,6 +228,9 @@ InfluxDB::Rails.configure do |config|
   config.ignored_hooks = ['sql.active_record', 'render_template.action_view']
 end
 ```
+
+## Demo
+Want to see this in action? Check out our [sample dashboard](https://github.com/influxdata/influxdb-rails/tree/master/sample-dashboard).
 
 ## Frequently Asked Questions
 
