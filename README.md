@@ -65,10 +65,10 @@ Reported tags:
 
 ```ruby
 {
+  hook:        "process_action",
   server:      Socket.gethostname,
   app_name:    configuration.application_name,
   method:      "PostsController#index",
-  hook:	       "process_action"
   http_method: "GET",
   format:      "html",
   status:      "200"
@@ -94,6 +94,7 @@ Reported values:
 Reported tags:
 
 ```ruby
+  hook:       ["render_template", "render_partial", "render_collection"]
   server:     Socket.gethostname,
   app_name:   configuration.application_name,
   location:   "PostsController#index",
@@ -115,6 +116,7 @@ Reported values:
 Reported tags:
 
 ```ruby
+  hook:       "sql",
   server:     Socket.gethostname,
   app_name:   configuration.application_name,
   location:   "PostsController#index",
