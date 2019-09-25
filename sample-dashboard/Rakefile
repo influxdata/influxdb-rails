@@ -1,0 +1,8 @@
+task default: %w[prepare]
+
+# rubocop:disable Metrics/LineLength
+task :prepare do
+  sh "cat 'Ruby On Rails Performance.json' | sed 's/${DS_INFLUXDB}/InfluxDB/g' > provisioning/performance.json"
+  sh "cat 'Ruby On Rails Performance (per Request).json' | sed 's/${DS_INFLUXDB}/InfluxDB/g' > provisioning/performance-request.json"
+end
+# rubocop:enable Metrics/LineLength

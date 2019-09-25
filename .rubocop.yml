@@ -52,6 +52,7 @@ Naming/UncommunicativeMethodParamName:
 Naming/FileName:
   Exclude:
   - lib/influxdb-rails.rb
+  - sample-dashboard/Rakefile
 
 Style/Documentation:
   Enabled: false
