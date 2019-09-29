@@ -15,12 +15,19 @@ services:
   grafana:
     image: grafana/grafana:6.2.4
     ports:
-      - 8000:3000
+      - 3000:3000
     depends_on:
       - influx
     volumes:
-      - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasource.yml:ro
+      - ./provisioning/grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasource.yml:ro
+      - ./provisioning/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/grafana-dashboards.yml:ro
+      - ./provisioning/performance.json:/var/lib/grafana/dashboards/performance.json:ro
+      - ./provisioning/performance-request.json:/var/lib/grafana/dashboards/performance-request.json:ro
       - grafanadata:/var/lib/grafana
+  rails:
+    image: hennevogel/influxdb-rails-sample
+    ports:
+      - 4000:4000
 volumes:
   influxdata:
   grafanadata:

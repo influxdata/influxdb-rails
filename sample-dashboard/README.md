@@ -36,9 +36,9 @@ In the unlikely case that you need to change the dashboard *UID*s during import 
 
 ## Demo
 
-This repository includes a [docker-compose](https://docs.docker.com/compose/) demo setup for influxdb and grafana that you can use with any rails app you already have.
+This repository includes a [docker-compose](https://docs.docker.com/compose/) demo setup that brings a simple rails app, influxdb and grafana.
 
-### Starting the demo
+### Starting the demo services
 
 Clone this repository and run
 
@@ -46,14 +46,18 @@ Clone this repository and run
 docker-compose up
 ```
 
-### Configure your Rails app
+### Browse the sample app...
 
-Follow our [install instructions](https://github.com/influxdata/influxdb-rails/#installation), the default configuration works with the demo.
+Go to http://0.0.0.0:4000 and do some things. Every request to the rails app will generate performance data in the demo.
 
-To be able to view individual request you have to enable request ID tags in your application. Something like:
+### ...or Configure your own Rails app...
+
+You can also use the dashboard with any other rails app you already have. Follow our [install instructions](https://github.com/influxdata/influxdb-rails/#installation), the default configuration works with the demo InfluxDB running on localhost:8086.
+
+To be able to view individual requests you have to enable request ID tags in your application. Something like:
 
 ```ruby
-class ApplicationController
+class ApplicationController < ActionController::Base
 
   before_action :set_influx_data
 
@@ -63,13 +67,8 @@ class ApplicationController
 end
 ```
 
-Every request to your rails app will now generate performance data in the demo which you can view at
+### ...then see the dashboards in action
 
-http://0.0.0.0:8000
+Just go to http://0.0.0.0:3000 and log in with admin/admin.
 
-## Just show me how it looks sister!
-
-Alternatively you can also just look at how we measure the performance of the [Open Build Service](https://openbuildservice.org/) instance over
-at [openSUSE](https://opensuse.org), that's how this dashboard was born, our numbers are public 🤠
-
-https://obs-measure.opensuse.org
+Enjoy! ❤️
