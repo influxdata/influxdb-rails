@@ -4,6 +4,14 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## v1.0.0.beta4, unreleased
 
+- Introduces a Sample Grafana Dashboard + docker-compose demo (#75/#79, @hennevogel)
+- Redesign Measurement Output (#66, @dmke, @ChrisBr, @hennevogel)
+  - Switching from emitting eight different measurements to one called `rails`
+    to support easier aggregation across data, to simplify configuration and to
+    stay closer to the InfluxDB/Grafana nomenclature.
+- Introduced configuration option `ignored_hooks` to disable specifc hooks
+- Enable SQL subscriber by default
+  - Set a default location (:raw) for SQL subscriber
 - Add dynamic values (#65, @ChrisBr)
 - Remove empty tags (#64, @ChrisBr)
 
