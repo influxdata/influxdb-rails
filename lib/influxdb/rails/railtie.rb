@@ -23,6 +23,11 @@ module InfluxDB
           include InfluxDB::Rails::AirTrafficController
           require "influxdb/rails/instrumentation"
           include InfluxDB::Rails::Instrumentation
+
+          before_action do
+            current = InfluxDB::Rails.current
+            current.request_id = request.request_id if request.respond_to?(:request_id)
+          end
         end
 
         require "influxdb/rails/middleware/hijack_render_exception"

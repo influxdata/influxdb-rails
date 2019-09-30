@@ -59,6 +59,7 @@ Reported values:
   view: 46.848
   db: 0.157,
   started: 1465839830100400200
+  request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
 ```
 
 Reported tags:
@@ -88,7 +89,8 @@ Reported values:
 ```ruby
   value: 48.467,
   count: 3,
-  cache_hits: 0
+  cache_hits: 0,
+  request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
 ```
 
 Reported tags:
@@ -110,7 +112,8 @@ Reported ActiveSupport instrumentation hooks:
 Reported values:
 
 ```ruby
-  sql: "SELECT \"posts\".* FROM \"posts\""
+  sql: "SELECT \"posts\".* FROM \"posts\"",
+  request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
 ```
 
 Reported tags:
@@ -131,7 +134,8 @@ Reported values:
 
 ```ruby
   exception_message:   "The Exception Message",
-  exception_backtrace: "The Exception Backtrace"
+  exception_backtrace: "The Exception Backtrace",
+  request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
 ```
 
 Reported tags:
@@ -189,7 +193,7 @@ next section).
 
 If you want to add dynamically tags or fields *per request*, you can access
 `InfluxDB::Rails.current` to do so. For instance, you could add the current
-user as tag and the request id to every data point:
+user as tag or redis query time to every data point:
 
 ```ruby
 class ApplicationController
@@ -197,7 +201,7 @@ class ApplicationController
 
   def set_influx_data
     InfluxDB::Rails.current.tags = { user: current_user.id }
-    InfluxDB::Rails.current.values = { id: request.request_id }
+    InfluxDB::Rails.current.values = { redis_value: redis_value }
   end
 end
 ```

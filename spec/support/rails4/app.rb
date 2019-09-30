@@ -32,6 +32,10 @@ class ApplicationController < ActionController::Base; end
 class WidgetsController < ApplicationController
   prepend_view_path File.join(__dir__, "..", "views")
 
+  before_action do
+    InfluxDB::Rails.current.values = { key: :value }
+  end
+
   def index
     Widget.create!(title: "test")
   end
