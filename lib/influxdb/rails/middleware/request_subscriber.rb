@@ -13,7 +13,7 @@ module InfluxDB
             tags:      tags(payload),
             timestamp: timestamp(finish)
         rescue StandardError => e
-          log :error, "[InfluxDB::Rails] Unable to write points: #{e.message}"
+          ::Rails.logger.error("[InfluxDB::Rails] Unable to write points: #{e.message}")
         ensure
           InfluxDB::Rails.current.reset
         end

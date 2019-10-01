@@ -1,5 +1,3 @@
-require "influxdb/rails/logger"
-
 module InfluxDB
   module Rails
     module Middleware
@@ -7,8 +5,6 @@ module InfluxDB
       # which are intended as ActiveSupport::Notifications.subscribe
       # consumers.
       class Subscriber
-        include InfluxDB::Rails::Logger
-
         attr_reader :configuration
         attr_reader :hook_name
 

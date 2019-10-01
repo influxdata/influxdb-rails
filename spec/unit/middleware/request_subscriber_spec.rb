@@ -76,16 +76,13 @@ RSpec.describe InfluxDB::Rails::Middleware::RequestSubscriber do
     end
 
     context "not successfull" do
-      let(:logger) { double(:logger) }
-
       before do
-        allow(config).to receive(:logger).and_return(logger)
         InfluxDB::Rails.configuration = config
       end
 
       it "does log an error" do
         allow_any_instance_of(InfluxDB::Client).to receive(:write_point).and_raise("boom")
-        expect(logger).to receive(:error).with(/boom/)
+        expect(::Rails.logger).to receive(:error).with(/boom/)
         subject.call("name", start, finish, "id", payload)
       end
     end

@@ -4,23 +4,13 @@ require "rails"
 module InfluxDB
   module Rails
     class Railtie < ::Rails::Railtie # :nodoc:
-      initializer "influxdb.insert_rack_middleware" do |app|
-        app.config.middleware.insert 0, InfluxDB::Rails::Rack
-      end
-
-      config.after_initialize do # rubocop:disable Metrics/BlockLength
+      # rubocop:disable Metrics/BlockLength
+      config.after_initialize do
         InfluxDB::Rails.configure do |config|
-          config.logger           ||= ::Rails.logger
-          config.environment      ||= ::Rails.env
-          config.application_root ||= ::Rails.root
-          config.application_name ||= ::Rails.application.class.parent_name
-          config.framework          = "Rails".freeze
-          config.framework_version  = ::Rails.version
+          config.environment ||= ::Rails.env
         end
 
         ActiveSupport.on_load(:action_controller) do
-          require "influxdb/rails/air_traffic_controller"
-          include InfluxDB::Rails::AirTrafficController
           require "influxdb/rails/instrumentation"
           include InfluxDB::Rails::Instrumentation
 
@@ -29,9 +19,6 @@ module InfluxDB
             current.request_id = request.request_id if request.respond_to?(:request_id)
           end
         end
-
-        require "influxdb/rails/middleware/hijack_render_exception"
-        ::ActionDispatch::DebugExceptions.prepend InfluxDB::Rails::Middleware::HijackRenderException
 
         cache = lambda do |_, _, _, _, payload|
           current = InfluxDB::Rails.current
@@ -50,6 +37,7 @@ module InfluxDB
           subscribe_to(hook_name, subscriber_class)
         end
       end
+      # rubocop:enable Metrics/BlockLength
 
       def subscribe_to(hook_name, subscriber_class)
         subscriber = subscriber_class.new(InfluxDB::Rails.configuration, hook_name)

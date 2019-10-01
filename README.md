@@ -14,6 +14,7 @@ metrics directly into [InfluxDB](http://influxdb.org/).
 This gem is designed for Rails 4.2+, Ruby 2.3+ and InfluxDB 0.9+.
 
 ## Table of contents
+
 - [Installation](#installation)
 - [Usage](#installation)
 - [Configuration](#configuration)
@@ -42,8 +43,7 @@ configuration of this gem.
 ## Usage
 
 Out of the box, you'll automatically get reporting for sql, model, view and
-controller Rails instrumentation for every request. Additionally all exceptions
-are reported.
+controller Rails instrumentation for every request.
 
 ### Action Controller
 
@@ -126,35 +126,6 @@ Reported tags:
   operation:  "SELECT",
   class_name: "POST",
   name:       "Post Load"
-```
-
-### Exceptions
-
-Reported values:
-
-```ruby
-  exception_message:   "The Exception Message",
-  exception_backtrace: "The Exception Backtrace",
-  request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
-```
-
-Reported tags:
-
-```ruby
-{
-  application_name:   InfluxDB::Rails.configuration.application_name,
-  application_root:   InfluxDB::Rails.configuration.application_root,
-  framework:          InfluxDB::Rails.configuration.framework,
-  framework_version:  InfluxDB::Rails.configuration.framework_version,
-  language:           "Ruby",
-  language_version:   "#{RUBY_VERSION}-p#{RUBY_PATCHLEVEL}",
-  custom_data:        @custom_data,
-  class:              @exception.class.to_s,
-  method:             "#{@controller}##{@action}",
-  filename:           File.basename(@backtrace.lines.first.try(:file)),
-  server:             Socket.gethostname,
-  status:             "open"
-}
 ```
 
 ## Configuration
@@ -305,15 +276,15 @@ and (on final error) log an error and discard the values.
 
 [client docs]: https://github.com/influxdata/influxdb-ruby#retry
 
-### What happens with unwritten points, when the application restarts?
-
-The data points are simply discarded.
-
 ### What happens, when the InfluxDB client or this gem throws an exception? Will the user see 500 errors?
 
 No. The controller instrumentation is wrapped in a `rescue StandardError`
 clause, i.e. this gem will only write the error to the `client.logger`
 (`Rails.logger` by default) and not disturb the user experience.
+
+### What happens with unwritten points, when the application restarts?
+
+The data points are simply discarded.
 
 ## Contributing
 
