@@ -109,6 +109,18 @@ module InfluxDB
       # a logger instance
       attr_accessor :logger
 
+      # FIXME: Old configuration options, remove this in 1.0.1
+      attr_writer \
+        :series_name_for_controller_runtimes,
+        :series_name_for_view_runtimes,
+        :series_name_for_db_runtimes,
+        :series_name_for_render_template,
+        :series_name_for_render_partial,
+        :series_name_for_render_collection,
+        :series_name_for_sql,
+        :series_name_for_exceptions,
+        :series_name_for_instrumentation
+
       def initialize
         @client = ClientConfig.new
         load_defaults
