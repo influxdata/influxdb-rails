@@ -53,61 +53,21 @@ module InfluxDB
       include Configurable
 
       set_defaults(
-        measurement_name:             "rails".freeze,
-        ignored_hooks:                [].freeze,
-        tags_middleware:              ->(tags) { tags },
-        rails_app_name:               nil,
-
-        ignored_exceptions:           %w[
-          ActiveRecord::RecordNotFound
-          ActionController::RoutingError
-        ].freeze,
-
-        ignored_exception_messages:   [].freeze,
-        ignored_environments:         %w[test cucumber selenium].freeze,
-        ignored_user_agents:          %w[GoogleBot].freeze,
-        environment_variable_filters: [
-          /password/i,
-          /key/i,
-          /secret/i,
-          /ps1/i,
-          /rvm_.*_clr/i,
-          /color/i,
-        ].freeze,
-        environment:                  ::Rails.env,
-
-        backtrace_filters:            [
-          ->(line) { line.gsub(%r{^\./}, "") },
-          lambda { |line|
-            return line if InfluxDB::Rails.configuration.application_root.to_s.empty?
-
-            line.gsub(/#{InfluxDB::Rails.configuration.application_root}/, "[APP_ROOT]")
-          },
-          lambda { |line|
-            if defined?(Gem) && !Gem.path.nil? && !Gem.path.empty?
-              Gem.path.each { |path| line = line.gsub(/#{path}/, "[GEM_ROOT]") }
-            end
-            line
-          },
-        ].freeze,
-
-        debug:                        false,
-        instrumentation_enabled:      true
+        measurement_name:        "rails".freeze,
+        ignored_hooks:           [].freeze,
+        tags_middleware:         ->(tags) { tags },
+        rails_app_name:          nil,
+        ignored_environments:    %w[test cucumber selenium].freeze,
+        environment:             ::Rails.env,
+        debug:                   false,
+        instrumentation_enabled: true
       )
 
       # config option set after_initialize
-      attr_accessor \
-        :environment,      # Rails.env
-        :application_root, # Rails.root
-        :application_name, # Rails.application.class.parent_name
-        :framework,        # "Rails"
-        :framework_version # Rails.version
+      attr_accessor(:environment, :application_name)
 
       # configuration passed to InfluxDB::Client
       attr_reader :client
-
-      # a logger instance
-      attr_accessor :logger
 
       # FIXME: Old configuration options, remove this in 1.0.1
       attr_writer \
@@ -119,7 +79,12 @@ module InfluxDB
         :series_name_for_render_collection,
         :series_name_for_sql,
         :series_name_for_exceptions,
-        :series_name_for_instrumentation
+        :series_name_for_instrumentation,
+        :ignored_exceptions,
+        :ignored_exception_messages,
+        :ignored_user_agents,
+        :environment_variable_filters,
+        :backtrace_filters
 
       def initialize
         @client = ClientConfig.new
@@ -134,33 +99,8 @@ module InfluxDB
         @instrumentation_enabled
       end
 
-      def ignore_user_agent?(incoming_user_agent)
-        return false if ignored_user_agents.nil?
-
-        ignored_user_agents.any? { |agent| incoming_user_agent =~ /#{agent}/ }
-      end
-
       def ignore_current_environment?
         ignored_environments.include?(environment)
-      end
-
-      def ignore_exception?(ex)
-        !ignored_exception_messages.find { |msg| /.*#{msg}.*/ =~ ex.message }.nil? ||
-          ignored_exceptions.include?(ex.class.to_s)
-      end
-
-      def define_custom_exception_data(&block)
-        @custom_exception_data_handler = block
-      end
-
-      def add_custom_exception_data(exception_presenter)
-        @custom_exception_data_handler&.call(exception_presenter)
-      end
-
-      private
-
-      def initialize_http_connection
-        Net::HTTP.new(@app_host, "80")
       end
     end
   end
