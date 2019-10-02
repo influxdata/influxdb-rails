@@ -4,14 +4,19 @@ require "influxdb/rails/version"
 
 Gem::Specification.new do |spec|
   spec.name        = "influxdb-rails"
-  spec.version     = InfluxDB::Rails::VERSION
-  spec.authors     = ["Dominik Menke", "Todd Persen"]
-  spec.email       = ["dominik.menke@gmail.com", "todd@influxdb.com"]
-  spec.homepage    = "https://influxdata.com"
   spec.summary     = "InfluxDB bindings for Ruby on Rails."
-  spec.description = "This gem automatically instruments your Ruby on Rails" \
-                     " 4.2/5.x applications using InfluxDB for storage."
+  spec.description = "This gem instruments your Ruby on Rails application using InfluxDB."
+  spec.version     = InfluxDB::Rails::VERSION
+  spec.authors     = ["Christian Bruckmayer", "Henne Vogelsang"]
+  spec.email       = ["christian@bruckmayer.net", "hvogel@hennevogel.de"]
   spec.licenses    = ["MIT"]
+  spec.homepage    = "https://influxdata.com"
+  spec.metadata = {
+    "bug_tracker_uri"   => "https://github.com/influxdata/influxdb-rails/issues",
+    "changelog_uri"     => "https://github.com/influxdata/influxdb-rails/blob/master/CHANGELOG.md",
+    "documentation_uri" => "https://github.com/influxdata/influxdb-rails/blob/master/README.md",
+    "source_code_uri"   => "https://github.com/influxdata/influxdb-rails",
+  }
 
   spec.files         = `git ls-files`.split($/) # rubocop:disable Style/SpecialGlobalVars
   spec.test_files    = spec.files.grep(%r{^(test|spec|features|smoke)/})
