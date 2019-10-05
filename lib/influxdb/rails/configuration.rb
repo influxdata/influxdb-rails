@@ -83,8 +83,21 @@ module InfluxDB
         :ignored_exceptions,
         :ignored_exception_messages,
         :ignored_user_agents,
+        :application_root,
         :environment_variable_filters,
-        :backtrace_filters
+        :backtrace_filters,
+        :influxdb_database,
+        :influxdb_username,
+        :influxdb_password,
+        :influxdb_hosts,
+        :influxdb_port,
+        :async,
+        :use_ssl,
+        :retry,
+        :open_timeout,
+        :read_timeout,
+        :max_delay,
+        :time_precision
 
       def initialize
         @client = ClientConfig.new
