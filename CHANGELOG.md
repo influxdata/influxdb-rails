@@ -4,6 +4,7 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## v1.0.0.beta5, unreleased
 - Silently eat all dropped configuration options and do not crash
+- Add per action view to the sample dashboard
 
 ## v1.0.0.beta4
 
