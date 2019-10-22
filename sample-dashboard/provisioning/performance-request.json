@@ -59,7 +59,7 @@
   "gnetId": 10429,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1565382353036,
+  "iteration": 1571753874432,
   "links": [],
   "panels": [
     {
@@ -159,7 +159,7 @@
           ],
           "tags": [
             {
-              "key": "request",
+              "key": "request_id",
               "operator": "=~",
               "value": "/^$request_id$/"
             },
@@ -265,7 +265,7 @@
           ],
           "tags": [
             {
-              "key": "request",
+              "key": "request_id",
               "operator": "=~",
               "value": "/^$request_id$/"
             },
@@ -371,7 +371,7 @@
           ],
           "tags": [
             {
-              "key": "request",
+              "key": "request_id",
               "operator": "=~",
               "value": "/^$request_id$/"
             },
@@ -587,7 +587,7 @@
           ],
           "tags": [
             {
-              "key": "request",
+              "key": "request_id",
               "operator": "=~",
               "value": "/^$request_id$/"
             },
@@ -750,7 +750,7 @@
           ],
           "tags": [
             {
-              "key": "request",
+              "key": "request_id",
               "operator": "=~",
               "value": "/^$request_id$/"
             },
@@ -957,7 +957,7 @@
           ],
           "tags": [
             {
-              "key": "request",
+              "key": "request_id",
               "operator": "=~",
               "value": "/^$request_id$/"
             },
@@ -1049,5 +1049,5 @@
   "timezone": "",
   "title": "Ruby On Rails Performance (per Request)",
   "uid": "H8S9fSVWz",
-  "version": 11
+  "version": 1
 }

@@ -59,7 +59,7 @@
   "gnetId": 10428,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1565379563803,
+  "iteration": 1571752964360,
   "links": [],
   "panels": [
     {
@@ -477,7 +477,7 @@
             [
               {
                 "params": [
-                  "request"
+                  "request_id"
                 ],
                 "type": "field"
               },
@@ -1859,7 +1859,7 @@
           "linkTooltip": "Details",
           "linkUrl": "/d/$REQUEST_DASHBOARD_UID/ruby-on-rails-performance-per-request?var-request_id=${__cell}&from=${__cell_2}&to=${__cell_0}&var-method=${__cell_1}",
           "mappingType": 1,
-          "pattern": "request",
+          "pattern": "request_id",
           "thresholds": [],
           "type": "string",
           "unit": "short"
@@ -1909,7 +1909,7 @@
             [
               {
                 "params": [
-                  "request"
+                  "request_id"
                 ],
                 "type": "field"
               }
@@ -2007,5 +2007,5 @@
   "timezone": "",
   "title": "Ruby On Rails Performance Overview",
   "uid": "K2CJtIVZz",
-  "version": 13
+  "version": 1
 }
