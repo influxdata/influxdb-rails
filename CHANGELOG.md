@@ -2,7 +2,10 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
-## v1.0.0.beta4, unreleased
+## v1.0.0.beta5, unreleased
+- Silently eat all dropped configuration options and do not crash
+
+## v1.0.0.beta4
 
 - Introduces a Sample Grafana Dashboard + docker-compose demo (#75/#79, @hennevogel)
 - Redesign Measurement Output (#66, @dmke, @ChrisBr, @hennevogel)
