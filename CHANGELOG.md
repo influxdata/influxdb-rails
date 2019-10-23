@@ -50,8 +50,6 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
   - `InfluxDB::Rails::Configuration#database_name`
   - `InfluxDB::Rails::Configuration#application_id`
 
-[migrate]: https://gist.github.com/dmke/2d0f4ccf9f43faf82e732dc041e90ca2
-
 ## v0.4.3, released 2017-12-12
 
 - Added `time_precision` config option (#42, @kkentzo)
