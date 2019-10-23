@@ -59,7 +59,7 @@
   "gnetId": 10428,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1565379563803,
+  "iteration": 1571758610473,
   "links": [],
   "panels": [
     {
@@ -477,7 +477,7 @@
             [
               {
                 "params": [
-                  "request"
+                  "request_id"
                 ],
                 "type": "field"
               },
@@ -1261,6 +1261,10 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
+          "link": true,
+          "linkTargetBlank": true,
+          "linkTooltip": "View data per this Controller Action",
+          "linkUrl": "/d/$ACTION_DASHBOARD_UID/ruby-on-rails-performance-per-action?var-Action=${__cell}&from=$__from&to=$__to",
           "mappingType": 1,
           "pattern": "method",
           "thresholds": [],
@@ -1463,6 +1467,10 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
+          "link": true,
+          "linkTargetBlank": true,
+          "linkTooltip": "View data per this Controller Action",
+          "linkUrl": "/d/$ACTION_DASHBOARD_UID/ruby-on-rails-performance-per-action?var-Action=${__cell}&from=$__from&to=$__to",
           "mappingType": 1,
           "pattern": "location",
           "thresholds": [],
@@ -1856,10 +1864,10 @@
           "decimals": 2,
           "link": true,
           "linkTargetBlank": false,
-          "linkTooltip": "Details",
+          "linkTooltip": "View data per this Request",
           "linkUrl": "/d/$REQUEST_DASHBOARD_UID/ruby-on-rails-performance-per-request?var-request_id=${__cell}&from=${__cell_2}&to=${__cell_0}&var-method=${__cell_1}",
           "mappingType": 1,
-          "pattern": "request",
+          "pattern": "request_id",
           "thresholds": [],
           "type": "string",
           "unit": "short"
@@ -1874,6 +1882,10 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
+          "link": true,
+          "linkTargetBlank": true,
+          "linkTooltip": "View data per this Controller Action",
+          "linkUrl": "/d/$ACTION_DASHBOARD_UID/ruby-on-rails-performance-per-action?var-Action=${__cell}&from=$__from&to=$__to",
           "mappingType": 1,
           "pattern": "method",
           "thresholds": [],
@@ -1909,7 +1921,7 @@
             [
               {
                 "params": [
-                  "request"
+                  "request_id"
                 ],
                 "type": "field"
               }
@@ -1972,6 +1984,24 @@
         "query": "H8S9fSVWz",
         "skipUrlSync": false,
         "type": "custom"
+      },
+      {
+        "current": {
+          "value": "Gpp3B1Pik",
+          "text": "Gpp3B1Pik"
+        },
+        "hide": 2,
+        "label": null,
+        "name": "ACTION_DASHBOARD_UID",
+        "options": [
+          {
+            "value": "Gpp3B1Pik",
+            "text": "Gpp3B1Pik"
+          }
+        ],
+        "query": "Gpp3B1Pik",
+        "skipUrlSync": false,
+        "type": "constant"
       }
     ]
   },
@@ -2007,5 +2037,5 @@
   "timezone": "",
   "title": "Ruby On Rails Performance Overview",
   "uid": "K2CJtIVZz",
-  "version": 13
+  "version": 1
 }

@@ -20,6 +20,5 @@ RUN echo 'gem "influxdb-rails", :git => "https://github.com/influxdata/influxdb-
 RUN bundle install; rails webpacker:install; rake db:migrate
 RUN sed -i '2i \  root to: "things#index"' config/routes.rb
 RUN bundle exec rails generate influxdb
-RUN curl -o app/controllers/application_controller.rb https://gist.githubusercontent.com/hennevogel/296e93b9db620e9cf48eeb30cef6a145/raw/8c6d4635ded3bef2ca9cfdf65c5863cf6f03a984/application_controller.rb
 RUN sed -i '2i \  config.client.hosts = "influx"' config/initializers/influxdb_rails.rb
 CMD bundle exec rails server -b 0.0.0.0 -p 4000

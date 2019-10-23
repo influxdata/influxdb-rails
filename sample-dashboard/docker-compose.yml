@@ -22,6 +22,7 @@ services:
       - ./provisioning/grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasource.yml:ro
       - ./provisioning/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/grafana-dashboards.yml:ro
       - ./provisioning/performance.json:/var/lib/grafana/dashboards/performance.json:ro
+      - ./provisioning/performance-action.json:/var/lib/grafana/dashboards/performance-action.json:ro
       - ./provisioning/performance-request.json:/var/lib/grafana/dashboards/performance-request.json:ro
       - grafanadata:/var/lib/grafana
   rails:

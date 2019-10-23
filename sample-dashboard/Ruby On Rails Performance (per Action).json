@@ -54,25 +54,24 @@
       }
     ]
   },
-  "description": "Ruby on Rails Performance Insights based on influxdb and influxdb-rails",
+  "description": "Ruby on Rails Request Performance Insights based on influxdb-rails",
   "editable": true,
-  "gnetId": 10428,
+  "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1571758610473,
+  "iteration": 1571756217977,
   "links": [],
   "panels": [
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": true,
+      "colorValue": false,
       "colors": [
         "#299c46",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "InfluxDB",
-      "description": "",
+      "datasource": "${DS_INFLUXDB}",
       "format": "ms",
       "gauge": {
         "maxValue": 100,
@@ -80,6 +79,258 @@
         "show": false,
         "thresholdLabels": false,
         "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 0,
+        "y": 0
+      },
+      "id": 16,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "options": {},
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "rails",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "controller"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
+              "key": "hook",
+              "operator": "=",
+              "value": "process_action"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "title": "Request",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 5,
+        "y": 0
+      },
+      "id": 14,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "options": {},
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": true
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "rails",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "view"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
+              "key": "hook",
+              "operator": "=",
+              "value": "process_action"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "title": "View per request",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_INFLUXDB}",
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 10,
+        "y": 0
       },
       "id": 10,
       "interval": null,
@@ -133,124 +384,6 @@
               "type": "fill"
             }
           ],
-          "hide": false,
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "controller"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        }
-      ],
-      "thresholds": "200,300",
-      "title": "Average Controller Action Time",
-      "type": "singlestat",
-      "valueFontSize": "80%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "avg"
-    },
-    {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "InfluxDB",
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 6,
-        "y": 0
-      },
-      "id": 12,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "options": {},
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
-      },
-      "tableColumn": "",
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "null"
-              ],
-              "type": "fill"
-            }
-          ],
           "measurement": "rails",
           "orderByTime": "ASC",
           "policy": "default",
@@ -272,6 +405,12 @@
           ],
           "tags": [
             {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
               "value": "process_action"
@@ -279,8 +418,8 @@
           ]
         }
       ],
-      "thresholds": "50,100",
-      "title": "Average Database Query Time",
+      "thresholds": "",
+      "title": "SQL per request",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -295,14 +434,14 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": true,
+      "colorValue": false,
       "colors": [
         "#299c46",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "InfluxDB",
-      "format": "ms",
+      "datasource": "${DS_INFLUXDB}",
+      "format": "short",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -311,12 +450,12 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 12,
+        "h": 4,
+        "w": 5,
+        "x": 15,
         "y": 0
       },
-      "id": 14,
+      "id": 22,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -349,19 +488,12 @@
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
         "lineColor": "rgb(31, 120, 193)",
-        "show": true
+        "show": false
       },
-      "tableColumn": "",
+      "tableColumn": "value",
       "targets": [
         {
-          "groupBy": [
-            {
-              "params": [
-                "$interval"
-              ],
-              "type": "time"
-            }
-          ],
+          "groupBy": [],
           "measurement": "rails",
           "orderByTime": "ASC",
           "policy": "default",
@@ -371,18 +503,24 @@
             [
               {
                 "params": [
-                  "view"
+                  "controller"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
-                "type": "mean"
+                "type": "count"
               }
             ]
           ],
           "tags": [
             {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
               "value": "process_action"
@@ -390,8 +528,8 @@
           ]
         }
       ],
-      "thresholds": "50,100",
-      "title": "Average View Rendering Time",
+      "thresholds": "",
+      "title": "Total requests",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -406,15 +544,15 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
-      "colorValue": false,
+      "colorValue": true,
       "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
+        "#e24d42",
+        "#e5ac0e",
+        "#629e51"
       ],
-      "datasource": "InfluxDB",
+      "datasource": "${DS_INFLUXDB}",
       "decimals": null,
-      "format": "short",
+      "format": "percent",
       "gauge": {
         "maxValue": 100,
         "minValue": 0,
@@ -423,12 +561,12 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 18,
+        "h": 4,
+        "w": 4,
+        "x": 20,
         "y": 0
       },
-      "id": 16,
+      "id": 24,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -467,7 +605,6 @@
       "targets": [
         {
           "groupBy": [],
-          "hide": false,
           "measurement": "rails",
           "orderByTime": "ASC",
           "policy": "default",
@@ -477,27 +614,35 @@
             [
               {
                 "params": [
-                  "request_id"
+                  "cache_hits"
                 ],
                 "type": "field"
               },
               {
-                "params": [],
-                "type": "count"
+                "params": [
+                  " / \"count\" * 100"
+                ],
+                "type": "math"
               }
             ]
           ],
           "tags": [
             {
+              "key": "location",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
-              "value": "process_action"
+              "value": "render_collection"
             }
           ]
         }
       ],
-      "thresholds": "",
-      "title": "Total Number of Requests",
+      "thresholds": "10,80",
+      "title": "Cache hits",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -507,247 +652,23 @@
           "value": "null"
         }
       ],
-      "valueName": "current"
-    },
-    {
-      "aliasColors": {
-        "rails.controller.mean": "#1f78c1"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "InfluxDB",
-      "description": "Time spent in controller actions",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 0,
-        "y": 3
-      },
-      "id": 6,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Maximum",
-          "fillBelowTo": "Minimum",
-          "lines": false
-        },
-        {
-          "alias": "Minimum",
-          "lines": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Maximum",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "controller"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        },
-        {
-          "alias": "Mean",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "controller"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        },
-        {
-          "alias": "Minimum",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "controller"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "min"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Controller Action Runtime",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "dtdurationms",
-          "label": null,
-          "logBase": 2,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "valueName": "avg"
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "InfluxDB",
-      "description": "Time spent in executing database queries",
+      "datasource": "${DS_INFLUXDB}",
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 8,
-        "y": 3
+        "h": 8,
+        "w": 13,
+        "x": 0,
+        "y": 4
       },
-      "id": 2,
+      "id": 20,
       "legend": {
         "avg": false,
         "current": false,
@@ -761,20 +682,21 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
-      "paceLength": 10,
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "Maximum",
-          "fillBelowTo": "Minimum",
+          "alias": "rails.max",
+          "fillBelowTo": "rails.min",
           "lines": false
         },
         {
-          "alias": "Minimum",
+          "alias": "rails.min",
           "lines": false
         }
       ],
@@ -783,50 +705,6 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "Maximum",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "B",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "db"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        },
-        {
-          "alias": "Mean",
           "groupBy": [
             {
               "params": [
@@ -850,7 +728,7 @@
             [
               {
                 "params": [
-                  "db"
+                  "controller"
                 ],
                 "type": "field"
               },
@@ -862,185 +740,12 @@
           ],
           "tags": [
             {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        },
-        {
-          "alias": "Minimum",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
             },
             {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "db"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "min"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Database Query Runtime",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "dtdurationms",
-          "label": null,
-          "logBase": 2,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "rails.view.mean": "#eab839"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "InfluxDB",
-      "description": "Time spent in rendering views",
-      "fill": 0,
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 3
-      },
-      "id": 4,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {},
-      "paceLength": 10,
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Maximum",
-          "fillBelowTo": "Minimum",
-          "lines": false
-        },
-        {
-          "alias": "Minimum",
-          "lines": false
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "alias": "Maximum",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "C",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "view"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
-              }
-            ]
-          ],
-          "tags": [
-            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
               "value": "process_action"
@@ -1048,50 +753,6 @@
           ]
         },
         {
-          "alias": "Mean",
-          "groupBy": [
-            {
-              "params": [
-                "$__interval"
-              ],
-              "type": "time"
-            },
-            {
-              "params": [
-                "0"
-              ],
-              "type": "fill"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "time_series",
-          "select": [
-            [
-              {
-                "params": [
-                  "view"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "process_action"
-            }
-          ]
-        },
-        {
-          "alias": "Minimum",
           "groupBy": [
             {
               "params": [
@@ -1115,7 +776,55 @@
             [
               {
                 "params": [
-                  "view"
+                  "controller"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
+              "key": "hook",
+              "operator": "=",
+              "value": "process_action"
+            }
+          ]
+        },
+        {
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "0"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "rails",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "controller"
                 ],
                 "type": "field"
               },
@@ -1127,6 +836,12 @@
           ],
           "tags": [
             {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
               "value": "process_action"
@@ -1138,7 +853,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "View Rendering Runtime",
+      "title": "Response time",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1154,8 +869,9 @@
       },
       "yaxes": [
         {
+          "decimals": null,
           "format": "dtdurationms",
-          "label": null,
+          "label": "",
           "logBase": 2,
           "max": null,
           "min": null,
@@ -1177,23 +893,22 @@
     },
     {
       "columns": [],
-      "datasource": "InfluxDB",
-      "description": "Data for the selected range by controller action.\n\n- Count: Number of occurrences\n- Mean: Average time spent\n- Median: Median time spent\n- Maximum: Slowest occurrence\n\n[Average vs. Median?](https://www.differencebetween.com/difference-between-mean-and-median/)",
+      "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 0,
-        "y": 12
+        "h": 8,
+        "w": 11,
+        "x": 13,
+        "y": 4
       },
-      "id": 18,
+      "id": 26,
       "links": [],
       "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 5,
+        "col": 0,
         "desc": true
       },
       "styles": [
@@ -1201,58 +916,10 @@
           "alias": "Time",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
-          "type": "hidden"
+          "type": "date"
         },
         {
-          "alias": "Mean",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "mean",
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "Count",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "count",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "Median",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "median",
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "Controller Action",
+          "alias": "Reqest",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1263,16 +930,16 @@
           "decimals": 2,
           "link": true,
           "linkTargetBlank": true,
-          "linkTooltip": "View data per this Controller Action",
-          "linkUrl": "/d/$ACTION_DASHBOARD_UID/ruby-on-rails-performance-per-action?var-Action=${__cell}&from=$__from&to=$__to",
+          "linkTooltip": "Show details of this request",
+          "linkUrl": "/d/$REQUEST_DASHBOARD_UID/ruby-on-rails-performance-per-request?orgId=1&var-request_id=${__cell}&from=${__cell_2}&to=${__cell_0}&var-method=${__cell_1}",
           "mappingType": 1,
-          "pattern": "method",
+          "pattern": "request_id",
           "thresholds": [],
-          "type": "number",
+          "type": "string",
           "unit": "short"
         },
         {
-          "alias": "Maximum",
+          "alias": "Response time",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1282,10 +949,42 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
           "mappingType": 1,
-          "pattern": "max",
+          "pattern": "controller",
           "thresholds": [],
           "type": "number",
           "unit": "ms"
+        },
+        {
+          "alias": "Time",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "started",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "method",
+          "thresholds": [],
+          "type": "hidden",
+          "unit": "short"
         },
         {
           "alias": "",
@@ -1312,9 +1011,9 @@
               "type": "tag"
             }
           ],
-          "limit": "",
+          "limit": "50",
           "measurement": "rails",
-          "orderByTime": "ASC",
+          "orderByTime": "DESC",
           "policy": "default",
           "refId": "A",
           "resultFormat": "table",
@@ -1322,13 +1021,9 @@
             [
               {
                 "params": [
-                  "controller"
+                  "started"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "count"
               }
             ],
             [
@@ -1337,39 +1032,25 @@
                   "controller"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
               }
             ],
             [
               {
                 "params": [
-                  "controller"
+                  "request_id"
                 ],
                 "type": "field"
-              },
-              {
-                "params": [],
-                "type": "median"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "controller"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
               }
             ]
           ],
           "tags": [
             {
+              "key": "method",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
               "value": "process_action"
@@ -1377,249 +1058,21 @@
           ]
         }
       ],
-      "title": "By Controller Action",
+      "title": "Last requests",
       "transform": "table",
       "type": "table"
     },
     {
       "columns": [],
-      "datasource": "InfluxDB",
-      "description": "Data for the selected range by database query.\n\n- Count: Number of occurrences\n- Mean: Average time spent\n- Median: Median time spent\n- Maximum: Slowest occurrence\n\n[Average vs. Median?](https://www.differencebetween.com/difference-between-mean-and-median/)",
+      "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 12,
+        "h": 15,
+        "w": 13,
+        "x": 0,
         "y": 12
       },
-      "id": 29,
-      "links": [],
-      "options": {},
-      "pageSize": null,
-      "scroll": true,
-      "showHeader": true,
-      "sort": {
-        "col": 6,
-        "desc": true
-      },
-      "styles": [
-        {
-          "alias": "Time",
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "pattern": "Time",
-          "type": "hidden"
-        },
-        {
-          "alias": "Count",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": null,
-          "mappingType": 1,
-          "pattern": "count",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "Mean",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "mean",
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "Median",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "median",
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "Controller Action",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": true,
-          "linkTargetBlank": true,
-          "linkTooltip": "View data per this Controller Action",
-          "linkUrl": "/d/$ACTION_DASHBOARD_UID/ruby-on-rails-performance-per-action?var-Action=${__cell}&from=$__from&to=$__to",
-          "mappingType": 1,
-          "pattern": "location",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "Name of the operation",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "name",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "Maximum",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "max",
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "decimals": 2,
-          "pattern": "/.*/",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "groupBy": [
-            {
-              "params": [
-                "name"
-              ],
-              "type": "tag"
-            },
-            {
-              "params": [
-                "location"
-              ],
-              "type": "tag"
-            }
-          ],
-          "measurement": "rails",
-          "orderByTime": "ASC",
-          "policy": "default",
-          "refId": "A",
-          "resultFormat": "table",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "count"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "mean"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "median"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "field"
-              },
-              {
-                "params": [],
-                "type": "max"
-              }
-            ]
-          ],
-          "tags": [
-            {
-              "key": "hook",
-              "operator": "=",
-              "value": "sql"
-            }
-          ]
-        }
-      ],
-      "title": "By Database Query",
-      "transform": "table",
-      "type": "table"
-    },
-    {
-      "columns": [],
-      "datasource": "InfluxDB",
-      "description": "Data for the selected range by view rendering.\n\n- Count: Number of occurrences\n- Mean: Average time spent\n- Median: Median time spent\n- Maximum: Slowest occurrence\n\n[Average vs. Median?](https://www.differencebetween.com/difference-between-mean-and-median/)",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 0,
-        "y": 25
-      },
-      "id": 27,
+      "id": 2,
       "links": [],
       "options": {},
       "pageSize": null,
@@ -1635,6 +1088,23 @@
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "hidden"
+        },
+        {
+          "alias": "Partial",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "filename",
+          "sanitize": false,
+          "thresholds": [],
+          "type": "string",
+          "unit": "short"
         },
         {
           "alias": "Count",
@@ -1685,7 +1155,7 @@
           "unit": "ms"
         },
         {
-          "alias": "Maximum",
+          "alias": "Max",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1701,7 +1171,7 @@
           "unit": "ms"
         },
         {
-          "alias": "View",
+          "alias": "",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1782,47 +1252,52 @@
           ],
           "tags": [
             {
+              "key": "location",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
-              "value": "render_template"
+              "value": "render_partial"
             }
           ]
         }
       ],
-      "title": "By View Rendering",
+      "title": "Partials",
       "transform": "table",
       "type": "table"
     },
     {
       "columns": [],
-      "datasource": "InfluxDB",
-      "description": "Data for the selected range by request ID.\n\n- Maximum: Slowest occurrence",
+      "datasource": "${DS_INFLUXDB}",
       "fontSize": "100%",
       "gridPos": {
-        "h": 13,
-        "w": 12,
-        "x": 12,
-        "y": 25
+        "h": 15,
+        "w": 11,
+        "x": 13,
+        "y": 12
       },
-      "id": 33,
+      "id": 4,
       "links": [],
       "options": {},
       "pageSize": null,
       "scroll": true,
       "showHeader": true,
       "sort": {
-        "col": 4,
+        "col": 6,
         "desc": true
       },
       "styles": [
         {
-          "alias": "Finished",
+          "alias": "Time",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "hidden"
         },
         {
-          "alias": "Started",
+          "alias": "",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1831,13 +1306,78 @@
           ],
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
-          "pattern": "started",
+          "mappingType": 1,
+          "pattern": "SQL",
           "thresholds": [],
-          "type": "hidden",
+          "type": "string",
           "unit": "short"
         },
         {
-          "alias": "Maximum",
+          "alias": "Count",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 0,
+          "mappingType": 1,
+          "pattern": "count",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "Mean",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "mean",
+          "thresholds": [],
+          "type": "number",
+          "unit": "ms"
+        },
+        {
+          "alias": "Median",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "median",
+          "thresholds": [],
+          "type": "number",
+          "unit": "ms"
+        },
+        {
+          "alias": "Name",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "name",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "Max",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -1853,41 +1393,15 @@
           "unit": "ms"
         },
         {
-          "alias": "Request ID",
+          "alias": "",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "decimals": 2,
-          "link": true,
-          "linkTargetBlank": false,
-          "linkTooltip": "View data per this Request",
-          "linkUrl": "/d/$REQUEST_DASHBOARD_UID/ruby-on-rails-performance-per-request?var-request_id=${__cell}&from=${__cell_2}&to=${__cell_0}&var-method=${__cell_1}",
-          "mappingType": 1,
-          "pattern": "request_id",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Controller Action",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": true,
-          "linkTargetBlank": true,
-          "linkTooltip": "View data per this Controller Action",
-          "linkUrl": "/d/$ACTION_DASHBOARD_UID/ruby-on-rails-performance-per-action?var-Action=${__cell}&from=$__from&to=$__to",
-          "mappingType": 1,
-          "pattern": "method",
+          "pattern": "/.*/",
           "thresholds": [],
           "type": "number",
           "unit": "short"
@@ -1898,12 +1412,11 @@
           "groupBy": [
             {
               "params": [
-                "method"
+                "name"
               ],
               "type": "tag"
             }
           ],
-          "limit": "20",
           "measurement": "rails",
           "orderByTime": "ASC",
           "policy": "default",
@@ -1913,23 +1426,43 @@
             [
               {
                 "params": [
-                  "started"
+                  "value"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "count"
               }
             ],
             [
               {
                 "params": [
-                  "request_id"
+                  "value"
                 ],
                 "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
               }
             ],
             [
               {
                 "params": [
-                  "controller"
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "median"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "value"
                 ],
                 "type": "field"
               },
@@ -1941,72 +1474,74 @@
           ],
           "tags": [
             {
+              "key": "location",
+              "operator": "=~",
+              "value": "/^$Action$/"
+            },
+            {
+              "condition": "AND",
               "key": "hook",
               "operator": "=",
-              "value": "process_action"
+              "value": "sql"
             }
           ]
         }
       ],
-      "title": "By Request ID",
+      "title": "SQL",
       "transform": "table",
       "type": "table"
     }
   ],
-  "refresh": "5m",
+  "refresh": false,
   "schemaVersion": 18,
   "style": "dark",
-  "tags": [
-    "performance",
-    "ruby on rails",
-    "influxdb"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "allValue": null,
-        "current": {
-          "text": "H8S9fSVWz",
-          "value": "H8S9fSVWz"
-        },
-        "hide": 2,
+        "current": {},
+        "datasource": "${DS_INFLUXDB}",
+        "definition": "",
+        "hide": 0,
         "includeAll": false,
         "label": null,
-        "multi": false,
-        "name": "REQUEST_DASHBOARD_UID",
-        "options": [
-          {
-            "selected": true,
-            "text": "H8S9fSVWz",
-            "value": "H8S9fSVWz"
-          }
-        ],
-        "query": "H8S9fSVWz",
+        "multi": true,
+        "name": "Action",
+        "options": [],
+        "query": "show tag values from \"rails\" with key = \"method\";",
+        "refresh": 1,
+        "regex": "",
         "skipUrlSync": false,
-        "type": "custom"
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "current": {
-          "value": "Gpp3B1Pik",
-          "text": "Gpp3B1Pik"
+          "value": "H8S9fSVWz",
+          "text": "H8S9fSVWz"
         },
         "hide": 2,
         "label": null,
-        "name": "ACTION_DASHBOARD_UID",
+        "name": "REQUEST_DASHBOARD_UID",
         "options": [
           {
-            "value": "Gpp3B1Pik",
-            "text": "Gpp3B1Pik"
+            "value": "H8S9fSVWz",
+            "text": "H8S9fSVWz"
           }
         ],
-        "query": "Gpp3B1Pik",
+        "query": "H8S9fSVWz",
         "skipUrlSync": false,
         "type": "constant"
       }
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-2d",
     "to": "now"
   },
   "timepicker": {
@@ -2035,7 +1570,7 @@
     ]
   },
   "timezone": "",
-  "title": "Ruby On Rails Performance Overview",
-  "uid": "K2CJtIVZz",
+  "title": "Ruby On Rails Performance (per Action)",
+  "uid": "Gpp3B1Pik",
   "version": 1
 }
