@@ -1,7 +1,6 @@
-> You are looking at the README for the master branch of this gem.
-> The latest released version lives in the stable-04 branch,
-> [see here](https://github.com/influxdata/influxdb-rails/tree/stable-04#readme)
-> for an online version.
+> :warning: You are looking at the README for the master branch of this gem.
+> See the latest [released version (1.0.0)](https://github.com/influxdata/influxdb-rails/tree/v1.0.0#readme)
+> instead.
 
 # influxdb-rails
 
