@@ -2,6 +2,10 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
+## v1.0.1, unreleased
+- Drop support for Ruby 2.3
+- Drop support for Rails 4.x
+
 ## v1.0.0, released 2019-10-23
 The Final release, no code changes.
 
