@@ -1,9 +1,9 @@
-require "influxdb/rails/middleware/simple_subscriber"
+require "influxdb/rails/middleware/subscriber"
 
 module InfluxDB
   module Rails
     module Middleware
-      class RenderSubscriber < SimpleSubscriber # :nodoc:
+      class RenderSubscriber < Subscriber # :nodoc:
         def short_hook_name
           return "render_template" if hook_name.include?("render_template")
           return "render_partial" if hook_name.include?("render_partial")
@@ -13,19 +13,18 @@ module InfluxDB
         private
 
         def values(started, finished, payload)
-          super(started, finished, payload).merge(
+          {
+            value:      ((finished - started) * 1000).ceil,
             count:      payload[:count],
-            cache_hits: payload[:cache_hits]
-          ).reject { |_, value| value.nil? }
+            cache_hits: payload[:cache_hits],
+          }
         end
 
         def tags(payload)
-          tags = {
-            location: location,
+          {
             hook:     short_hook_name,
             filename: payload[:identifier],
           }
-          super(tags)
         end
       end
     end

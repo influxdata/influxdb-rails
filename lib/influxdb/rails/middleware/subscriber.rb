@@ -1,3 +1,5 @@
+require "influxdb/rails/metric"
+
 module InfluxDB
   module Rails
     module Middleware
@@ -13,47 +15,24 @@ module InfluxDB
           @hook_name = hook_name
         end
 
-        def call(*)
-          raise NotImplementedError, "must be implemented in subclass"
+        def call(_name, start, finish, _id, payload)
+          InfluxDB::Rails::Metric.new(
+            values:        values(start, finish, payload),
+            tags:          tags(payload),
+            configuration: configuration,
+            timestamp:     finish,
+            hook_name:     hook_name
+          ).write
         end
 
         private
 
-        def timestamp(time)
-          InfluxDB.convert_timestamp(time.utc, client.time_precision)
+        def tags(*)
+          raise NotImplementedError, "must be implemented in subclass"
         end
 
-        def client
-          @client = configuration.client
-        end
-
-        def tags(tags)
-          result = configuration.tags_middleware.call(tags.merge(default_tags))
-          result.reject! do |_, value|
-            value.nil? || value == ""
-          end
-          result
-        end
-
-        def default_tags
-          {
-            server:   Socket.gethostname,
-            app_name: configuration.application_name,
-          }.merge(InfluxDB::Rails.current.tags)
-        end
-
-        def enabled?
-          configuration.instrumentation_enabled? &&
-            !configuration.ignore_current_environment? &&
-            !configuration.ignored_hooks.include?(hook_name)
-        end
-
-        def location
-          current = InfluxDB::Rails.current
-          [
-            current.controller,
-            current.action,
-          ].reject(&:blank?).join("#")
+        def values(*)
+          raise NotImplementedError, "must be implemented in subclass"
         end
       end
     end
