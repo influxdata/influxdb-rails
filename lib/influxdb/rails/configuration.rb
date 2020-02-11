@@ -54,14 +54,13 @@ module InfluxDB
       include Configurable
 
       set_defaults(
-        measurement_name:        "rails".freeze,
-        ignored_hooks:           [].freeze,
-        tags_middleware:         ->(tags) { tags },
-        rails_app_name:          nil,
-        ignored_environments:    %w[test cucumber selenium].freeze,
-        environment:             ::Rails.env,
-        debug:                   false,
-        instrumentation_enabled: true
+        measurement_name:     "rails".freeze,
+        ignored_hooks:        [].freeze,
+        tags_middleware:      ->(tags) { tags },
+        rails_app_name:       nil,
+        ignored_environments: %w[test cucumber selenium].freeze,
+        environment:          ::Rails.env,
+        debug:                false
       )
 
       # config option set after_initialize
@@ -107,10 +106,6 @@ module InfluxDB
 
       def debug?
         @debug
-      end
-
-      def instrumentation_enabled?
-        @instrumentation_enabled
       end
 
       def ignore_current_environment?

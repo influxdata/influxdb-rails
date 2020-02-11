@@ -4,16 +4,12 @@ require "rails"
 module InfluxDB
   module Rails
     class Railtie < ::Rails::Railtie # :nodoc:
-      # rubocop:disable Metrics/BlockLength
       config.after_initialize do
         InfluxDB::Rails.configure do |config|
           config.environment ||= ::Rails.env
         end
 
         ActiveSupport.on_load(:action_controller) do
-          require "influxdb/rails/instrumentation"
-          include InfluxDB::Rails::Instrumentation
-
           before_action do
             current = InfluxDB::Rails.current
             current.request_id = request.request_id if request.respond_to?(:request_id)
@@ -37,7 +33,6 @@ module InfluxDB
           subscribe_to(hook_name, subscriber_class)
         end
       end
-      # rubocop:enable Metrics/BlockLength
 
       def subscribe_to(hook_name, subscriber_class)
         subscriber = subscriber_class.new(InfluxDB::Rails.configuration, hook_name)
