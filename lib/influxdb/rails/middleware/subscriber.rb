@@ -28,12 +28,18 @@ module InfluxDB
         end
 
         def tags(tags)
-          result = tags.merge(InfluxDB::Rails.current.tags)
-          result = configuration.tags_middleware.call(result)
+          result = configuration.tags_middleware.call(tags.merge(default_tags))
           result.reject! do |_, value|
             value.nil? || value == ""
           end
           result
+        end
+
+        def default_tags
+          {
+            server:   Socket.gethostname,
+            app_name: configuration.application_name,
+          }.merge(InfluxDB::Rails.current.tags)
         end
 
         def enabled?

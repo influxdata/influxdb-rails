@@ -1,5 +1,8 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+require "active_support"
+require File.expand_path(File.dirname(__FILE__) + "/support/matchers")
+
 ENV["RAILS_ENV"] ||= "test"
 
 require "rails"
@@ -29,5 +32,15 @@ RSpec.configure do |config|
   config.before :each do
     InfluxDB::Rails.instance_variable_set :@configuration, nil
     InfluxDB::Rails.configure
+
+    allow(InfluxDB::Rails).to receive(:client).and_return(InfluxDB::Rails::TestClient.new)
+    InfluxDB::Rails::TestClient.metrics.clear
   end
+
+  config.after(:each) do
+    travel_back
+  end
+
+  config.include ActiveSupport::Testing::TimeHelpers
+  config.include InfluxDB::Rails::Matchers
 end

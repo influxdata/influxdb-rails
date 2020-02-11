@@ -1,5 +1,5 @@
 require "action_controller/railtie"
-require "active_record"
+require "active_record/railtie"
 
 app = Class.new(Rails::Application)
 app.config.secret_key_base = "1234567890abcdef1234567890abcdef"
@@ -12,35 +12,39 @@ Rails.backtrace_cleaner.remove_silencers!
 app.initialize!
 
 app.routes.draw do
-  resources :widgets
+  resources :metrics, only: :index
+  resources :exceptions, only: :index
 end
 
 InfluxDB::Rails.configure do |config|
 end
 
-ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+ENV["DATABASE_URL"] = "sqlite3::memory:"
 ActiveRecord::Schema.define do
-  create_table :widgets, force: true do |t|
-    t.string :title
+  create_table :metrics, force: true do |t|
+    t.string :name
 
     t.timestamps
   end
 end
 
-class Widget < ActiveRecord::Base; end
+class Metric < ActiveRecord::Base; end
 class ApplicationController < ActionController::Base; end
-class WidgetsController < ApplicationController
+class MetricsController < ApplicationController
   prepend_view_path File.join(__dir__, "..", "views")
 
   before_action do
-    InfluxDB::Rails.current.values = { key: :value }
+    InfluxDB::Rails.current.values = { additional_value: :value }
+    InfluxDB::Rails.current.tags = { additional_tag: :value }
   end
 
   def index
-    Widget.create!(title: "test")
+    Metric.create!(name: "name")
   end
+end
 
-  def new
+class ExceptionsController < ApplicationController
+  def index
     1 / 0
   end
 end

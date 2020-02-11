@@ -27,8 +27,6 @@ module InfluxDB
             status:      payload[:status],
             format:      payload[:format],
             http_method: payload[:method],
-            server:      Socket.gethostname,
-            app_name:    configuration.application_name,
           }
           super(tags)
         end
