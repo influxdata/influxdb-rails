@@ -8,3 +8,4 @@ pkg/*
 spec/support/rails*/log/*
 .ruby-*
 vendor/bundle
+tmp
