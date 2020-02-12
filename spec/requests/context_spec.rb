@@ -20,16 +20,11 @@ RSpec.describe "Context", type: :request do
   end
 
   it "resets the context after a request when exceptioni occurs" do
-    get "/exceptions"
+    setup_broken_client
 
-    expect_metric(
-      name: "rails",
-      tags: a_hash_including(
-        method: "ExceptionsController#index",
-        hook:   "process_action"
-      )
-    )
+    get "/metrics"
 
+    expect_no_metric(hook: "process_action")
     expect(InfluxDB::Rails.current.tags).to be_empty
     expect(InfluxDB::Rails.current.values).to be_empty
   end
