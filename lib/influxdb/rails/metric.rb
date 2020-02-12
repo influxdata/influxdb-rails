@@ -37,8 +37,7 @@ module InfluxDB
       end
 
       def enabled?
-        configuration.instrumentation_enabled? &&
-          !configuration.ignore_current_environment? &&
+        !configuration.ignore_current_environment? &&
           !configuration.ignored_hooks.include?(hook_name)
       end
 
