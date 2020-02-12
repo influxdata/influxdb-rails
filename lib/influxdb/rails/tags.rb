@@ -17,26 +17,14 @@ module InfluxDB
       attr_reader :tags, :config
 
       def expanded_tags
-        config.tags_middleware.call(default_tags.merge(tags))
+        config.tags_middleware.call(tags.merge(default_tags))
       end
 
       def default_tags
         {
           server:   Socket.gethostname,
           app_name: config.application_name,
-          location: location.presence || default_location,
         }.merge(InfluxDB::Rails.current.tags)
-      end
-
-      def location
-        [
-          current.controller,
-          current.action,
-        ].reject(&:blank?).join("#")
-      end
-
-      def default_location
-        :raw
       end
 
       def current

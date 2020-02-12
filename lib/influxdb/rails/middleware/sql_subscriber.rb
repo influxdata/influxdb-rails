@@ -25,6 +25,7 @@ module InfluxDB
             operation:  query.operation,
             class_name: query.class_name,
             name:       query.name,
+            location:   :raw,
           }
         end
       end
