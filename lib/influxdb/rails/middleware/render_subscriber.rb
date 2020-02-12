@@ -12,9 +12,9 @@ module InfluxDB
 
         private
 
-        def values(started, finished, payload)
+        def values(_start, duration, payload)
           {
-            value:      ((finished - started) * 1000).ceil,
+            value:      duration,
             count:      payload[:count],
             cache_hits: payload[:cache_hits],
           }

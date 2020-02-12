@@ -11,9 +11,9 @@ module InfluxDB
 
         private
 
-        def values(started, finished, payload)
+        def values(_start, duration, payload)
           {
-            value: ((finished - started) * 1000).ceil,
+            value: duration,
             sql:   InfluxDB::Rails::Sql::Normalizer.new(payload[:sql]).perform,
           }
         end
