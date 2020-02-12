@@ -4,16 +4,8 @@ module InfluxDB
   module Rails
     module Middleware
       class RequestSubscriber < Subscriber # :nodoc:
-        def call(_name, start, finish, _id, payload)
-          return unless enabled?
-
-          InfluxDB::Rails.client.write_point \
-            configuration.measurement_name,
-            values:    values(start, finish, payload),
-            tags:      tags(payload),
-            timestamp: timestamp(finish)
-        rescue StandardError => e
-          ::Rails.logger.error("[InfluxDB::Rails] Unable to write points: #{e.message}")
+        def call(_name, started, finished, _unique_id, payload)
+          super
         ensure
           InfluxDB::Rails.current.reset
         end
@@ -21,14 +13,13 @@ module InfluxDB
         private
 
         def tags(payload)
-          tags = {
+          {
             method:      "#{payload[:controller]}##{payload[:action]}",
             hook:        "process_action",
             status:      payload[:status],
             format:      payload[:format],
             http_method: payload[:method],
           }
-          super(tags)
         end
 
         def values(started, finished, payload)
@@ -36,10 +27,11 @@ module InfluxDB
             controller: ((finished - started) * 1000).ceil,
             view:       (payload[:view_runtime] || 0).ceil,
             db:         (payload[:db_runtime] || 0).ceil,
-            started:    timestamp(started),
-          }.merge(InfluxDB::Rails.current.values).reject do |_, value|
-            value.nil? || value == ""
-          end
+            started:    InfluxDB.convert_timestamp(
+              started.utc,
+              configuration.client.time_precision
+            ),
+          }
         end
       end
     end
