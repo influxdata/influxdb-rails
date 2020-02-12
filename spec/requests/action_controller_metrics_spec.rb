@@ -7,7 +7,6 @@ RSpec.describe "ActionController metrics", type: :request do
     end
   end
   before do
-    allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:ignored_environments).and_return(%w[development])
     allow_any_instance_of(ActionDispatch::Request).to receive(:request_id).and_return(:request_id)
     allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:application_name).and_return(:app_name)
     allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:tags_middleware).and_return(tags_middleware)

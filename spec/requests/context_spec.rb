@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
 RSpec.describe "Context", type: :request do
-  before do
-    allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:ignored_environments).and_return(%w[development])
-  end
-
   it "resets the context after a request" do
     get "/metrics"
 
