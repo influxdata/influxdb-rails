@@ -16,8 +16,6 @@ module InfluxDB
         return unless enabled?
 
         client.write_point configuration.measurement_name, options
-      rescue StandardError => e
-        ::Rails.logger.error("[InfluxDB::Rails] Unable to write points: #{e.message}")
       end
 
       private

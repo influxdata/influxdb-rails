@@ -16,6 +16,14 @@ module InfluxDB
         end
 
         def call(_name, start, finish, _id, payload)
+          write_metric(start, finish, payload)
+        rescue StandardError => e
+          ::Rails.logger.error("[InfluxDB::Rails] Unable to write points: #{e.message}")
+        end
+
+        private
+
+        def write_metric(start, finish, payload)
           InfluxDB::Rails::Metric.new(
             values:        values(start, finish, payload),
             tags:          tags(payload),
@@ -24,8 +32,6 @@ module InfluxDB
             hook_name:     hook_name
           ).write
         end
-
-        private
 
         def tags(*)
           raise NotImplementedError, "must be implemented in subclass"
