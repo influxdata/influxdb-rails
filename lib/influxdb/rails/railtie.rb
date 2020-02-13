@@ -12,14 +12,14 @@ module InfluxDB
         ActiveSupport.on_load(:action_controller) do
           before_action do
             current = InfluxDB::Rails.current
-            current.request_id = request.request_id if request.respond_to?(:request_id)
+            current.values = { request_id: request.request_id } if request.respond_to?(:request_id)
           end
         end
 
         cache = lambda do |_, _, _, _, payload|
           current = InfluxDB::Rails.current
-          current.controller = payload[:controller]
-          current.action     = payload[:action]
+          location = [payload[:controller], payload[:action]].join("#")
+          current.tags = { location: location }
         end
         ActiveSupport::Notifications.subscribe "start_processing.action_controller", &cache
 
