@@ -5,6 +5,10 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 ## v1.0.1, unreleased
 - Drop support for Ruby 2.3
 - Drop support for Rails 4.x
+- Add `auth_method` to client configuration (#96, @anlek)
+- Drop undocumented `instrumentation_enabled` setting, use
+  `ignored_environments` do disable instrumentation
+- Simplified spec with a PORO test client
 
 ## v1.0.0, released 2019-10-23
 The Final release, no code changes.
