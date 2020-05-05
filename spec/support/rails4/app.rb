@@ -12,7 +12,7 @@ Rails.backtrace_cleaner.remove_silencers!
 app.initialize!
 
 app.routes.draw do
-  resources :metrics, only: :index
+  resources :metrics, only: %i[index show]
   resources :exceptions, only: :index
 end
 
@@ -40,6 +40,10 @@ class MetricsController < ApplicationController
 
   def index
     Metric.create!(name: "name")
+  end
+
+  def show
+    @metric = Metric.find_by(name: "name")
   end
 end
 

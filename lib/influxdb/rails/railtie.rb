@@ -29,6 +29,7 @@ module InfluxDB
           "render_partial.action_view"       => Middleware::RenderSubscriber,
           "render_collection.action_view"    => Middleware::RenderSubscriber,
           "sql.active_record"                => Middleware::SqlSubscriber,
+          "instantiation.active_record"      => Middleware::ActiveRecordSubscriber,
         }.each do |hook_name, subscriber_class|
           subscribe_to(hook_name, subscriber_class)
         end

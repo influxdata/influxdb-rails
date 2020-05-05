@@ -9,6 +9,7 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 - Drop undocumented `instrumentation_enabled` setting, use
   `ignored_environments` do disable instrumentation
 - Simplified spec with a PORO test client
+- Implement `instantiation.active_record` subscriber (https://guides.rubyonrails.org/active_support_instrumentation.html#instantiation-active-record)
 
 ## v1.0.0, released 2019-10-23
 The Final release, no code changes.
