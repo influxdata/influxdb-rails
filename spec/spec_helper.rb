@@ -2,6 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "active_support"
 require File.expand_path(File.dirname(__FILE__) + "/support/matchers")
+require File.expand_path(File.dirname(__FILE__) + "/support/broken_client")
 
 ENV["RAILS_ENV"] ||= "test"
 
@@ -34,6 +35,8 @@ RSpec.configure do |config|
     InfluxDB::Rails.configure
 
     allow(InfluxDB::Rails).to receive(:client).and_return(InfluxDB::Rails::TestClient.new)
+    allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:ignored_environments).and_return(%w[development])
+
     InfluxDB::Rails::TestClient.metrics.clear
   end
 
@@ -43,4 +46,5 @@ RSpec.configure do |config|
 
   config.include ActiveSupport::Testing::TimeHelpers
   config.include InfluxDB::Rails::Matchers
+  config.include InfluxDB::Rails::BrokenClient
 end

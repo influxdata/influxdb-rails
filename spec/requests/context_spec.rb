@@ -1,28 +1,27 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
 RSpec.describe "Context", type: :request do
-  before do
-    allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:ignored_environments).and_return(%w[development])
-  end
-
-  it "resets the context between requests" do
+  it "resets the context after a request" do
     get "/metrics"
 
     expect_metric(
       tags: a_hash_including(
-        method: "MetricsController#index",
-        hook:   "process_action"
+        location: "MetricsController#index",
+        hook:     "sql"
       )
     )
 
-    get "/exceptions"
+    expect(InfluxDB::Rails.current.tags).to be_empty
+    expect(InfluxDB::Rails.current.values).to be_empty
+  end
 
-    expect_metric(
-      name: "rails",
-      tags: a_hash_including(
-        method: "ExceptionsController#index",
-        hook:   "process_action"
-      )
-    )
+  it "resets the context after a request when exceptioni occurs" do
+    setup_broken_client
+
+    get "/metrics"
+
+    expect_no_metric(hook: "process_action")
+    expect(InfluxDB::Rails.current.tags).to be_empty
+    expect(InfluxDB::Rails.current.values).to be_empty
   end
 end
