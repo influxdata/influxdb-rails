@@ -28,7 +28,7 @@ RSpec.describe "ActiveRecord metrics", type: :request do
         tags_middleware: :tags_middleware
       ),
       values: a_hash_including(
-        value: be_between(1, 30)
+        value: be_between(0, 30)
       )
     )
   end
