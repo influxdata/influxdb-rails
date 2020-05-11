@@ -24,6 +24,7 @@ module InfluxDB
         {
           server:   Socket.gethostname,
           app_name: config.application_name,
+          location: :raw,
         }.merge(InfluxDB::Rails.current.tags)
       end
 

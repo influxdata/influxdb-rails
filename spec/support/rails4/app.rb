@@ -1,5 +1,6 @@
 require "action_controller/railtie"
 require "active_record/railtie"
+require "active_job"
 
 app = Class.new(Rails::Application)
 app.config.secret_key_base = "1234567890abcdef1234567890abcdef"
@@ -9,6 +10,7 @@ app.config.active_support.deprecation = :log
 app.config.eager_load = false
 app.config.root = __dir__
 Rails.backtrace_cleaner.remove_silencers!
+ActiveJob::Base.logger = Rails.logger
 app.initialize!
 
 app.routes.draw do
@@ -28,6 +30,14 @@ ActiveRecord::Schema.define do
   end
 end
 
+class MetricJob < ActiveJob::Base
+  queue_as :default
+
+  def perform
+    # Do something later
+  end
+end
+
 class Metric < ActiveRecord::Base; end
 class ApplicationController < ActionController::Base; end
 class MetricsController < ApplicationController
@@ -39,6 +49,7 @@ class MetricsController < ApplicationController
   end
 
   def index
+    MetricJob.perform_later
     Metric.create!(name: "name")
   end
 

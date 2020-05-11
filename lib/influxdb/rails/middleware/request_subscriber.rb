@@ -22,13 +22,13 @@ module InfluxDB
           }
         end
 
-        def values(started, finished, payload)
+        def values(start, duration, payload)
           {
-            controller: ((finished - started) * 1000).ceil,
+            controller: duration,
             view:       (payload[:view_runtime] || 0).ceil,
             db:         (payload[:db_runtime] || 0).ceil,
             started:    InfluxDB.convert_timestamp(
-              started.utc,
+              start.utc,
               configuration.client.time_precision
             ),
           }

@@ -4,6 +4,7 @@ require "rails"
 module InfluxDB
   module Rails
     class Railtie < ::Rails::Railtie # :nodoc:
+      # rubocop:disable Metrics/BlockLength
       config.after_initialize do
         InfluxDB::Rails.configure do |config|
           config.environment ||= ::Rails.env
@@ -30,10 +31,14 @@ module InfluxDB
           "render_collection.action_view"    => Middleware::RenderSubscriber,
           "sql.active_record"                => Middleware::SqlSubscriber,
           "instantiation.active_record"      => Middleware::ActiveRecordSubscriber,
+          "enqueue.active_job"               => Middleware::ActiveJobSubscriber,
+          "perform_start.active_job"         => Middleware::ActiveJobSubscriber,
+          "perform.active_job"               => Middleware::ActiveJobSubscriber,
         }.each do |hook_name, subscriber_class|
           subscribe_to(hook_name, subscriber_class)
         end
       end
+      # rubocop:enable Metrics/BlockLength
 
       def subscribe_to(hook_name, subscriber_class)
         subscriber = subscriber_class.new(InfluxDB::Rails.configuration, hook_name)

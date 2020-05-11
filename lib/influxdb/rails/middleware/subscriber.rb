@@ -25,7 +25,7 @@ module InfluxDB
 
         def write_metric(start, finish, payload)
           InfluxDB::Rails::Metric.new(
-            values:        values(start, finish, payload),
+            values:        values(start, ((finish - start) * 1000).ceil, payload),
             tags:          tags(payload),
             configuration: configuration,
             timestamp:     finish,

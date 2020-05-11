@@ -7,9 +7,9 @@ module InfluxDB
       class ActiveRecordSubscriber < Subscriber # :nodoc:
         private
 
-        def values(started, finished, payload)
+        def values(_start, duration, payload)
           {
-            value:        ((finished - started) * 1000).ceil,
+            value:        duration,
             record_count: payload[:record_count],
           }
         end
