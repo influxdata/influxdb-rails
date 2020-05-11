@@ -45,6 +45,7 @@ RSpec.configure do |config|
   end
 
   config.include ActiveSupport::Testing::TimeHelpers
+  config.include ActiveJob::TestHelper
   config.include InfluxDB::Rails::Matchers
   config.include InfluxDB::Rails::BrokenClient
 end

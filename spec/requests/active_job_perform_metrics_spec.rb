@@ -14,11 +14,13 @@ RSpec.describe "ActiveRecord metrics", type: :request do
   end
 
   it "writes metric" do
-    get "/metrics"
+    perform_enqueued_jobs do
+      get "/metrics"
+    end
 
     expect_metric(
       tags:   a_hash_including(
-        location:        :raw,
+        location:        "MetricsController#index",
         hook:            "perform",
         state:           "succeeded",
         job:             "MetricJob",
@@ -36,11 +38,13 @@ RSpec.describe "ActiveRecord metrics", type: :request do
   it "includes correct timestamps" do
     travel_to Time.zone.local(2018, 1, 1, 9, 0, 0)
 
-    get "/metrics"
+    perform_enqueued_jobs do
+      get "/metrics"
+    end
 
     expect_metric(
       tags:      a_hash_including(
-        location: :raw,
+        location: "MetricsController#index",
         hook:     "perform"
       ),
       timestamp: 1_514_797_200
@@ -50,11 +54,13 @@ RSpec.describe "ActiveRecord metrics", type: :request do
   it "does not write metric when hook is ignored" do
     allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:ignored_hooks).and_return(["perform.active_job"])
 
-    get "/metrics"
+    perform_enqueued_jobs do
+      get "/metrics"
+    end
 
     expect_no_metric(
       tags: a_hash_including(
-        location: :raw,
+        location: "MetricsController#index",
         hook:     "perform"
       )
     )
