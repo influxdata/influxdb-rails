@@ -25,15 +25,16 @@ module InfluxDB
         ActiveSupport::Notifications.subscribe "start_processing.action_controller", &cache
 
         {
-          "process_action.action_controller" => Middleware::RequestSubscriber,
-          "render_template.action_view"      => Middleware::RenderSubscriber,
-          "render_partial.action_view"       => Middleware::RenderSubscriber,
-          "render_collection.action_view"    => Middleware::RenderSubscriber,
-          "sql.active_record"                => Middleware::SqlSubscriber,
-          "instantiation.active_record"      => Middleware::ActiveRecordSubscriber,
-          "enqueue.active_job"               => Middleware::ActiveJobSubscriber,
-          "perform_start.active_job"         => Middleware::ActiveJobSubscriber,
-          "perform.active_job"               => Middleware::ActiveJobSubscriber,
+          "process_action.action_controller"     => Middleware::RequestSubscriber,
+          "render_template.action_view"          => Middleware::RenderSubscriber,
+          "render_partial.action_view"           => Middleware::RenderSubscriber,
+          "render_collection.action_view"        => Middleware::RenderSubscriber,
+          "sql.active_record"                    => Middleware::SqlSubscriber,
+          "instantiation.active_record"          => Middleware::ActiveRecordSubscriber,
+          "enqueue.active_job"                   => Middleware::ActiveJobSubscriber,
+          "perform_start.active_job"             => Middleware::ActiveJobSubscriber,
+          "perform.active_job"                   => Middleware::ActiveJobSubscriber,
+          "block_instrumentation.influxdb_rails" => Middleware::BlockInstrumentationSubscriber,
         }.each do |hook_name, subscriber_class|
           subscribe_to(hook_name, subscriber_class)
         end

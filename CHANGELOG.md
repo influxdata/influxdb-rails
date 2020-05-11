@@ -13,6 +13,7 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 - Implement `enqueue.active_job` subscriber (https://guides.rubyonrails.org/active_support_instrumentation.html#enqueue-active-job)
 - Implement `perform_start.active_job` subscriber (https://guides.rubyonrails.org/active_support_instrumentation.html#perform-start-active-job)
 - Implement `perform.active_job` subscriber (https://guides.rubyonrails.org/active_support_instrumentation.html#perform-active-job)
+- Implement block instrumentation `InfluxDB::Rails.instrument do; 1 + 1; end`
 
 ## v1.0.0, released 2019-10-23
 The Final release, no code changes.

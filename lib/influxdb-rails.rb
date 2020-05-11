@@ -2,6 +2,7 @@ require "net/http"
 require "net/https"
 require "rubygems"
 require "socket"
+require "influxdb/rails/middleware/block_instrumentation_subscriber"
 require "influxdb/rails/middleware/render_subscriber"
 require "influxdb/rails/middleware/request_subscriber"
 require "influxdb/rails/middleware/sql_subscriber"
@@ -59,6 +60,13 @@ module InfluxDB
 
       def current
         @current ||= InfluxDB::Rails::Context.new
+      end
+
+      def instrument(name, options = {})
+        ActiveSupport::Notifications.instrument "block_instrumentation.influxdb_rails",
+                                                **options.merge(name: name) do
+          yield if block_given?
+        end
       end
     end
   end

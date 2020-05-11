@@ -176,6 +176,44 @@ class ApplicationController
 end
 ```
 
+### Block Instrumentation
+If you want to add custom instrumentation, you can wrap any code into a block instrumentation
+
+```ruby
+InfluxDB::Rails.instrument "expensive_operation", tags: { }, values: { } do
+  expensive_operation
+end
+```
+
+Reported tags:
+
+```ruby
+  hook:       "block_instrumentation"
+  server:     Socket.gethostname,
+  app_name:   configuration.application_name,
+  location:   "PostsController#index",
+  name:       "expensive_operation"
+```
+
+Reported values:
+```ruby
+  value: 100 # execution time of the block
+```
+
+You can also overwrite the `value`
+
+```ruby
+InfluxDB::Rails.instrument "user_count", values: { value: 1 } do
+  User.create(name: 'mickey', surname: 'mouse')
+end
+```
+
+or call it even without a block
+
+```ruby
+InfluxDB::Rails.instrument "temperature", values: { value: 25 }
+```
+
 ### Custom client configuration
 
 The settings named `config.client.*` are used to construct an `InfluxDB::Client`
