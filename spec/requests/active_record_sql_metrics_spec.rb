@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + "/../spec_helper"
 
-RSpec.describe "ActiveRecord metrics", type: :request do
+RSpec.describe "ActiveRecord SQL metrics", type: :request do
   let(:tags_middleware) do
     lambda do |tags|
       tags.merge(tags_middleware: :tags_middleware)
