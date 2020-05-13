@@ -1,8 +1,9 @@
 module InfluxDB
   module Rails
     class Values
-      def initialize(values: {})
+      def initialize(values: {}, additional_values: InfluxDB::Rails.current.values)
         @values = values
+        @additional_values = additional_values
       end
 
       def to_h
@@ -13,14 +14,10 @@ module InfluxDB
 
       private
 
-      attr_reader :values
+      attr_reader :additional_values, :values
 
       def expanded_values
         values.merge(additional_values)
-      end
-
-      def additional_values
-        InfluxDB::Rails.current.values
       end
     end
   end

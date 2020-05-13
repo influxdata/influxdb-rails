@@ -6,30 +6,23 @@ module InfluxDB
       class ActiveJobSubscriber < Subscriber # :nodoc:
         private
 
-        def values(_start, duration, _payload)
-          value = measure_performance? ? duration : 1
+        def values
           {
             value: value,
           }
         end
 
-        def tags(payload)
+        def tags
           {
             hook:  short_hook_name,
-            state: job_state(payload),
-            job:   payload[:job].class.name,
-            queue: payload[:job].queue_name,
+            state: job_state,
+            job:   job.class.name,
+            queue: job.queue_name,
           }
         end
 
-        def short_hook_name
-          return "enqueue" if hook_name.include?("enqueue")
-          return "perform_start" if hook_name.include?("perform_start")
-          return "perform" if hook_name.include?("perform")
-        end
-
-        def job_state(payload)
-          return "failed" if payload[:exception_object]
+        def job_state
+          return "failed" if failed?
 
           case short_hook_name
           when "enqueue"
@@ -43,6 +36,30 @@ module InfluxDB
 
         def measure_performance?
           short_hook_name == "perform"
+        end
+
+        def short_hook_name
+          @short_hook_name ||= fetch_short_hook_name
+        end
+
+        def fetch_short_hook_name
+          return "enqueue" if hook_name.include?("enqueue")
+          return "perform_start" if hook_name.include?("perform_start")
+          return "perform" if hook_name.include?("perform")
+        end
+
+        def job
+          @job ||= payload[:job]
+        end
+
+        def value
+          return duration if measure_performance?
+
+          1
+        end
+
+        def failed?
+          payload[:exception_object]
         end
       end
     end

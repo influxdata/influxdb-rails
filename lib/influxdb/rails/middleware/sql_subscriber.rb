@@ -5,21 +5,16 @@ module InfluxDB
   module Rails
     module Middleware
       class SqlSubscriber < Subscriber # :nodoc:
-        def call(_name, started, finished, _unique_id, payload)
-          super if InfluxDB::Rails::Sql::Query.new(payload).track?
-        end
-
         private
 
-        def values(_start, duration, payload)
+        def values
           {
             value: duration,
             sql:   InfluxDB::Rails::Sql::Normalizer.new(payload[:sql]).perform,
           }
         end
 
-        def tags(payload)
-          query = InfluxDB::Rails::Sql::Query.new(payload)
+        def tags
           {
             hook:       "sql",
             operation:  query.operation,
@@ -27,6 +22,14 @@ module InfluxDB
             name:       query.name,
             location:   :raw,
           }
+        end
+
+        def disabled?
+          super || !query.track?
+        end
+
+        def query
+          @query ||= InfluxDB::Rails::Sql::Query.new(payload)
         end
       end
     end

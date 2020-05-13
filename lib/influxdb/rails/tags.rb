@@ -1,9 +1,10 @@
 module InfluxDB
   module Rails
     class Tags
-      def initialize(tags: {}, config:)
+      def initialize(tags: {}, config:, additional_tags: InfluxDB::Rails.current.tags)
         @tags = tags
         @config = config
+        @additional_tags = additional_tags
       end
 
       def to_h
@@ -14,7 +15,7 @@ module InfluxDB
 
       private
 
-      attr_reader :tags, :config
+      attr_reader :additional_tags, :tags, :config
 
       def expanded_tags
         config.tags_middleware.call(tags.merge(default_tags))
@@ -25,11 +26,7 @@ module InfluxDB
           server:   Socket.gethostname,
           app_name: config.application_name,
           location: :raw,
-        }.merge(InfluxDB::Rails.current.tags)
-      end
-
-      def current
-        @current ||= InfluxDB::Rails.current
+        }.merge(additional_tags)
       end
     end
   end

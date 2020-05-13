@@ -7,14 +7,14 @@ module InfluxDB
       class ActiveRecordSubscriber < Subscriber # :nodoc:
         private
 
-        def values(_start, duration, payload)
+        def values
           {
             value:        duration,
             record_count: payload[:record_count],
           }
         end
 
-        def tags(payload)
+        def tags
           {
             hook:       "instantiation",
             class_name: payload[:class_name],
