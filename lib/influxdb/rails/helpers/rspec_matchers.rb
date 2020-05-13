@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/test_client")
+require_relative "../test_client"
 require "launchy"
 
 module InfluxDB
@@ -25,10 +25,23 @@ module InfluxDB
         ::Launchy.open(file_path)
       end
 
-      private
-
       def metrics
         TestClient.metrics
+      end
+
+      RSpec.configure do |config|
+        config.before :each do
+          InfluxDB::Rails.instance_variable_set :@configuration, nil
+          InfluxDB::Rails.configure
+
+          allow(InfluxDB::Rails).to receive(:client).and_return(InfluxDB::Rails::TestClient.new)
+          allow_any_instance_of(InfluxDB::Rails::Configuration)
+            .to receive(:ignored_environments).and_return(%w[development])
+
+          InfluxDB::Rails::TestClient.metrics.clear
+        end
+
+        config.include InfluxDB::Rails::Matchers
       end
     end
   end

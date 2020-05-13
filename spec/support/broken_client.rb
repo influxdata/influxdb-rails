@@ -1,5 +1,3 @@
-require File.expand_path(File.dirname(__FILE__) + "/test_client")
-
 module InfluxDB
   module Rails
     module BrokenClient
