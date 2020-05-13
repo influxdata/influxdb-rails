@@ -49,6 +49,9 @@ class MetricsController < ApplicationController
   end
 
   def index
+    InfluxDB::Rails.instrument "name", tags: { block_tag: :block_tag }, values: { block_value: :block_value } do
+      1 + 1
+    end
     MetricJob.perform_later
     Metric.create!(name: "name")
   end
