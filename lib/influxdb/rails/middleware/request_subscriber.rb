@@ -19,6 +19,7 @@ module InfluxDB
             status:      payload[:status],
             format:      payload[:format],
             http_method: payload[:method],
+            exception:   payload[:exception]&.first,
           }
         end
 

@@ -74,8 +74,9 @@ RSpec.describe "ActionController metrics", type: :request do
 
     expect_metric(
       tags: a_hash_including(
-        method: "ExceptionsController#index",
-        hook:   "process_action"
+        method:    "ExceptionsController#index",
+        hook:      "process_action",
+        exception: "ZeroDivisionError"
       )
     )
   end
