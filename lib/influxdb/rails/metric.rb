@@ -4,23 +4,20 @@ require "influxdb/rails/tags"
 module InfluxDB
   module Rails
     class Metric
-      def initialize(configuration:, timestamp:, tags: {}, values: {}, hook_name:)
+      def initialize(configuration:, timestamp:, tags: {}, values: {})
         @configuration = configuration
         @timestamp = timestamp
         @tags = tags
         @values = values
-        @hook_name = hook_name
       end
 
       def write
-        return unless enabled?
-
         client.write_point configuration.measurement_name, options
       end
 
       private
 
-      attr_reader :configuration, :tags, :values, :timestamp, :hook_name
+      attr_reader :configuration, :tags, :values, :timestamp
 
       def options
         {
@@ -32,11 +29,6 @@ module InfluxDB
 
       def timestamp_with_precision
         InfluxDB.convert_timestamp(timestamp.utc, configuration.client.time_precision)
-      end
-
-      def enabled?
-        !configuration.ignore_current_environment? &&
-          !configuration.ignored_hooks.include?(hook_name)
       end
 
       def client

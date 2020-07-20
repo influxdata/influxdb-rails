@@ -4,15 +4,9 @@ module InfluxDB
   module Rails
     module Middleware
       class RenderSubscriber < Subscriber # :nodoc:
-        def short_hook_name
-          return "render_template" if hook_name.include?("render_template")
-          return "render_partial" if hook_name.include?("render_partial")
-          return "render_collection" if hook_name.include?("render_collection")
-        end
-
         private
 
-        def values(_start, duration, payload)
+        def values
           {
             value:      duration,
             count:      payload[:count],
@@ -20,11 +14,17 @@ module InfluxDB
           }
         end
 
-        def tags(payload)
+        def tags
           {
             hook:     short_hook_name,
             filename: payload[:identifier],
           }
+        end
+
+        def short_hook_name
+          return "render_template" if hook_name.include?("render_template")
+          return "render_partial" if hook_name.include?("render_partial")
+          return "render_collection" if hook_name.include?("render_collection")
         end
       end
     end

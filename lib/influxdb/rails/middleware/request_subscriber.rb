@@ -4,7 +4,7 @@ module InfluxDB
   module Rails
     module Middleware
       class RequestSubscriber < Subscriber # :nodoc:
-        def call(_name, started, finished, _unique_id, payload)
+        def write
           super
         ensure
           InfluxDB::Rails.current.reset
@@ -12,7 +12,7 @@ module InfluxDB
 
         private
 
-        def tags(payload)
+        def tags
           {
             method:      "#{payload[:controller]}##{payload[:action]}",
             hook:        "process_action",
@@ -22,16 +22,20 @@ module InfluxDB
           }
         end
 
-        def values(start, duration, payload)
+        def values
           {
             controller: duration,
             view:       (payload[:view_runtime] || 0).ceil,
             db:         (payload[:db_runtime] || 0).ceil,
-            started:    InfluxDB.convert_timestamp(
-              start.utc,
-              configuration.client.time_precision
-            ),
+            started:    started,
           }
+        end
+
+        def started
+          InfluxDB.convert_timestamp(
+            start.utc,
+            configuration.client.time_precision
+          )
         end
       end
     end

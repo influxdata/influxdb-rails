@@ -35,16 +35,11 @@ module InfluxDB
           "perform_start.active_job"             => Middleware::ActiveJobSubscriber,
           "perform.active_job"                   => Middleware::ActiveJobSubscriber,
           "block_instrumentation.influxdb_rails" => Middleware::BlockInstrumentationSubscriber,
-        }.each do |hook_name, subscriber_class|
-          subscribe_to(hook_name, subscriber_class)
+        }.each do |hook_name, subscriber|
+          ActiveSupport::Notifications.subscribe(hook_name, subscriber)
         end
       end
       # rubocop:enable Metrics/BlockLength
-
-      def subscribe_to(hook_name, subscriber_class)
-        subscriber = subscriber_class.new(InfluxDB::Rails.configuration, hook_name)
-        ActiveSupport::Notifications.subscribe hook_name, subscriber
-      end
     end
   end
 end
