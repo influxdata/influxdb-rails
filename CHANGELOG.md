@@ -2,7 +2,7 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
-## v1.0.1, unreleased
+## v1.0.1.beta1, released 2020-08-21
 - Drop support for Ruby 2.3
 - Drop support for Rails 4.x
 - Add `auth_method` to client configuration (#96, @anlek)
