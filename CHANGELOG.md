@@ -5,6 +5,8 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 ## v1.0.1.beta2
 - Implement [`deliver.action_mailer`](https://guides.rubyonrails.org/active_support_instrumentation.html#deliver-action-mailer) subscriber
 - Add missing Active Job documentation
+- Drop support for Ruby 2.4
+- Drop support for Rails < 5.2
 
 ## v1.0.1.beta1, released 2020-08-21
 - Drop support for Ruby 2.3
