@@ -1,6 +1,7 @@
 require "action_controller/railtie"
 require "active_record/railtie"
 require "active_job"
+require "action_mailer"
 
 app = Class.new(Rails::Application)
 app.config.secret_key_base = "1234567890abcdef1234567890abcdef"
@@ -11,6 +12,7 @@ app.config.eager_load = false
 app.config.root = __dir__
 Rails.backtrace_cleaner.remove_silencers!
 ActiveJob::Base.logger = Rails.logger
+ActionMailer::Base.delivery_method = :test
 app.initialize!
 
 app.routes.draw do
@@ -38,6 +40,17 @@ class MetricJob < ActiveJob::Base
   end
 end
 
+class MetricMailer < ActionMailer::Base
+  default from: "from@example.com"
+  layout "mailer"
+
+  def welcome_mail
+    mail(to: "eisendieter@werder.de", subject: "Welcome to metrics!") do |format|
+      format.text { render plain: "Hello Dieter!" }
+    end
+  end
+end
+
 class Metric < ActiveRecord::Base; end
 class ApplicationController < ActionController::Base; end
 class MetricsController < ApplicationController
@@ -53,6 +66,7 @@ class MetricsController < ApplicationController
       1 + 1
     end
     MetricJob.perform_later
+    MetricMailer.with(user: "eisendieter").welcome_mail.deliver_now
     Metric.create!(name: "name")
   end
 

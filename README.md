@@ -158,6 +158,27 @@ Reported tags:
 *Note*: Only the measurements with the hook `perform` report a duration in the value.
 The other hooks are counters and always report a value of `1`.
 
+### Action Mailer
+
+Reported ActiveSupport instrumentation hooks:
+
+- [deliver.action\_mailer](https://guides.rubyonrails.org/active_support_instrumentation.html#deliver-action-mailer)
+
+Reported values:
+
+```ruby
+  value: 1
+```
+
+Reported tags:
+
+```ruby
+  hook:               "deliver",
+  mailer:             "SomeMailerClassName"
+```
+
+*Note*: The hook is just a counter and always report a value of `1`.
+
 ## Configuration
 
 The only setting you actually need to configure is the name of the database
