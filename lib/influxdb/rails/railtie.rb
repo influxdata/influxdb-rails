@@ -34,6 +34,7 @@ module InfluxDB
           "enqueue.active_job"                   => Middleware::ActiveJobSubscriber,
           "perform_start.active_job"             => Middleware::ActiveJobSubscriber,
           "perform.active_job"                   => Middleware::ActiveJobSubscriber,
+          "deliver.action_mailer"                => Middleware::ActionMailerSubscriber,
           "block_instrumentation.influxdb_rails" => Middleware::BlockInstrumentationSubscriber,
         }.each do |hook_name, subscriber|
           ActiveSupport::Notifications.subscribe(hook_name, subscriber)

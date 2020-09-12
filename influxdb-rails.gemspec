@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "influxdb", "~> 0.6", ">= 0.6.4"
   spec.add_runtime_dependency "railties", ">= 5.0"
 
+  spec.add_development_dependency "actionmailer"
   spec.add_development_dependency "activejob"
   spec.add_development_dependency "activerecord"
   spec.add_development_dependency "bundler", ">= 1.0.0"

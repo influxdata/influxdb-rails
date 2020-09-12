@@ -10,12 +10,9 @@ rvm:
   - "2.7"
   - "2.6"
   - "2.5"
-  - "2.4"
 gemfile:
   - gemfiles/Gemfile.rails-6.0.x
   - gemfiles/Gemfile.rails-5.2.x
-  - gemfiles/Gemfile.rails-5.1.x
-  - gemfiles/Gemfile.rails-5.0.x
 env:
   - TEST_TASK=spec
 matrix:
@@ -23,9 +20,6 @@ matrix:
     - rvm: ruby-head
   include:
     - { rvm: "2.6",   gemfile: "Gemfile", env: [TEST_TASK=rubocop] }
-  exclude:
-    # Rails > 5 not on MRI 2.4+
-    - { rvm: "2.4",   gemfile: "gemfiles/Gemfile.rails-6.0.x" }
 addons:
   apt:
     packages:
