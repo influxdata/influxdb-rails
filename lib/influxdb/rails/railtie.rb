@@ -32,7 +32,6 @@ module InfluxDB
           "sql.active_record"                    => Middleware::SqlSubscriber,
           "instantiation.active_record"          => Middleware::ActiveRecordSubscriber,
           "enqueue.active_job"                   => Middleware::ActiveJobSubscriber,
-          "perform_start.active_job"             => Middleware::ActiveJobSubscriber,
           "perform.active_job"                   => Middleware::ActiveJobSubscriber,
           "deliver.action_mailer"                => Middleware::ActionMailerSubscriber,
           "block_instrumentation.influxdb_rails" => Middleware::BlockInstrumentationSubscriber,

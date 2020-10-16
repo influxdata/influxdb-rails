@@ -44,8 +44,8 @@ module InfluxDB
 
         def fetch_short_hook_name
           return "enqueue" if hook_name.include?("enqueue")
-          return "perform_start" if hook_name.include?("perform_start")
-          return "perform" if hook_name.include?("perform")
+
+          "perform"
         end
 
         def job
@@ -59,7 +59,7 @@ module InfluxDB
         end
 
         def failed?
-          payload[:exception_object]
+          payload[:aborted]
         end
       end
     end
