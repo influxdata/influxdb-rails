@@ -30,7 +30,7 @@ RSpec.describe "ActionView collection metrics", type: :request do
         additional_value: :value,
         count:            3,
         request_id:       :request_id,
-        value:            be_between(1, 30)
+        value:            be_between(1, 500)
       )
     )
   end

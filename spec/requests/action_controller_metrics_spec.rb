@@ -31,9 +31,9 @@ RSpec.describe "ActionController metrics", type: :request do
       values: a_hash_including(
         additional_value: :value,
         request_id:       :request_id,
-        view:             be_between(1, 30),
-        db:               be_between(1, 30),
-        controller:       be_between(1, 30)
+        view:             be_between(1, 500),
+        db:               be_between(1, 500),
+        controller:       be_between(1, 500)
       )
     )
   end
