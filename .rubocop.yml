@@ -13,16 +13,13 @@ AllCops:
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.4
 
-Rails:
-  Enabled: false
-
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyleForEmptyBraces: space
 
-Layout/AlignHash:
+Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
 
@@ -34,7 +31,7 @@ Metrics/BlockLength:
   - 'spec/**/*.rb'
   - 'influxdb-rails.gemspec'
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
   Exclude:
   - 'spec/**/*.rb'
@@ -46,7 +43,7 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Max: 6
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   AllowedNames: [io, id, db, ex]
 
 Naming/FileName:
@@ -81,3 +78,34 @@ Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
   Exclude:
   - "spec/**/*.rb"
+
+Lint/DuplicateBranch:
+  Enabled: true
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: true
+Lint/EmptyBlock:
+  Enabled: true
+Lint/EmptyClass:
+  Enabled: true
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: true
+Lint/ToEnumArguments:
+  Enabled: true
+Lint/UnexpectedBlockArity:
+  Enabled: true
+Lint/UnmodifiedReduceAccumulator:
+  Enabled: true
+Style/ArgumentsForwarding:
+  Enabled: true
+Style/CollectionCompact:
+  Enabled: true
+Style/DocumentDynamicEvalDefinition:
+  Enabled: true
+Style/NegatedIfElseCondition:
+  Enabled: true
+Style/NilLambda:
+  Enabled: true
+Style/RedundantArgument:
+  Enabled: true
+Style/SwapValues:
+  Enabled: true

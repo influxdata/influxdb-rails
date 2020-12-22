@@ -20,9 +20,6 @@ app.routes.draw do
   resources :exceptions, only: :index
 end
 
-InfluxDB::Rails.configure do |config|
-end
-
 ENV["DATABASE_URL"] = "sqlite3::memory:"
 ActiveRecord::Schema.define do
   create_table :metrics, force: true do |t|
@@ -52,7 +49,9 @@ class MetricMailer < ActionMailer::Base
 end
 
 class Metric < ActiveRecord::Base; end
+
 class ApplicationController < ActionController::Base; end
+
 class MetricsController < ApplicationController
   prepend_view_path File.join(__dir__, "..", "views")
 

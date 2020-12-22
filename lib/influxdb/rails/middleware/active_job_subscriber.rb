@@ -6,6 +6,13 @@ module InfluxDB
       class ActiveJobSubscriber < Subscriber # :nodoc:
         private
 
+        JOB_STATE = {
+          "enqueue"       => "queued",
+          "perform_start" => "running",
+          "perform"       => "succeeded",
+        }.freeze
+        private_constant :JOB_STATE
+
         def values
           {
             value: value,
@@ -24,14 +31,7 @@ module InfluxDB
         def job_state
           return "failed" if failed?
 
-          case short_hook_name
-          when "enqueue"
-            "queued"
-          when "perform_start"
-            "running"
-          when "perform"
-            "succeeded"
-          end
+          JOB_STATE[short_hook_name]
         end
 
         def measure_performance?
