@@ -8,9 +8,9 @@ module InfluxDB
 
         def perform
           query.squish!
-          query.gsub!(/(\s(=|>|<|>=|<=|<>|!=)\s)('[^']+'|[\$\+\-\w\.]+)/, '\1xxx')
-          query.gsub!(/(\sIN\s)\([^\(\)]+\)/i, '\1(xxx)')
-          regex = /(\sBETWEEN\s)('[^']+'|[\+\-\w\.]+)(\sAND\s)('[^']+'|[\+\-\w\.]+)/i
+          query.gsub!(/(\s(=|>|<|>=|<=|<>|!=)\s)('[^']+'|[$+\-\w.]+)/, '\1xxx')
+          query.gsub!(/(\sIN\s)\([^()]+\)/i, '\1(xxx)')
+          regex = /(\sBETWEEN\s)('[^']+'|[+\-\w.]+)(\sAND\s)('[^']+'|[+\-\w.]+)/i
           query.gsub!(regex, '\1xxx\3xxx')
           query.gsub!(/(\sVALUES\s)\(.+\)/i, '\1(xxx)')
           query.gsub!(/(\s(LIKE|ILIKE|SIMILAR TO|NOT SIMILAR TO)\s)('[^']+')/i, '\1xxx')

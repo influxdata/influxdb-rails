@@ -2,7 +2,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "active_support"
 require_relative "../lib/influxdb/rails/helpers/rspec_matchers"
-require File.expand_path(File.dirname(__FILE__) + "/support/broken_client")
+require File.expand_path("#{File.dirname(__FILE__)}/support/broken_client")
 
 ENV["RAILS_ENV"] ||= "test"
 

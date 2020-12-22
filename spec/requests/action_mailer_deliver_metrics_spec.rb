@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../spec_helper"
+require "#{File.dirname(__FILE__)}/../spec_helper"
 
 RSpec.describe "ActionMailer deliver metrics", type: :request do
   let(:tags_middleware) do

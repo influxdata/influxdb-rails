@@ -1,7 +1,7 @@
 module InfluxDB
   module Rails
     class Tags
-      def initialize(tags: {}, config:, additional_tags: InfluxDB::Rails.current.tags)
+      def initialize(config:, tags: {}, additional_tags: InfluxDB::Rails.current.tags)
         @tags = tags
         @config = config
         @additional_tags = additional_tags

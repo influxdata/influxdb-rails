@@ -21,8 +21,7 @@ module InfluxDB
   # InfluxDB and Rails. This is a singleton class.
   module Rails
     class << self
-      attr_writer :configuration
-      attr_writer :client
+      attr_writer :configuration, :client
 
       def configure
         return configuration unless block_given?

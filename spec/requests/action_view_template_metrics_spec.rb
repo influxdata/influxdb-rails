@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../spec_helper"
+require "#{File.dirname(__FILE__)}/../spec_helper"
 
 RSpec.describe "ActionView template metrics", type: :request do
   let(:tags_middleware) do
