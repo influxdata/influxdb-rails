@@ -30,7 +30,7 @@ RSpec.describe "BlockInstrumentation metrics", type: :request do
         additional_value: :value,
         request_id:       :request_id,
         block_value:      :block_value,
-        value:            be_between(1, 30)
+        value:            be_between(1, 500)
       )
     )
   end

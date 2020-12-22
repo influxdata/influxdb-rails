@@ -1,0 +1,31 @@
+name: Specs
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  spec:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ '2.5', '2.6', '2.7', 'head' ]
+        rails: [ 'gemfiles/Gemfile.rails-6.1.x', 'gemfiles/Gemfile.rails-6.0.x', 'gemfiles/Gemfile.rails-5.2.x']
+        exclude:
+          - { ruby: '2.7', rails: 'gemfiles/Gemfile.rails-5.2.x' }
+          - { ruby: 'head', rails: 'gemfiles/Gemfile.rails-5.2.x' }
+          - { ruby: '2.5', rails: 'gemfiles/Gemfile.rails-6.0.x' }
+    continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.rails }}
+    name: Ruby ${{ matrix.ruby }} ${{ matrix.rails }} specs
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake spec

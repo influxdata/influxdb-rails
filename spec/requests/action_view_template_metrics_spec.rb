@@ -28,7 +28,7 @@ RSpec.describe "ActionView template metrics", type: :request do
       values: a_hash_including(
         additional_value: :value,
         request_id:       :request_id,
-        value:            be_between(1, 30)
+        value:            be_between(1, 500)
       )
     )
   end
