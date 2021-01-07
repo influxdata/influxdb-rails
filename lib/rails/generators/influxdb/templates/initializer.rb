@@ -11,6 +11,10 @@ InfluxDB::Rails.configure do |config|
   # config.client.username = "root"
   # config.client.password = "root"
 
+  ## If your InfluxDB service requires an HTTPS connection then you can
+  ## enable it here.
+  # config.client.use_ssl = true
+
   ## Various other client and connection options. These are used to create
   ## an `InfluxDB::Client` instance (i.e. `InfluxDB::Rails.client`).
   ##
