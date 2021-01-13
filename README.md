@@ -137,7 +137,6 @@ Reported tags:
 Reported ActiveSupport instrumentation hooks:
 
 - [enqueue.active\_job](https://guides.rubyonrails.org/active_support_instrumentation.html#enqueue-active-job)
-- [perform_start.active\_job](https://guides.rubyonrails.org/active_support_instrumentation.html#perform-start-active-job)
 - [perform.active\_job](https://guides.rubyonrails.org/active_support_instrumentation.html#perform-active-job)
 
 Reported values:
@@ -149,14 +148,14 @@ Reported values:
 Reported tags:
 
 ```ruby
-  hook:       ["enqueue", "perform_start", "perform"],
-  state:      ["queued", "running", "succeeded", "failed"],
+  hook:       ["enqueue", "perform"],
+  state:      ["queued", "succeeded", "failed"],
   job:        "SomeJobClassName",
   queue:      "queue_name"
 ```
 
 *Note*: Only the measurements with the hook `perform` report a duration in the value.
-The other hooks are counters and always report a value of `1`.
+The enqueue hook is a counter and always reports a value of `1`.
 
 ### Action Mailer
 
