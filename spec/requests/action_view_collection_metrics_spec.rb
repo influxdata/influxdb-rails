@@ -22,9 +22,11 @@ RSpec.describe "ActionView collection metrics" do
         hook:     "render_collection",
         filename: include("spec/support/views/metrics/_item.html.erb")
       ),
-      values: a_hash_including(
-        count: 3,
-        value: be_between(1, 500)
+      fields: a_hash_including(
+        additional_value: :value,
+        count:            3,
+        request_id:       :request_id,
+        value:            be_between(1, 500)
       )
     )
   end
@@ -35,11 +37,12 @@ RSpec.describe "ActionView collection metrics" do
     get "/metrics"
 
     expect_metric(
-      name:      "rails",
-      tags:      a_hash_including(
-        hook: "render_collection"
+      name: "rails",
+      tags: a_hash_including(
+        location: "MetricsController#index",
+        hook:     "render_collection"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 

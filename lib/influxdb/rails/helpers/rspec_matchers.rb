@@ -34,7 +34,7 @@ module InfluxDB
           InfluxDB::Rails.instance_variable_set :@configuration, nil
           InfluxDB::Rails.configure
 
-          allow(InfluxDB::Rails).to receive(:client).and_return(InfluxDB::Rails::TestClient.new)
+          InfluxDB::Rails.client = InfluxDB::Rails::TestClient.new
           allow_any_instance_of(InfluxDB::Rails::Configuration)
             .to receive(:ignored_environments).and_return(%w[development])
 

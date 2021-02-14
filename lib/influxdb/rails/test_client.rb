@@ -5,8 +5,12 @@ module InfluxDB
         []
       end
 
-      def write_point(name, options = {})
-        metrics << options.merge(name: name)
+      def write(options = {})
+        metrics << options[:data]
+      end
+
+      def create_write_api(*)
+        self
       end
     end
   end

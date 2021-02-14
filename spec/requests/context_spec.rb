@@ -16,7 +16,7 @@ RSpec.describe "Context" do
   end
 
   it "resets the context after a request when exceptioni occurs" do
-    setup_broken_client
+    InfluxDB::Rails.client = build_broken_client
 
     get "/metrics"
 

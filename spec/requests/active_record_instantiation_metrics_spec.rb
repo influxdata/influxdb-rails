@@ -23,9 +23,11 @@ RSpec.describe "ActiveRecord instantiation metrics" do
         hook:       "instantiation",
         class_name: "Metric"
       ),
-      values: a_hash_including(
-        value:        be_between(1, 500),
-        record_count: 1
+      fields: a_hash_including(
+        additional_value: :value,
+        request_id:       :request_id,
+        value:            be_between(1, 500),
+        record_count:     1
       )
     )
   end
@@ -36,10 +38,11 @@ RSpec.describe "ActiveRecord instantiation metrics" do
     get metric_path(metric)
 
     expect_metric(
-      tags:      a_hash_including(
-        hook: "instantiation"
+      tags: a_hash_including(
+        location: "MetricsController#show",
+        hook:     "instantiation"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 

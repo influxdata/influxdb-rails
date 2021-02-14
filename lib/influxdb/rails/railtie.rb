@@ -1,4 +1,4 @@
-require "influxdb"
+require "influxdb-client"
 require "rails"
 
 module InfluxDB

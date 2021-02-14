@@ -1,37 +1,24 @@
 InfluxDB::Rails.configure do |config|
-  ## The only setting you actually need to update is the name of the
-  ## database within the InfluxDB server instance. Don't forget to
-  ## create this database as well.
-  config.client.database = "rails"
-  # config.client.hosts = ["localhost"]
-  # config.client.port = 8086
-
-  ## If you've setup user authentication (and activated it in the server
-  ## config), you need to configure the credentials here.
-  # config.client.username = "root"
-  # config.client.password = "root"
-
-  ## If your InfluxDB service requires an HTTPS connection then you can
-  ## enable it here.
-  # config.client.use_ssl = true
+  ## The only settings you actually need to set are org, bucket and token.
+  config.client.bucket = "bucket"
+  config.client.org = "org"
+  config.client.token = "token"
+  # config.client.url = "localhost:8086",
 
   ## Various other client and connection options. These are used to create
-  ## an `InfluxDB::Client` instance (i.e. `InfluxDB::Rails.client`).
+  ## an `InfluxDB2::Client` instance (i.e. `InfluxDB::Rails.client`).
   ##
-  ## See docs for the influxdb gem for the canonical list of options:
-  ## https://github.com/influxdata/influxdb-ruby#list-of-configuration-options
+  ## See docs for the influxdb-client gem for the canonical list of options:
+  ## https://github.com/influxdata/influxdb-client-ruby#creating-a-client
   ##
-  ## These defaults for the influxdb-rails gem deviate from the default
-  ## for the influxdb gem:
-  # config.client.async = true # false
-  # config.client.read_timeout = 30 # 300
-  # config.client.max_delay = 300 # 30
-  # config.client.time_precision = "ms" # "s"
-
-  ## Prior to 1.0.0, this gem has written all data points in different
-  ## measurements (the config options were named `series_name_for_*`).
-  ## Since 1.0.0.beta3, we're now using a single measurements
-  # config.measurement_name = "rails"
+  # config.client.use_ssql = true
+  # config.client.open_timeout = 5.seconds
+  # config.client.write_timeout = 5.seconds
+  # config.client.read_timeout = 60.seconds
+  # config.client.time_precisions = InfluxDB2::WritePrecision::MILLISECOND
+  # config.client.retries = 0
+  # config.client.max_retry_delay_ms = 10_000
+  # config.client.async = true
 
   ## Disable rails framework hooks.
   # config.ignored_hooks = ['sql.active_record', 'render_template.action_view']

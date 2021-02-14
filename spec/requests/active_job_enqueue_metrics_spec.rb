@@ -24,8 +24,10 @@ RSpec.describe "ActiveJob enqueue metrics" do
         queue: "default",
         state: "queued"
       ),
-      values: a_hash_including(
-        value: 1
+      fields: a_hash_including(
+        additional_value: :value,
+        request_id:       :request_id,
+        value:            1
       )
     )
   end
@@ -36,10 +38,11 @@ RSpec.describe "ActiveJob enqueue metrics" do
     get "/metrics"
 
     expect_metric(
-      tags:      a_hash_including(
+      tags: a_hash_including(
+        location: "MetricsController#index",
         hook:     "enqueue"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 

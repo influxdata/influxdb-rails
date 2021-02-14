@@ -28,24 +28,36 @@ module InfluxDB
     class ClientConfig
       include Configurable
 
+      WRITE_TYPE = {
+        true  => ::InfluxDB2::WriteType::BATCHING,
+        false => ::InfluxDB2::WriteType::SYNCHRONOUS,
+      }.freeze
+      private_constant :WRITE_TYPE
+
       set_defaults(
-        hosts:          ["localhost"].freeze,
-        port:           8086,
-        username:       "root".freeze,
-        password:       "root".freeze,
-        database:       nil,
-        auth_method:    "params".freeze,
-        async:          true,
-        use_ssl:        false,
-        retry:          nil,
-        open_timeout:   5,
-        read_timeout:   300,
-        max_delay:      30,
-        time_precision: "s".freeze
+        url:                "http://localhost:8086".freeze,
+        token:              nil,
+        org:                nil,
+        bucket:             nil,
+        use_ssl:            true,
+        open_timeout:       5.seconds,
+        write_timeout:      5.seconds,
+        read_timeout:       60.seconds,
+        precision:          ::InfluxDB2::WritePrecision::MILLISECOND,
+        retries:            0,
+        async:              true,
+        max_retry_delay_ms: 10.seconds.to_i * 1000
       )
 
       def initialize
         load_defaults
+      end
+
+      def write_options
+        InfluxDB2::WriteOptions.new(
+          write_type:  WRITE_TYPE[async],
+          max_retries: retries
+        )
       end
     end
     private_constant :ClientConfig
@@ -68,36 +80,6 @@ module InfluxDB
 
       # configuration passed to InfluxDB::Client
       attr_reader :client
-
-      # FIXME: Old configuration options, remove this in 1.0.1
-      attr_writer \
-        :series_name_for_controller_runtimes,
-        :series_name_for_view_runtimes,
-        :series_name_for_db_runtimes,
-        :series_name_for_render_template,
-        :series_name_for_render_partial,
-        :series_name_for_render_collection,
-        :series_name_for_sql,
-        :series_name_for_exceptions,
-        :series_name_for_instrumentation,
-        :ignored_exceptions,
-        :ignored_exception_messages,
-        :ignored_user_agents,
-        :application_root,
-        :environment_variable_filters,
-        :backtrace_filters,
-        :influxdb_database,
-        :influxdb_username,
-        :influxdb_password,
-        :influxdb_hosts,
-        :influxdb_port,
-        :async,
-        :use_ssl,
-        :retry,
-        :open_timeout,
-        :read_timeout,
-        :max_delay,
-        :time_precision
 
       def initialize
         @client = ClientConfig.new

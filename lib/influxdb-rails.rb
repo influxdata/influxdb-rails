@@ -2,6 +2,7 @@ require "net/http"
 require "net/https"
 require "rubygems"
 require "socket"
+require "influxdb-client"
 require "influxdb/rails/middleware/block_instrumentation_subscriber"
 require "influxdb/rails/middleware/render_subscriber"
 require "influxdb/rails/middleware/request_subscriber"
@@ -21,13 +22,20 @@ module InfluxDB
   # InfluxDB and Rails. This is a singleton class.
   module Rails
     class << self
-      attr_writer :configuration, :client
+      attr_writer :configuration, :client, :write_api
 
       def configure
-        return configuration unless block_given?
+        yield configuration if block_given?
 
-        yield configuration
-        self.client = nil # if we change configuration, reload the client
+        # if we change configuration, reload the client
+        self.client = nil
+        self.write_api = nil
+
+        configuration
+      end
+
+      def configuration
+        @configuration ||= InfluxDB::Rails::Configuration.new
       end
 
       # rubocop:disable Metrics/MethodLength
@@ -35,27 +43,27 @@ module InfluxDB
       def client
         @client ||= begin
           cfg = configuration.client
-          InfluxDB::Client.new \
-            database:       cfg.database,
-            username:       cfg.username,
-            password:       cfg.password,
-            auth_method:    cfg.auth_method,
-            hosts:          cfg.hosts,
-            port:           cfg.port,
-            async:          cfg.async,
-            use_ssl:        cfg.use_ssl,
-            retry:          cfg.retry,
-            open_timeout:   cfg.open_timeout,
-            read_timeout:   cfg.read_timeout,
-            max_delay:      cfg.max_delay,
-            time_precision: cfg.time_precision
+          InfluxDB2::Client.new(
+            cfg.url,
+            cfg.token,
+            org:           cfg.org,
+            bucket:        cfg.bucket,
+            precision:     cfg.precision,
+            open_timeout:  cfg.open_timeout,
+            write_timeout: cfg.write_timeout,
+            read_timeout:  cfg.read_timeout,
+            use_ssl:       cfg.use_ssl,
+            logger:        ::Rails.logger,
+            async:         cfg.async,
+            retries:       cfg.retries
+          )
         end
       end
 
       # rubocop:enable Metrics/MethodLength
 
-      def configuration
-        @configuration ||= InfluxDB::Rails::Configuration.new
+      def write_api
+        @write_api ||= client.create_write_api(write_options: configuration.client.write_options)
       end
 
       def current
