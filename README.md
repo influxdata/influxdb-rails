@@ -112,15 +112,16 @@ Reported tags:
 Reported ActiveSupport instrumentation hooks:
 
 - [sql.active\_record](https://guides.rubyonrails.org/active_support_instrumentation.html#sql-active-record)
+- [instantiation.active\_record](https://guides.rubyonrails.org/active_support_instrumentation.html#instantiation-active-record)
 
-Reported values:
+Reported SQL values:
 
 ```ruby
   sql: "SELECT \"posts\".* FROM \"posts\"",
   request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
 ```
 
-Reported tags:
+Reported SQL tags:
 
 ```ruby
   hook:       "sql",
@@ -130,6 +131,24 @@ Reported tags:
   operation:  "SELECT",
   class_name: "POST",
   name:       "Post Load"
+```
+
+Reported instantiation values:
+
+```ruby
+  record_count: 1,
+  request_id:   "d5bf620b-3494-425b-b7e1-4953597ea744"
+  value:        7.689
+```
+
+Reported instantiation tags:
+
+```ruby
+  hook:       "instantiation",
+  server:     Socket.gethostname,
+  app_name:   configuration.application_name,
+  location:   "PostsController#index",
+  class_name: "POST"
 ```
 
 ### Active Job
