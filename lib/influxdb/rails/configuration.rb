@@ -40,13 +40,13 @@ module InfluxDB
         org:                nil,
         bucket:             nil,
         use_ssl:            true,
-        open_timeout:       5.seconds,
-        write_timeout:      5.seconds,
-        read_timeout:       60.seconds,
+        open_timeout:       5,
+        write_timeout:      5,
+        read_timeout:       60,
         precision:          ::InfluxDB2::WritePrecision::MILLISECOND,
         retries:            0,
         async:              true,
-        max_retry_delay_ms: 10.seconds.to_i * 1000
+        max_retry_delay_ms: 10 * 1000
       )
 
       def initialize

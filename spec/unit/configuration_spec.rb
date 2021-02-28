@@ -37,7 +37,7 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
     describe "#write_timeout" do
       it "defaults to 5 seconds" do
-        expect(subject.write_timeout).to eql(5.seconds)
+        expect(subject.write_timeout).to eql(5)
       end
 
       it "can be updated" do
@@ -49,13 +49,8 @@ RSpec.describe InfluxDB::Rails::Configuration do
     end
 
     describe "#read_timeout" do
-<<<<<<< HEAD
-      it "defaults to 300" do
-        expect(subject.read_timeout).to be(300)
-=======
       it "defaults to 60 seconds" do
-        expect(subject.read_timeout).to eql(60.seconds)
->>>>>>> 6c9043d (Support InfluxDB 2.0)
+        expect(subject.read_timeout).to eql(60)
       end
 
       it "can be updated" do
@@ -66,26 +61,16 @@ RSpec.describe InfluxDB::Rails::Configuration do
       end
     end
 
-<<<<<<< HEAD
-    describe "#max_delay" do
-      it "defaults to 30" do
-        expect(subject.max_delay).to be(30)
-=======
     describe "#max_retry_delay_ms" do
       it "defaults to 10 seconds in milliseconds" do
         expect(subject.max_retry_delay_ms).to eql(10_000)
->>>>>>> 6c9043d (Support InfluxDB 2.0)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
           config.client.max_retry_delay_ms = 5
         end
-<<<<<<< HEAD
-        expect(subject.max_delay).to be(5)
-=======
         expect(subject.max_retry_delay_ms).to eql(5)
->>>>>>> 6c9043d (Support InfluxDB 2.0)
       end
     end
 
