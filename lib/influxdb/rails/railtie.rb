@@ -13,7 +13,7 @@ module InfluxDB
         ActiveSupport.on_load(:action_controller) do
           before_action do
             current = InfluxDB::Rails.current
-            current.values = { request_id: request.request_id } if request.respond_to?(:request_id)
+            current.fields = { request_id: request.request_id } if request.respond_to?(:request_id)
           end
         end
 

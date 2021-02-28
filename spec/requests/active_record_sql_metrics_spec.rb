@@ -26,7 +26,7 @@ RSpec.describe "ActiveRecord SQL metrics" do
         operation:  "INSERT"
       ),
       fields: a_hash_including(
-        additional_value: :value,
+        additional_field: :value,
         request_id:       :request_id,
         value:            be_between(1, 500),
         sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
@@ -47,7 +47,7 @@ RSpec.describe "ActiveRecord SQL metrics" do
         operation:  "INSERT"
       ),
       fields: a_hash_including(
-        additional_value: :value,
+        additional_field: :value,
         request_id:       :request_id,
         value:            be_between(1, 500),
         sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"

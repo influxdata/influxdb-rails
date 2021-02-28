@@ -24,7 +24,7 @@ RSpec.describe "ActionController metrics" do
         format:      :html,
         http_method: "GET"
       ),
-      values: a_hash_including(
+      fields: a_hash_including(
         view:       be_between(1, 500),
         db:         be_between(1, 500),
         controller: be_between(1, 500)
@@ -46,8 +46,11 @@ RSpec.describe "ActionController metrics" do
         tags_middleware: :tags_middleware
       ),
       fields: a_hash_including(
-        additional_value: :value,
-        request_id:       :request_id
+        additional_field: :value,
+        request_id:       :request_id,
+        view:             be_between(1, 500),
+        db:               be_between(1, 500),
+        controller:       be_between(1, 500)
       )
     )
   end

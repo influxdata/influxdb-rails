@@ -23,7 +23,7 @@ RSpec.describe "ActionMailer deliver metrics" do
         mailer: "MetricMailer"
       ),
       fields: a_hash_including(
-        additional_value: :value,
+        additional_field: :value,
         request_id:       :request_id,
         value:            1
       )

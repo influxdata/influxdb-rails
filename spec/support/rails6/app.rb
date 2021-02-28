@@ -56,12 +56,12 @@ class MetricsController < ApplicationController
   prepend_view_path File.join(__dir__, "..", "views")
 
   before_action do
-    InfluxDB::Rails.current.values = { additional_value: :value }
+    InfluxDB::Rails.current.fields = { additional_field: :value }
     InfluxDB::Rails.current.tags = { additional_tag: :value }
   end
 
   def index
-    InfluxDB::Rails.instrument "name", tags: { block_tag: :block_tag }, values: { block_value: :block_value } do
+    InfluxDB::Rails.instrument "name", tags: { block_tag: :block_tag }, fields: { block_field: :block_value } do
       1 + 1
     end
     MetricJob.perform_later

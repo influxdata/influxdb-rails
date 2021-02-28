@@ -12,7 +12,7 @@ RSpec.describe "Context" do
     )
 
     expect(InfluxDB::Rails.current.tags).to be_empty
-    expect(InfluxDB::Rails.current.values).to be_empty
+    expect(InfluxDB::Rails.current.fields).to be_empty
   end
 
   it "resets the context after a request when exceptioni occurs" do
@@ -22,6 +22,6 @@ RSpec.describe "Context" do
 
     expect_no_metric(hook: "process_action")
     expect(InfluxDB::Rails.current.tags).to be_empty
-    expect(InfluxDB::Rails.current.values).to be_empty
+    expect(InfluxDB::Rails.current.fields).to be_empty
   end
 end

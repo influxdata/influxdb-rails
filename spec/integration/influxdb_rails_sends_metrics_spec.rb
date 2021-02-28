@@ -10,7 +10,7 @@ RSpec.describe "InfluxDB Rails sends metrics" do
       body:  "rails,hook=block_instrumentation,location=raw,name=name,server=hostname value=1i 1514797200000000000"
     )
 
-    InfluxDB::Rails.instrument "name", values: { value: 1 }
+    InfluxDB::Rails.instrument "name", fields: { value: 1 }
 
     assert_requested(request, times: 1)
   end

@@ -3,11 +3,11 @@ require "influxdb/rails/tags"
 module InfluxDB
   module Rails
     class Metric
-      def initialize(configuration:, timestamp:, tags: {}, values: {})
+      def initialize(configuration:, timestamp:, tags: {}, fields: {})
         @configuration = configuration
         @timestamp = timestamp
         @tags = tags
-        @values = values
+        @fields = fields
       end
 
       def write
@@ -16,11 +16,11 @@ module InfluxDB
 
       private
 
-      attr_reader :configuration, :tags, :values, :timestamp
+      attr_reader :configuration, :tags, :fields, :timestamp
 
       def data
         {
-          fields: values.merge(InfluxDB::Rails.current.values),
+          fields: fields.merge(InfluxDB::Rails.current.fields),
           tags:   Tags.new(tags: tags, config: configuration).to_h,
           name:   configuration.measurement_name,
           time:   timestamp.utc,

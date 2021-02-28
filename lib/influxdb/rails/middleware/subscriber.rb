@@ -39,7 +39,7 @@ module InfluxDB
 
         def metric
           InfluxDB::Rails::Metric.new(
-            values:        values,
+            fields:        fields,
             tags:          tags,
             configuration: configuration,
             timestamp:     finish
@@ -50,7 +50,7 @@ module InfluxDB
           raise NotImplementedError, "must be implemented in subclass"
         end
 
-        def values
+        def fields
           raise NotImplementedError, "must be implemented in subclass"
         end
 

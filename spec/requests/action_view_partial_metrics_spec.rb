@@ -22,7 +22,7 @@ RSpec.describe "ActionView partial metrics" do
         filename: include("spec/support/views/metrics/_item.html.erb")
       ),
       fields: a_hash_including(
-        additional_value: :value,
+        additional_field: :value,
         request_id:       :request_id,
         value:            be_between(1, 500)
       )

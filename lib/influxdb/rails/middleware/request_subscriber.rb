@@ -23,7 +23,7 @@ module InfluxDB
           }
         end
 
-        def values
+        def fields
           {
             controller: duration,
             view:       (payload[:view_runtime] || 0).ceil,
