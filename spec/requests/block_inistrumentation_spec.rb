@@ -26,10 +26,10 @@ RSpec.describe "BlockInstrumentation metrics", type: :request do
         block_tag:       :block_tag,
         name:            "name"
       ),
-      values: a_hash_including(
-        additional_value: :value,
+      fields: a_hash_including(
+        additional_field: :value,
         request_id:       :request_id,
-        block_value:      :block_value,
+        block_field:      :block_value,
         value:            be_between(1, 500)
       )
     )
@@ -41,11 +41,11 @@ RSpec.describe "BlockInstrumentation metrics", type: :request do
     get "/metrics"
 
     expect_metric(
-      tags:      a_hash_including(
+      tags: a_hash_including(
         location: "MetricsController#index",
         hook:     "block_instrumentation"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 

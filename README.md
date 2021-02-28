@@ -26,7 +26,7 @@ This gem is designed for Rails 4.2+, Ruby 2.3+ and InfluxDB 0.9+.
 Add the gem to your `Gemfile`:
 
 ```console
-echo 'gem "influxdb-rails"' >>Gemfile
+echo 'gem "influxdb-rails"' >> Gemfile
 bundle install
 ```
 
@@ -51,7 +51,7 @@ Reported ActiveSupport instrumentation hooks:
 - [start\_processing.action\_controller](https://guides.rubyonrails.org/active_support_instrumentation.html#start-processing-action-controller)
 - [process\_action.action\_controller](https://guides.rubyonrails.org/active_support_instrumentation.html#process-action-action-controller)
 
-Reported values:
+Reported fields:
 
 ```ruby
   controller: 48.467,
@@ -89,7 +89,7 @@ Reported ActiveSupport instrumentation hooks:
 - [render\_partial.action\_view](https://guides.rubyonrails.org/active_support_instrumentation.html#render-partial-action-view)
 - [render\_collection.action\_view](https://guides.rubyonrails.org/active_support_instrumentation.html#render-collection-action-view)
 
-Reported values:
+Reported fields:
 
 ```ruby
   value: 48.467,
@@ -115,7 +115,7 @@ Reported ActiveSupport instrumentation hooks:
 - [sql.active\_record](https://guides.rubyonrails.org/active_support_instrumentation.html#sql-active-record)
 - [instantiation.active\_record](https://guides.rubyonrails.org/active_support_instrumentation.html#instantiation-active-record)
 
-Reported SQL values:
+Reported fields:
 
 ```ruby
   sql: "SELECT \"posts\".* FROM \"posts\"",
@@ -159,7 +159,7 @@ Reported ActiveSupport instrumentation hooks:
 - [enqueue.active\_job](https://guides.rubyonrails.org/active_support_instrumentation.html#enqueue-active-job)
 - [perform.active\_job](https://guides.rubyonrails.org/active_support_instrumentation.html#perform-active-job)
 
-Reported values:
+Reported fields:
 
 ```ruby
   value: 89.467
@@ -183,7 +183,7 @@ Reported ActiveSupport instrumentation hooks:
 
 - [deliver.action\_mailer](https://guides.rubyonrails.org/active_support_instrumentation.html#deliver-action-mailer)
 
-Reported values:
+Reported fields:
 
 ```ruby
   value: 1
@@ -200,12 +200,13 @@ Reported tags:
 
 ## Configuration
 
-The only setting you actually need to configure is the name of the database
-within the InfluxDB server instance (don't forget to create this database!).
+The only settings you actually need to configure are the organization, bucket and access token.
 
 ```ruby
 InfluxDB::Rails.configure do |config|
-  config.client.database = "rails"
+  config.client.org = "org"
+  config.client.bucket = "bucket"
+  config.client.token = "token"
 end
 ```
 
@@ -242,7 +243,7 @@ class ApplicationController
 
   def set_influx_data
     InfluxDB::Rails.current.tags = { user: current_user.id }
-    InfluxDB::Rails.current.values = { redis_value: redis_value }
+    InfluxDB::Rails.current.fields = { redis_value: redis_value }
   end
 end
 ```
@@ -251,7 +252,7 @@ end
 If you want to add custom instrumentation, you can wrap any code into a block instrumentation
 
 ```ruby
-InfluxDB::Rails.instrument "expensive_operation", tags: { }, values: { } do
+InfluxDB::Rails.instrument "expensive_operation", tags: { }, fields: { } do
   expensive_operation
 end
 ```
@@ -266,7 +267,7 @@ Reported tags:
   name:       "expensive_operation"
 ```
 
-Reported values:
+Reported fields:
 ```ruby
   value: 100 # execution time of the block
 ```
@@ -274,7 +275,7 @@ Reported values:
 You can also overwrite the `value`
 
 ```ruby
-InfluxDB::Rails.instrument "user_count", values: { value: 1 } do
+InfluxDB::Rails.instrument "user_count", fields: { value: 1 } do
   User.create(name: 'mickey', surname: 'mouse')
 end
 ```
@@ -282,7 +283,7 @@ end
 or call it even without a block
 
 ```ruby
-InfluxDB::Rails.instrument "temperature", values: { value: 25 }
+InfluxDB::Rails.instrument "temperature", fields: { value: 25 }
 ```
 
 ### Custom client configuration
@@ -293,15 +294,17 @@ to your InfluxDB server. You can access this client as well, and perform
 arbitrary operations on your data:
 
 ```ruby
-InfluxDB::Rails.client.write_point "events",
+InfluxDB::Rails.write_api.write(
+  name: "events",
   tags:   { url: "/foo", user_id: current_user.id, location: InfluxDB::Rails.current.location },
-  values: { value: 0 }
+  fields: { value: 0 }
+)
 ```
 
 If you do that, it might be useful to add the current context to these custom
 data points which can get accessed with `InfluxDB::Rails.current.location`.
 
-See [influxdb-ruby](http://github.com/influxdata/influxdb-ruby) for a
+See [influxdb-client](https://github.com/influxdata/influxdb-client-ruby) for a
 full list of configuration options and detailed usage.
 
 ### Disabling hooks

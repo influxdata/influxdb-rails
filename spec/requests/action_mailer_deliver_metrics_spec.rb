@@ -26,8 +26,8 @@ RSpec.describe "ActionMailer deliver metrics", type: :request do
         app_name:        :app_name,
         tags_middleware: :tags_middleware
       ),
-      values: a_hash_including(
-        additional_value: :value,
+      fields: a_hash_including(
+        additional_field: :value,
         request_id:       :request_id,
         value:            1
       )

@@ -7,7 +7,7 @@ module InfluxDB
       class SqlSubscriber < Subscriber # :nodoc:
         private
 
-        def values
+        def fields
           {
             value: duration,
             sql:   InfluxDB::Rails::Sql::Normalizer.new(payload[:sql]).perform,

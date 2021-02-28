@@ -29,7 +29,7 @@ RSpec.describe "ActiveJobs perform metrics", type: :request do
         app_name:        :app_name,
         tags_middleware: :tags_middleware
       ),
-      values: a_hash_including(
+      fields: a_hash_including(
         value: be_between(0, 30)
       )
     )
@@ -43,11 +43,11 @@ RSpec.describe "ActiveJobs perform metrics", type: :request do
     end
 
     expect_metric(
-      tags:      a_hash_including(
+      tags: a_hash_including(
         location: "MetricsController#index",
         hook:     "perform"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 

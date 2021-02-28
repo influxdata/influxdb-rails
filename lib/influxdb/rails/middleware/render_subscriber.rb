@@ -6,7 +6,7 @@ module InfluxDB
       class RenderSubscriber < Subscriber # :nodoc:
         private
 
-        def values
+        def fields
           {
             value:      duration,
             count:      payload[:count],

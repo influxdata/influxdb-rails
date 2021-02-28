@@ -6,7 +6,7 @@ module InfluxDB
       class ActionMailerSubscriber < Subscriber # :nodoc:
         private
 
-        def values
+        def fields
           { value: 1 }
         end
 

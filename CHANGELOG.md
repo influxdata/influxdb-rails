@@ -2,6 +2,11 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
+## v2.0.0.beta1, release 2020-10-16
+- Support InfluxDB > 2.0
+  - Switched the client library to use [influxdb-ruby](https://github.com/influxdata/influxdb-client-ruby).
+    This is a breaking change as most of the configuration changed.
+
 ## v1.0.1.beta3, release 2020-10-16
 - Drop `perform_start.active_job` subscriber, it's rather useless on dashboards.
 
