@@ -22,7 +22,7 @@ module InfluxDB
   # InfluxDB and Rails. This is a singleton class.
   module Rails
     class << self
-      attr_writer :configuration, :client, :write_api
+      attr_writer :configuration, :client, :write_api, :logger
 
       def configure
         yield configuration if block_given?
@@ -30,6 +30,7 @@ module InfluxDB
         # if we change configuration, reload the client
         self.client = nil
         self.write_api = nil
+        self.logger = nil
 
         configuration
       end
@@ -53,7 +54,7 @@ module InfluxDB
             write_timeout: cfg.write_timeout,
             read_timeout:  cfg.read_timeout,
             use_ssl:       cfg.use_ssl,
-            logger:        ::Rails.logger,
+            logger:        logger,
             async:         cfg.async,
             retries:       cfg.retries
           )
@@ -64,6 +65,10 @@ module InfluxDB
 
       def write_api
         @write_api ||= client.create_write_api(write_options: configuration.client.write_options)
+      end
+
+      def logger
+        @logger ||= configuration.logger
       end
 
       def current

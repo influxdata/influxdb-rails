@@ -18,7 +18,9 @@ RSpec.describe "Context" do
   it "resets the context after a request when exceptioni occurs" do
     InfluxDB::Rails.client = build_broken_client
 
-    get "/metrics"
+    capture_influxdb_output do
+      get "/metrics"
+    end
 
     expect_no_metric(hook: "process_action")
     expect(InfluxDB::Rails.current.tags).to be_empty

@@ -30,10 +30,24 @@ module InfluxDB
         ::Launchy.open(file_path)
       end
 
+      def capture_influxdb_output
+        orig_logger = InfluxDB::Rails.logger
+        out = StringIO.new
+        InfluxDB::Rails.logger = Logger.new(out)
+
+        yield
+
+        out.string
+      ensure
+        InfluxDB::Rails.logger = orig_logger
+      end
+
       RSpec.configure do |config|
         config.before :each do
           InfluxDB::Rails.instance_variable_set :@configuration, nil
-          InfluxDB::Rails.configure
+          InfluxDB::Rails.configure do |cfg|
+            cfg.logger = Logger.new($stdout)
+          end
 
           InfluxDB::Rails.client = InfluxDB::Rails::TestClient.new
           allow_any_instance_of(InfluxDB::Rails::Configuration)

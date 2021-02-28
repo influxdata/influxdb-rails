@@ -30,7 +30,7 @@ module InfluxDB
 
           metric.write
         rescue StandardError => e
-          ::Rails.logger.error("[InfluxDB::Rails] Unable to write points: #{e.message}")
+          InfluxDB::Rails.logger.error("[InfluxDB::Rails] Unable to write points: #{e.message}")
         end
 
         private

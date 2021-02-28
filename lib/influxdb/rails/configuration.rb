@@ -72,7 +72,8 @@ module InfluxDB
         rails_app_name:       nil,
         ignored_environments: %w[test cucumber selenium].freeze,
         environment:          ::Rails.env,
-        debug:                false
+        debug:                false,
+        logger:               ::Rails.logger
       )
 
       # config option set after_initialize
