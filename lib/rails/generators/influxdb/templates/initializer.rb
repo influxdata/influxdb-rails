@@ -16,8 +16,7 @@ InfluxDB::Rails.configure do |config|
   # config.client.write_timeout = 5.seconds
   # config.client.read_timeout = 60.seconds
   # config.client.time_precisions = InfluxDB2::WritePrecision::MILLISECOND
-  # config.client.retries = 0
-  # config.client.max_retry_delay_ms = 10_000
+  # config.client.max_retries = 0
   # config.client.async = true
 
   ## Disable rails framework hooks.

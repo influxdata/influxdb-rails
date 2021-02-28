@@ -35,18 +35,17 @@ module InfluxDB
       private_constant :WRITE_TYPE
 
       set_defaults(
-        url:                "http://localhost:8086".freeze,
-        token:              nil,
-        org:                nil,
-        bucket:             nil,
-        use_ssl:            true,
-        open_timeout:       5,
-        write_timeout:      5,
-        read_timeout:       60,
-        precision:          ::InfluxDB2::WritePrecision::MILLISECOND,
-        retries:            0,
-        async:              true,
-        max_retry_delay_ms: 10 * 1000
+        url:           "http://localhost:8086".freeze,
+        token:         nil,
+        org:           nil,
+        bucket:        nil,
+        use_ssl:       true,
+        open_timeout:  5,
+        write_timeout: 5,
+        read_timeout:  60,
+        precision:     ::InfluxDB2::WritePrecision::MILLISECOND,
+        max_retries:   0,
+        async:         true
       )
 
       def initialize
@@ -56,7 +55,7 @@ module InfluxDB
       def write_options
         InfluxDB2::WriteOptions.new(
           write_type:  WRITE_TYPE[async],
-          max_retries: retries
+          max_retries: max_retries
         )
       end
     end

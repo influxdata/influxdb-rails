@@ -8,23 +8,23 @@ RSpec.describe InfluxDB::Rails::Configuration do
   describe "client configuration" do
     subject { InfluxDB::Rails.configuration.client }
 
-    describe "#retries" do
+    describe "#max_retries" do
       it "defaults to 0" do
-        expect(subject.retries).to eq(0)
+        expect(subject.max_retries).to eq(0)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
-          config.client.retries = 5
+          config.client.max_retries = 5
         end
-        expect(subject.retries).to eql(5)
-        expect(subject.write_options.max_retries).to eql(5)
+        expect(subject.max_retries).to be(5)
+        expect(subject.write_options.max_retries).to be(5)
       end
     end
 
     describe "#open_timeout" do
       it "defaults to 5 seconds" do
-        expect(subject.open_timeout).to eql(5.seconds)
+        expect(subject.open_timeout).to be(5)
       end
 
       it "can be updated" do
@@ -37,20 +37,20 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
     describe "#write_timeout" do
       it "defaults to 5 seconds" do
-        expect(subject.write_timeout).to eql(5)
+        expect(subject.write_timeout).to be(5)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
           config.client.write_timeout = 5
         end
-        expect(subject.write_timeout).to eql(5)
+        expect(subject.write_timeout).to be(5)
       end
     end
 
     describe "#read_timeout" do
       it "defaults to 60 seconds" do
-        expect(subject.read_timeout).to eql(60)
+        expect(subject.read_timeout).to be(60)
       end
 
       it "can be updated" do
@@ -61,42 +61,29 @@ RSpec.describe InfluxDB::Rails::Configuration do
       end
     end
 
-    describe "#max_retry_delay_ms" do
-      it "defaults to 10 seconds in milliseconds" do
-        expect(subject.max_retry_delay_ms).to eql(10_000)
-      end
-
-      it "can be updated" do
-        InfluxDB::Rails.configure do |config|
-          config.client.max_retry_delay_ms = 5
-        end
-        expect(subject.max_retry_delay_ms).to eql(5)
-      end
-    end
-
     describe "#precision" do
       it "defaults to milli seconds" do
-        expect(subject.precision).to eql(::InfluxDB2::WritePrecision::MILLISECOND)
+        expect(subject.precision).to eql(InfluxDB2::WritePrecision::MILLISECOND)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
-          config.client.precision = ::InfluxDB2::WritePrecision::NANOSECOND
+          config.client.precision = InfluxDB2::WritePrecision::NANOSECOND
         end
-        expect(subject.precision).to eql(::InfluxDB2::WritePrecision::NANOSECOND)
+        expect(subject.precision).to eql(InfluxDB2::WritePrecision::NANOSECOND)
       end
     end
 
     describe "#async" do
       it "set write_type to batching by default" do
-        expect(subject.write_options.write_type).to eql(::InfluxDB2::WriteType::BATCHING)
+        expect(subject.write_options.write_type).to eql(InfluxDB2::WriteType::BATCHING)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
           config.client.async = false
         end
-        expect(subject.write_options.write_type).to eql(::InfluxDB2::WriteType::SYNCHRONOUS)
+        expect(subject.write_options.write_type).to eql(InfluxDB2::WriteType::SYNCHRONOUS)
       end
     end
   end
