@@ -4,6 +4,9 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 
 ## v2.0.0.beta1, not released yet
 - Drop support for Ruby < 3.0, Rails < 7.0
+- Support InfluxDB > 2.0
+  - Switched the client library to use [influxdb-ruby](https://github.com/influxdata/influxdb-client-ruby).
+    This is a breaking change as most of the configuration changed.
 
 ## v1.0.2, released 2021-04-13
 
