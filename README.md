@@ -55,9 +55,9 @@ Reported values:
 
 ```ruby
   controller: 48.467,
-  view: 46.848
+  view: 46.848,
   db: 0.157,
-  started: 1465839830100400200
+  started: 1465839830100400200,
   request_id: "d5bf620b-3494-425b-b7e1-4953597ea744"
 ```
 
@@ -71,14 +71,15 @@ Reported tags:
   method:      "PostsController#index",
   http_method: "GET",
   format:      "html",
-  status:      ["200", ""]
-  exception:   ["", "ArgumentError"]
+  status:      ["200", ""],
+  exception:   "ArgumentError"
 }
 ```
 
 *Note*: If an exception happens during that particular instrumentation the
 `status` will be blank and the tag `exception` will contain the name of the
-exception class.
+exception class. The status is blank because we can't know how you handle it
+outside the action.
 
 ### Action View
 
@@ -100,11 +101,11 @@ Reported values:
 Reported tags:
 
 ```ruby
-  hook:       ["render_template", "render_partial", "render_collection"]
+  hook:       ["render_template", "render_partial", "render_collection"],
   server:     Socket.gethostname,
   app_name:   configuration.application_name,
   location:   "PostsController#index",
-  filename:   "/some/file/action.html",
+  filename:   "/some/file/action.html"
 ```
 
 ### Active Record
@@ -258,7 +259,7 @@ end
 Reported tags:
 
 ```ruby
-  hook:       "block_instrumentation"
+  hook:       "block_instrumentation",
   server:     Socket.gethostname,
   app_name:   configuration.application_name,
   location:   "PostsController#index",
