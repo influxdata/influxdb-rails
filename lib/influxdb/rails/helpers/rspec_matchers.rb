@@ -4,9 +4,14 @@ require "launchy"
 module InfluxDB
   module Rails
     module Matchers
-      def expect_metric(name: "rails", **options)
-        expect(metrics).to include(
-          a_hash_including(options.merge(name: name))
+      def expect_metric(name: "rails", tags: a_hash_including, fields: a_hash_including, **options)
+        expect(filtered_metrics(tags)).to include(
+          a_hash_including(
+            name:   name,
+            tags:   tags,
+            fields: fields,
+            **options
+          )
         )
       end
 
@@ -25,10 +30,6 @@ module InfluxDB
         ::Launchy.open(file_path)
       end
 
-      def metrics
-        TestClient.metrics
-      end
-
       RSpec.configure do |config|
         config.before :each do
           InfluxDB::Rails.instance_variable_set :@configuration, nil
@@ -42,6 +43,22 @@ module InfluxDB
         end
 
         config.include InfluxDB::Rails::Matchers
+      end
+
+      private
+
+      def filtered_metrics(tags)
+        if tags.expecteds.first[:hook]
+          metrics.select do |metric|
+            metric.dig(:tags, :hook) == tags.expecteds.first[:hook]
+          end
+        else
+          metrics
+        end
+      end
+
+      def metrics
+        TestClient.metrics
       end
     end
   end
