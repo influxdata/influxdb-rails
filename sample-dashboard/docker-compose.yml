@@ -24,6 +24,11 @@ services:
       - ./provisioning/performance.json:/var/lib/grafana/dashboards/performance.json:ro
       - ./provisioning/performance-action.json:/var/lib/grafana/dashboards/performance-action.json:ro
       - ./provisioning/performance-request.json:/var/lib/grafana/dashboards/performance-request.json:ro
+      - ./provisioning/activejob.json:/var/lib/grafana/dashboards/activejob.json.json:ro
+      - ./provisioning/requests.json:/var/lib/grafana/dashboards/requests.json:ro
+      - ./provisioning/slowlog-action.json:/var/lib/grafana/dashboards/slowlog-action.json.json:ro
+      - ./provisioning/slowlog-requests.json:/var/lib/grafana/dashboards/slowlog-requests.json:ro
+      - ./provisioning/slowlog-sql.json:/var/lib/grafana/dashboards/slowlog-sql.json:ro
       - grafanadata:/var/lib/grafana
   rails:
     image: hennevogel/influxdb-rails-sample
