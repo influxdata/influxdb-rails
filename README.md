@@ -1,16 +1,14 @@
 > :warning: You are looking at the README for the master branch of this gem.
-> See the latest [released version (1.0.0)](https://github.com/influxdata/influxdb-rails/tree/v1.0.0#readme)
+> See the latest [released version (1.0.1)](https://github.com/influxdata/influxdb-rails/tree/v1.0.1#readme)
 > instead.
 
 # influxdb-rails
 
 [![Gem Version](https://badge.fury.io/rb/influxdb-rails.svg)](https://badge.fury.io/rb/influxdb-rails)
-[![Build Status](https://travis-ci.org/influxdata/influxdb-rails.svg?branch=master)](https://travis-ci.org/influxdata/influxdb-rails)
+[![Build Status](https://github.com/influxdata/influxdb-rails/actions/workflows/spec.yml/badge.svg)](https://github.com/influxdata/influxdb-rails/actions)
 
-Automatically instrument your Ruby on Rails applications and write the
-metrics directly into [InfluxDB](http://influxdb.org/).
-
-This gem is designed for Rails 4.2+, Ruby 2.3+ and InfluxDB 0.9+.
+Automatically instrument your Ruby on Rails applications and write the metrics directly into
+[InfluxDB](https://www.influxdata.com/).
 
 ## Table of contents
 
@@ -41,8 +39,8 @@ configuration of this gem.
 
 ## Usage
 
-Out of the box, you'll automatically get reporting for sql, model, view and
-controller Rails instrumentation for every request.
+Out of the box, you'll automatically get reporting for the Ruby on Rails components mentioned
+below.
 
 ### Action Controller
 
@@ -76,10 +74,7 @@ Reported tags:
 }
 ```
 
-*Note*: If an exception happens during that particular instrumentation the
-`status` will be blank and the tag `exception` will contain the name of the
-exception class. The status is blank because we can't know how you handle it
-outside the action.
+*Note*: If an exception happens during that particular action the `status` will be blank and the tag `exception` will contain the name of the exception class. The status is blank because we can't know how you handle the exception outside the action.
 
 ### Action View
 
@@ -209,9 +204,7 @@ InfluxDB::Rails.configure do |config|
 end
 ```
 
-You'll find *most* of the configuration settings in the initializer file. The
-canonical list of default values is located in `lib/influxdb/rails/configuration.rb`
-(`InfluxDB::Rails::Configuration::DEFAULTS`).
+You'll find all of the configuration settings in the initializer file.
 
 ### Custom Tags
 
@@ -268,7 +261,7 @@ Reported tags:
 
 Reported values:
 ```ruby
-  value: 100 # execution time of the block
+  value: 100 # execution time of the block in ms
 ```
 
 You can also overwrite the `value`
@@ -351,7 +344,7 @@ might cause performance issues on traffic intensive applications. Disable it in
 the configuration if you are not willing to tolerate this.
 
 By default, this gem performs writes to InfluxDB asynchronously. A single
-hooks usually only performs some time delta calculations, and then enqueues
+hook usually only performs some time delta calculations, and then enqueues
 the data point into a worker queue (which is processed by a background
 thread).
 
@@ -375,8 +368,7 @@ implications, depending on the value of `config.client.async`:
   cycle), it might block all available request threads
 
 In both cases, your application server might become unresponsive and needs
-to be restarted (which can happen automatically in `cgroups` contexts,
-like Docker containers).
+to be restarted.
 
 If you setup a maximum retry value (`Integer === config.client.retry`),
 the client will try up to that amount of times to send the data to the server
@@ -407,12 +399,10 @@ The data points are simply discarded.
     rake test:all
     ```
 
-  - or wait for [Travis][travis-pr] to pick up your changes, *after*
+  - or wait for [our CI](https://github.com/influxdata/influxdb-rails/actions) to pick up your changes, *after*
     you made a pull request.
 - Send a pull request.
 - If your changes are looking good, we'll merge them.
-
-[travis-pr]: https://travis-ci.org/influxdata/influxdb-rails/pull_requests
 
 ### Testing Tasks
 
