@@ -2,16 +2,23 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
 
-## v1.0.1.beta3, release 2020-10-16
+## v1.0.1, released 2021-03-23
+
+The final release, no code changes.
+
+## v1.0.1.beta3, released 2020-10-16
+
 - Drop `perform_start.active_job` subscriber, it's rather useless on dashboards.
 
 ## v1.0.1.beta2, released 2020-09-14
+
 - Implement [`deliver.action_mailer`](https://guides.rubyonrails.org/active_support_instrumentation.html#deliver-action-mailer) subscriber
 - Add missing Active Job documentation
 - Drop support for Ruby 2.4
 - Drop support for Rails < 5.2
 
 ## v1.0.1.beta1, released 2020-08-21
+
 - Drop support for Ruby 2.3
 - Drop support for Rails 4.x
 - Add `auth_method` to client configuration (#96, @anlek)
@@ -26,9 +33,11 @@ For the full commit log, [see here](https://github.com/influxdata/influxdb-rails
 - Record unhandled exceptions as tags for process_action.action_controller
 
 ## v1.0.0, released 2019-10-23
+
 The Final release, no code changes.
 
 ## v1.0.0.beta5, unreleased
+
 - Silently eat all dropped configuration options and do not crash
 - Add per action view to the sample dashboard
 
