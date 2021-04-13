@@ -9,7 +9,7 @@ module InfluxDB
 
       def to_h
         expanded_tags.reject do |_, value|
-          value.blank?
+          value.to_s.blank?
         end
       end
 
