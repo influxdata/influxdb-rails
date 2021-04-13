@@ -17,20 +17,13 @@ RSpec.describe "BlockInstrumentation metrics", type: :request do
 
     expect_metric(
       tags:   a_hash_including(
-        location:        "MetricsController#index",
-        hook:            "block_instrumentation",
-        additional_tag:  :value,
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware,
-        block_tag:       :block_tag,
-        name:            "name"
+        hook:      "block_instrumentation",
+        block_tag: :block_tag,
+        name:      "name"
       ),
       values: a_hash_including(
-        additional_value: :value,
-        request_id:       :request_id,
-        block_value:      :block_value,
-        value:            be_between(1, 500)
+        block_value: :block_value,
+        value:       be_between(1, 500)
       )
     )
   end
@@ -42,8 +35,7 @@ RSpec.describe "BlockInstrumentation metrics", type: :request do
 
     expect_metric(
       tags:      a_hash_including(
-        location: "MetricsController#index",
-        hook:     "block_instrumentation"
+        hook: "block_instrumentation"
       ),
       timestamp: 1_514_797_200
     )
@@ -56,8 +48,7 @@ RSpec.describe "BlockInstrumentation metrics", type: :request do
 
     expect_no_metric(
       tags: a_hash_including(
-        location: "MetricsController#index",
-        hook:     "block_instrumentation"
+        hook: "block_instrumentation"
       )
     )
   end

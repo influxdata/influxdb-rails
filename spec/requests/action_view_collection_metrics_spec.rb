@@ -18,19 +18,12 @@ RSpec.describe "ActionView collection metrics", type: :request do
     expect_metric(
       name:   "rails",
       tags:   a_hash_including(
-        location:        "MetricsController#index",
-        hook:            "render_collection",
-        additional_tag:  :value,
-        filename:        include("spec/support/views/metrics/_item.html.erb"),
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware
+        hook:     "render_collection",
+        filename: include("spec/support/views/metrics/_item.html.erb")
       ),
       values: a_hash_including(
-        additional_value: :value,
-        count:            3,
-        request_id:       :request_id,
-        value:            be_between(1, 500)
+        count: 3,
+        value: be_between(1, 500)
       )
     )
   end
@@ -43,8 +36,7 @@ RSpec.describe "ActionView collection metrics", type: :request do
     expect_metric(
       name:      "rails",
       tags:      a_hash_including(
-        location: "MetricsController#index",
-        hook:     "render_collection"
+        hook: "render_collection"
       ),
       timestamp: 1_514_797_200
     )
@@ -58,8 +50,7 @@ RSpec.describe "ActionView collection metrics", type: :request do
     expect_no_metric(
       name: "rails",
       tags: a_hash_including(
-        location: "MetricsController#index",
-        hook:     "render_collection"
+        hook: "render_collection"
       )
     )
   end

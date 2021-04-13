@@ -20,14 +20,10 @@ RSpec.describe "ActiveJobs perform metrics", type: :request do
 
     expect_metric(
       tags:   a_hash_including(
-        location:        "MetricsController#index",
-        hook:            "perform",
-        state:           "succeeded",
-        job:             "MetricJob",
-        queue:           "default",
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware
+        hook:  "perform",
+        state: "succeeded",
+        job:   "MetricJob",
+        queue: "default"
       ),
       values: a_hash_including(
         value: be_between(0, 30)
@@ -44,7 +40,6 @@ RSpec.describe "ActiveJobs perform metrics", type: :request do
 
     expect_metric(
       tags:      a_hash_including(
-        location: "MetricsController#index",
         hook:     "perform"
       ),
       timestamp: 1_514_797_200
@@ -60,7 +55,6 @@ RSpec.describe "ActiveJobs perform metrics", type: :request do
 
     expect_no_metric(
       tags: a_hash_including(
-        location: "MetricsController#index",
         hook:     "perform"
       )
     )

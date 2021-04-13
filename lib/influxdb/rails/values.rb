@@ -8,7 +8,7 @@ module InfluxDB
 
       def to_h
         expanded_values.reject do |_, value|
-          value.blank?
+          value.to_s.blank?
         end
       end
 

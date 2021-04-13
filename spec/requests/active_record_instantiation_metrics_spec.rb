@@ -19,19 +19,12 @@ RSpec.describe "ActiveRecord instantiation metrics", type: :request do
 
     expect_metric(
       tags:   a_hash_including(
-        location:        "MetricsController#show",
-        hook:            "instantiation",
-        class_name:      "Metric",
-        additional_tag:  :value,
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware
+        hook:       "instantiation",
+        class_name: "Metric"
       ),
       values: a_hash_including(
-        additional_value: :value,
-        request_id:       :request_id,
-        value:            be_between(1, 500),
-        record_count:     1
+        value:        be_between(1, 500),
+        record_count: 1
       )
     )
   end
@@ -43,8 +36,7 @@ RSpec.describe "ActiveRecord instantiation metrics", type: :request do
 
     expect_metric(
       tags:      a_hash_including(
-        location: "MetricsController#show",
-        hook:     "instantiation"
+        hook: "instantiation"
       ),
       timestamp: 1_514_797_200
     )
@@ -57,8 +49,7 @@ RSpec.describe "ActiveRecord instantiation metrics", type: :request do
 
     expect_no_metric(
       tags: a_hash_including(
-        location: "MetricsController#show",
-        hook:     "instantiation"
+        hook: "instantiation"
       )
     )
   end
