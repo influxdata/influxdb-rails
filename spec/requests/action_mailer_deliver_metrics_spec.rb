@@ -18,18 +18,11 @@ RSpec.describe "ActionMailer deliver metrics", type: :request do
 
     expect_metric(
       tags:   a_hash_including(
-        hook:            "deliver",
-        mailer:          "MetricMailer",
-        location:        "MetricsController#index",
-        additional_tag:  :value,
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware
+        hook:   "deliver",
+        mailer: "MetricMailer"
       ),
       values: a_hash_including(
-        additional_value: :value,
-        request_id:       :request_id,
-        value:            1
+        value: 1
       )
     )
   end

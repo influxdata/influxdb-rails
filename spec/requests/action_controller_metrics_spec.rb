@@ -18,11 +18,27 @@ RSpec.describe "ActionController metrics", type: :request do
     expect_metric(
       name:   "rails",
       tags:   a_hash_including(
-        method:          "MetricsController#index",
+        hook:        "process_action",
+        status:      200,
+        format:      :html,
+        http_method: "GET"
+      ),
+      values: a_hash_including(
+        view:       be_between(1, 500),
+        db:         be_between(1, 500),
+        controller: be_between(1, 500)
+      )
+    )
+  end
+
+  it "writes default and custom tags" do
+    get "/metrics"
+
+    expect_metric(
+      name:   "rails",
+      tags:   a_hash_including(
         hook:            "process_action",
-        status:          200,
-        format:          :html,
-        http_method:     "GET",
+        location:        "MetricsController#index",
         additional_tag:  :value,
         server:          Socket.gethostname,
         app_name:        :app_name,
@@ -30,10 +46,7 @@ RSpec.describe "ActionController metrics", type: :request do
       ),
       values: a_hash_including(
         additional_value: :value,
-        request_id:       :request_id,
-        view:             be_between(1, 500),
-        db:               be_between(1, 500),
-        controller:       be_between(1, 500)
+        request_id:       :request_id
       )
     )
   end

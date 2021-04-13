@@ -19,21 +19,14 @@ RSpec.describe "ActiveRecord SQL metrics", type: :request do
 
     expect_metric(
       tags:   a_hash_including(
-        location:        "MetricsController#index",
-        hook:            "sql",
-        name:            "Metric Create",
-        class_name:      "Metric",
-        operation:       "INSERT",
-        additional_tag:  :value,
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware
+        hook:       "sql",
+        name:       "Metric Create",
+        class_name: "Metric",
+        operation:  "INSERT"
       ),
       values: a_hash_including(
-        additional_value: :value,
-        request_id:       :request_id,
-        value:            be_between(1, 500),
-        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
+        value: be_between(1, 500),
+        sql:   "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
       )
     )
   end
@@ -45,21 +38,14 @@ RSpec.describe "ActiveRecord SQL metrics", type: :request do
 
     expect_metric(
       tags:   a_hash_including(
-        location:        "MetricsController#index",
-        hook:            "sql",
-        name:            "SQL",
-        class_name:      "SQL",
-        operation:       "INSERT",
-        additional_tag:  :value,
-        server:          Socket.gethostname,
-        app_name:        :app_name,
-        tags_middleware: :tags_middleware
+        hook:       "sql",
+        name:       "SQL",
+        class_name: "SQL",
+        operation:  "INSERT"
       ),
       values: a_hash_including(
-        additional_value: :value,
-        request_id:       :request_id,
-        value:            be_between(1, 500),
-        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
+        value: be_between(1, 500),
+        sql:   "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
       )
     )
   end
@@ -71,7 +57,6 @@ RSpec.describe "ActiveRecord SQL metrics", type: :request do
 
     expect_metric(
       tags:      a_hash_including(
-        location: "MetricsController#index",
         hook:     "sql"
       ),
       timestamp: 1_514_797_200
@@ -85,7 +70,6 @@ RSpec.describe "ActiveRecord SQL metrics", type: :request do
 
     expect_no_metric(
       tags: a_hash_including(
-        location: "MetricsController#index",
         hook:     "sql"
       )
     )
