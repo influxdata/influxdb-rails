@@ -1,6 +1,10 @@
 # Changelog
 
-For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/master).
+For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/one-stable).
+
+## v1.0.2, released 2021-04-13
+
+Fix passing booleans to custom tags.
 
 ## v1.0.1, released 2021-03-23
 
