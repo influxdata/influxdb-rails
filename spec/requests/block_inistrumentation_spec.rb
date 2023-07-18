@@ -1,11 +1,12 @@
 require "#{File.dirname(__FILE__)}/../spec_helper"
 
-RSpec.describe "BlockInstrumentation metrics", type: :request do
+RSpec.describe "BlockInstrumentation metrics" do
   let(:tags_middleware) do
     lambda do |tags|
       tags.merge(tags_middleware: :tags_middleware)
     end
   end
+
   before do
     allow_any_instance_of(ActionDispatch::Request).to receive(:request_id).and_return(:request_id)
     allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:application_name).and_return(:app_name)

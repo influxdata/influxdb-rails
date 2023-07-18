@@ -8,10 +8,6 @@ ENV["RAILS_ENV"] ||= "test"
 
 require "rails"
 
-if Rails::VERSION::MAJOR < 4 || Rails::VERSION::MAJOR == 4 && Rails::VERSION::MINOR < 2
-  raise "Sorry, influxdb-rails only supports Rails 4.2 and higher."
-end
-
 require "bundler/setup"
 Bundler.require
 
@@ -29,7 +25,7 @@ RSpec.configure do |config|
   # use expect syntax
   config.disable_monkey_patching!
 
-  config.after(:each) do
+  config.after do
     travel_back
   end
 

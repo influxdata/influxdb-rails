@@ -1,12 +1,13 @@
 require "#{File.dirname(__FILE__)}/../spec_helper"
 
-RSpec.describe "ActiveRecord instantiation metrics", type: :request do
+RSpec.describe "ActiveRecord instantiation metrics" do
   let(:tags_middleware) do
     lambda do |tags|
       tags.merge(tags_middleware: :tags_middleware)
     end
   end
   let(:metric) { Metric.create!(name: "name") }
+
   before do
     allow_any_instance_of(InfluxDB::Rails::Configuration).to receive(:ignored_environments).and_return(%w[development])
     allow_any_instance_of(ActionDispatch::Request).to receive(:request_id).and_return(:request_id)

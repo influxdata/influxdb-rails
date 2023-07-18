@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe InfluxDB::Rails::Configuration do
   before do
-    @configuration = InfluxDB::Rails::Configuration.new
+    @configuration = described_class.new
   end
 
   describe "client configuration" do
@@ -17,46 +17,46 @@ RSpec.describe InfluxDB::Rails::Configuration do
         InfluxDB::Rails.configure do |config|
           config.client.retry = 5
         end
-        expect(subject.retry).to eql(5)
+        expect(subject.retry).to be(5)
       end
     end
 
     describe "#open_timeout" do
       it "defaults to 5" do
-        expect(subject.open_timeout).to eql(5)
+        expect(subject.open_timeout).to be(5)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
           config.client.open_timeout = 5
         end
-        expect(subject.open_timeout).to eql(5)
+        expect(subject.open_timeout).to be(5)
       end
     end
 
     describe "#read_timeout" do
       it "defaults to 300" do
-        expect(subject.read_timeout).to eql(300)
+        expect(subject.read_timeout).to be(300)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
           config.client.read_timeout = 5
         end
-        expect(subject.read_timeout).to eql(5)
+        expect(subject.read_timeout).to be(5)
       end
     end
 
     describe "#max_delay" do
       it "defaults to 30" do
-        expect(subject.max_delay).to eql(30)
+        expect(subject.max_delay).to be(30)
       end
 
       it "can be updated" do
         InfluxDB::Rails.configure do |config|
           config.client.max_delay = 5
         end
-        expect(subject.max_delay).to eql(5)
+        expect(subject.max_delay).to be(5)
       end
     end
 
@@ -76,7 +76,7 @@ RSpec.describe InfluxDB::Rails::Configuration do
 
   describe "#rails_app_name" do
     it "defaults to nil" do
-      expect(InfluxDB::Rails.configuration.rails_app_name).to be(nil)
+      expect(InfluxDB::Rails.configuration.rails_app_name).to be_nil
     end
 
     it "can be set to own name" do
