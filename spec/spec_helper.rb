@@ -3,6 +3,9 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require "active_support"
 require_relative "../lib/influxdb/rails/helpers/rspec_matchers"
 require File.expand_path("#{File.dirname(__FILE__)}/support/broken_client")
+require "webmock/rspec"
+
+WebMock.disable_net_connect!
 
 ENV["RAILS_ENV"] ||= "test"
 
@@ -10,9 +13,6 @@ require "rails"
 
 require "bundler/setup"
 Bundler.require
-
-require "fakeweb"
-FakeWeb.allow_net_connect = false
 
 puts "Loading Rails v#{Rails.version}..."
 

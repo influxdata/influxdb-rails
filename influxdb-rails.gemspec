@@ -24,14 +24,13 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 3.0"
 
-  spec.add_runtime_dependency "influxdb", "~> 0.6", ">= 0.6.4"
+  spec.add_runtime_dependency "influxdb-client"
   spec.add_runtime_dependency "railties", ">= 5.0"
 
   spec.add_development_dependency "actionmailer"
   spec.add_development_dependency "activejob"
   spec.add_development_dependency "activerecord"
   spec.add_development_dependency "bundler", ">= 1.0.0"
-  spec.add_development_dependency "fakeweb"
   spec.add_development_dependency "launchy"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rake"
@@ -43,4 +42,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-rspec"
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "tzinfo"
+  spec.add_development_dependency "webmock"
 end

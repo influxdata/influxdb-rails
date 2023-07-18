@@ -6,10 +6,10 @@ module InfluxDB
       class BlockInstrumentationSubscriber < Subscriber
         private
 
-        def values
+        def fields
           {
             value: duration,
-          }.merge(payload[:values].to_h)
+          }.merge(payload[:fields].to_h)
         end
 
         def tags

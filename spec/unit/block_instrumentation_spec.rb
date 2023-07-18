@@ -6,7 +6,7 @@ RSpec.describe InfluxDB::Rails do
       described_class.instrument "name", values: { value: 1 }
 
       expect_metric(
-        values: a_hash_including(value: 1),
+        fields: a_hash_including(value: 1),
         tags:   a_hash_including(
           hook:     "block_instrumentation",
           server:   Socket.gethostname,

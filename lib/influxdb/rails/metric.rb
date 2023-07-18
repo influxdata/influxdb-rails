@@ -1,38 +1,34 @@
-require "influxdb/rails/values"
 require "influxdb/rails/tags"
 
 module InfluxDB
   module Rails
     class Metric
-      def initialize(configuration:, timestamp:, tags: {}, values: {})
+      def initialize(configuration:, timestamp:, tags: {}, fields: {})
         @configuration = configuration
         @timestamp = timestamp
         @tags = tags
-        @values = values
+        @fields = fields
       end
 
       def write
-        client.write_point configuration.measurement_name, options
+        write_api.write(data: data)
       end
 
       private
 
-      attr_reader :configuration, :tags, :values, :timestamp
+      attr_reader :configuration, :tags, :fields, :timestamp
 
-      def options
+      def data
         {
-          values:    Values.new(values: values).to_h,
-          tags:      Tags.new(tags: tags, config: configuration).to_h,
-          timestamp: timestamp_with_precision,
+          fields: fields.merge(InfluxDB::Rails.current.fields),
+          tags:   Tags.new(tags: tags, config: configuration).to_h,
+          name:   configuration.measurement_name,
+          time:   timestamp.utc,
         }
       end
 
-      def timestamp_with_precision
-        InfluxDB.convert_timestamp(timestamp.utc, configuration.client.time_precision)
-      end
-
-      def client
-        InfluxDB::Rails.client
+      def write_api
+        InfluxDB::Rails.write_api
       end
     end
   end

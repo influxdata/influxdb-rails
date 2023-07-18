@@ -2,9 +2,12 @@ require "#{File.dirname(__FILE__)}/../spec_helper"
 
 RSpec.describe "Logger" do
   it "logs exception" do
-    setup_broken_client
-    expect(Rails.logger).to receive(:error).with(/message/).at_least(:once)
+    InfluxDB::Rails.client = build_broken_client("error message")
 
-    get "/metrics"
+    out = capture_influxdb_output do
+      get "/metrics"
+    end
+
+    assert_includes out, "error message"
   end
 end

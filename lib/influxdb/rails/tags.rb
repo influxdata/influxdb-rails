@@ -8,18 +8,12 @@ module InfluxDB
       end
 
       def to_h
-        expanded_tags.reject do |_, value|
-          value.to_s.blank?
-        end
+        config.tags_middleware.call(tags.merge(default_tags))
       end
 
       private
 
       attr_reader :additional_tags, :tags, :config
-
-      def expanded_tags
-        config.tags_middleware.call(tags.merge(default_tags))
-      end
 
       def default_tags
         {

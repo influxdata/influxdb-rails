@@ -13,7 +13,7 @@ module InfluxDB
         }.freeze
         private_constant :JOB_STATE
 
-        def values
+        def fields
           {
             value: value,
           }

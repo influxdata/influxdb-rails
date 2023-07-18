@@ -25,9 +25,11 @@ RSpec.describe "ActiveRecord SQL metrics" do
         class_name: "Metric",
         operation:  "INSERT"
       ),
-      values: a_hash_including(
-        value: be_between(1, 500),
-        sql:   "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
+      fields: a_hash_including(
+        additional_field: :value,
+        request_id:       :request_id,
+        value:            be_between(1, 500),
+        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
       )
     )
   end
@@ -44,9 +46,11 @@ RSpec.describe "ActiveRecord SQL metrics" do
         class_name: "SQL",
         operation:  "INSERT"
       ),
-      values: a_hash_including(
-        value: be_between(1, 500),
-        sql:   "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
+      fields: a_hash_including(
+        additional_field: :value,
+        request_id:       :request_id,
+        value:            be_between(1, 500),
+        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
       )
     )
   end
@@ -57,10 +61,11 @@ RSpec.describe "ActiveRecord SQL metrics" do
     get "/metrics"
 
     expect_metric(
-      tags:      a_hash_including(
+      tags: a_hash_including(
+        location: "MetricsController#index",
         hook:     "sql"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 

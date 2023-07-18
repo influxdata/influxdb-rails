@@ -7,7 +7,7 @@ module InfluxDB
       class ActiveRecordSubscriber < Subscriber # :nodoc:
         private
 
-        def values
+        def fields
           {
             value:        duration,
             record_count: payload[:record_count],

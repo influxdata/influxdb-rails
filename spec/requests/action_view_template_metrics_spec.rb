@@ -21,8 +21,10 @@ RSpec.describe "ActionView template metrics" do
         hook:     "render_template",
         filename: include("spec/support/views/metrics/index.html.erb")
       ),
-      values: a_hash_including(
-        value: be_between(1, 500)
+      fields: a_hash_including(
+        additional_field: :value,
+        request_id:       :request_id,
+        value:            be_between(1, 500)
       )
     )
   end
@@ -33,10 +35,11 @@ RSpec.describe "ActionView template metrics" do
     get "/metrics"
 
     expect_metric(
-      tags:      a_hash_including(
-        hook: "render_template"
+      tags: a_hash_including(
+        location: "MetricsController#index",
+        hook:     "render_template"
       ),
-      timestamp: 1_514_797_200
+      time: Time.at(1_514_797_200)
     )
   end
 
