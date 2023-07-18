@@ -2,6 +2,9 @@
 
 For the full commit log, [see here](https://github.com/influxdata/influxdb-rails/commits/one-stable).
 
+## v2.0.0.beta1, not released yet
+- Drop support for Ruby < 3.0, Rails < 7.0
+
 ## v1.0.2, released 2021-04-13
 
 Fix passing booleans to custom tags.
