@@ -1,3 +1,9 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rspec
+  - rubocop-rake
+
 AllCops:
   Include:
   - 'Rakefile'
@@ -13,6 +19,9 @@ AllCops:
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.5
   NewCops: enable
+
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
 
 Layout/EmptyLinesAroundArguments:
   Enabled: false

@@ -10,7 +10,7 @@ module InfluxDB
           @defaults ||= {}
         end
 
-        def set_defaults(**values) # rubocop:disable Naming/AccessorMethodName:
+        def set_defaults(**values)
           defaults.merge! values
           attr_accessor(*defaults.keys)
         end
