@@ -12,14 +12,14 @@ Gem::Specification.new do |spec|
   spec.licenses    = ["MIT"]
   spec.homepage    = "https://influxdata.com"
   spec.metadata = {
-    "bug_tracker_uri"   => "https://github.com/influxdata/influxdb-rails/issues",
-    "changelog_uri"     => "https://github.com/influxdata/influxdb-rails/blob/master/CHANGELOG.md",
-    "documentation_uri" => "https://github.com/influxdata/influxdb-rails/blob/master/README.md",
-    "source_code_uri"   => "https://github.com/influxdata/influxdb-rails",
+    "bug_tracker_uri"       => "https://github.com/influxdata/influxdb-rails/issues",
+    "changelog_uri"         => "https://github.com/influxdata/influxdb-rails/blob/master/CHANGELOG.md",
+    "documentation_uri"     => "https://github.com/influxdata/influxdb-rails/blob/master/README.md",
+    "source_code_uri"       => "https://github.com/influxdata/influxdb-rails",
+    "rubygems_mfa_required" => "true",
   }
 
   spec.files         = `git ls-files`.split($/) # rubocop:disable Style/SpecialGlobalVars
-  spec.test_files    = spec.files.grep(%r{^(test|spec|features|smoke)/})
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = ">= 2.5.0"
