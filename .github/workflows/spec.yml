@@ -2,9 +2,9 @@ name: Specs
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, one-stable, two-stable ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, one-stable, two-stable ]
 
 jobs:
   spec:
