@@ -1,6 +1,6 @@
 require "#{File.dirname(__FILE__)}/../spec_helper"
 
-RSpec.describe "Context", type: :request do
+RSpec.describe "Context" do
   it "resets the context after a request" do
     get "/metrics"
 

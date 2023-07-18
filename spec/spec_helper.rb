@@ -25,7 +25,7 @@ RSpec.configure do |config|
   # use expect syntax
   config.disable_monkey_patching!
 
-  config.after(:each) do
+  config.after do
     travel_back
   end
 

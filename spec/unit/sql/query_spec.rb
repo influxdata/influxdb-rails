@@ -1,13 +1,14 @@
 require "spec_helper"
 
 RSpec.describe InfluxDB::Rails::Sql::Query do
+  subject { described_class.new(payload) }
+
   let(:payload) do
     {
       sql:  "select * from users where user_id = 42;",
       name: "User Load",
     }
   end
-  subject { described_class.new(payload) }
 
   describe "#class_name" do
     it { expect(subject.class_name).to eq("User") }
