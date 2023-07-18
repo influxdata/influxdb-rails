@@ -24,6 +24,7 @@ require "pry"
 RSpec.configure do |config|
   # use expect syntax
   config.disable_monkey_patching!
+  config.infer_spec_type_from_file_location!
 
   config.after do
     travel_back
