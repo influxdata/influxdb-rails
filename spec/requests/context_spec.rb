@@ -7,7 +7,8 @@ RSpec.describe "Context" do
     expect_metric(
       tags: a_hash_including(
         location: "MetricsController#index",
-        hook:     "sql"
+        hook:     "sql",
+        cached:   false
       )
     )
 

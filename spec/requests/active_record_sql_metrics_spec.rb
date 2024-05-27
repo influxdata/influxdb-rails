@@ -21,7 +21,8 @@ RSpec.describe "ActiveRecord SQL metrics" do
         hook:       "sql",
         name:       "Metric Create",
         class_name: "Metric",
-        operation:  "INSERT"
+        operation:  "INSERT",
+        cached:     false
       ),
       fields: a_hash_including(
         additional_field: :value,
@@ -40,7 +41,8 @@ RSpec.describe "ActiveRecord SQL metrics" do
     expect_metric(
       tags: a_hash_including(
         location: "MetricsController#index",
-        hook:     "sql"
+        hook:     "sql",
+        cached:   false
       ),
       time: Time.at(1_514_797_200)
     )
@@ -53,7 +55,8 @@ RSpec.describe "ActiveRecord SQL metrics" do
 
     expect_no_metric(
       tags: a_hash_including(
-        hook:     "sql"
+        hook:   "sql",
+        cached: false
       )
     )
   end
