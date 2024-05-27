@@ -84,12 +84,6 @@ RSpec/SpecFilePathSuffix:
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
-RSpecRails/MinitestAssertions:
-  Exclude:
-    - 'spec/requests/logger_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
 Rake/Desc:
   Exclude:
     - 'Rakefile'
