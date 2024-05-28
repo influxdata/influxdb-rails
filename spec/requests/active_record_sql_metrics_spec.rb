@@ -14,8 +14,6 @@ RSpec.describe "ActiveRecord SQL metrics" do
   end
 
   it "writes metric" do
-    skip("https://github.com/rails/rails/issues/30586") unless payload_names_fixed_in_rails?
-
     get "/metrics"
 
     expect_metric(
@@ -29,28 +27,7 @@ RSpec.describe "ActiveRecord SQL metrics" do
         additional_field: :value,
         request_id:       :request_id,
         value:            be_between(1, 500),
-        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
-      )
-    )
-  end
-
-  it "writes metric" do
-    skip("https://github.com/rails/rails/issues/30586") if payload_names_fixed_in_rails?
-
-    get "/metrics"
-
-    expect_metric(
-      tags:   a_hash_including(
-        hook:       "sql",
-        name:       "SQL",
-        class_name: "SQL",
-        operation:  "INSERT"
-      ),
-      fields: a_hash_including(
-        additional_field: :value,
-        request_id:       :request_id,
-        value:            be_between(1, 500),
-        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
+        sql:              /^INSERT INTO "metrics" \("name", "created_at", "updated_at"\) VALUES \(xxx\)( RETURNING "id")?$/
       )
     )
   end
@@ -79,15 +56,5 @@ RSpec.describe "ActiveRecord SQL metrics" do
         hook:     "sql"
       )
     )
-  end
-
-  def payload_names_fixed_in_rails?
-    Rails::VERSION::MAJOR > 5 ||
-      rails_after_5_1?
-  end
-
-  def rails_after_5_1?
-    Rails::VERSION::MAJOR == 5 &&
-      Rails::VERSION::MINOR > 1
   end
 end
