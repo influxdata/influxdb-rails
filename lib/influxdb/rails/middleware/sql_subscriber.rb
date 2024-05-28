@@ -21,6 +21,7 @@ module InfluxDB
             class_name: query.class_name,
             name:       query.name,
             location:   :raw,
+            cached:     query.try(:cached) == "true",
           }
         end
 
