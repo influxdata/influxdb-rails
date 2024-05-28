@@ -8,6 +8,6 @@ RSpec.describe "Logger" do
       get "/metrics"
     end
 
-    assert_includes out, "error message"
+    expect(out).to include("error message")
   end
 end
