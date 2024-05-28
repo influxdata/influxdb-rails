@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         ruby: [ '3.0', '3.1', '3.2', 'head' ]
-        rails: [ 'gemfiles/Gemfile.rails-6.1.x', 'gemfiles/Gemfile.rails-7.0.x']
+        rails: [ 'gemfiles/Gemfile.rails-6.1.x', 'gemfiles/Gemfile.rails-7.0.x', 'gemfiles/Gemfile.rails-7.1.x']
         exclude: []
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') || matrix.ruby == 'debug' }}
     env:

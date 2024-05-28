@@ -29,7 +29,7 @@ RSpec.describe "ActiveRecord SQL metrics" do
         additional_field: :value,
         request_id:       :request_id,
         value:            be_between(1, 500),
-        sql:              "INSERT INTO \"metrics\" (\"name\", \"created_at\", \"updated_at\") VALUES (xxx)"
+        sql:              /^INSERT INTO "metrics" \("name", "created_at", "updated_at"\) VALUES \(xxx\)( RETURNING "id")?$/
       )
     )
   end
